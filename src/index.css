@@ -1,0 +1,272 @@
+@import "tailwindcss";
+
+@theme {
+  --font-siliguri: 'Noto Sans Bengali', 'Anek Bangla', 'Hind Siliguri', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-noto: 'Noto Sans Bengali', 'Anek Bangla', 'Hind Siliguri', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-bengali: 'Noto Sans Bengali', 'Anek Bangla', 'Hind Siliguri', sans-serif;
+  --font-sans: 'Roboto', 'Noto Sans Bengali', 'Anek Bangla', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-body: 'Roboto', 'Noto Sans Bengali', 'Anek Bangla', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-heading: 'Montserrat', 'Noto Sans Bengali', 'Anek Bangla', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Montserrat', 'Noto Sans Bengali', 'Anek Bangla', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Typography Hierarchy:
+   - English: Montserrat (Headings, Branding) & Roboto (Body, UI)
+   - Bengali: Noto Sans Bengali & Anek Bangla (Flawless conjuncts, numerals 0-9 & ligatures)
+*/
+:root {
+  --font-bengali: 'Noto Sans Bengali', 'Anek Bangla', 'Hind Siliguri', sans-serif;
+  --font-siliguri: 'Noto Sans Bengali', 'Anek Bangla', 'Hind Siliguri', sans-serif;
+  --font-noto: 'Noto Sans Bengali', 'Anek Bangla', 'Hind Siliguri', sans-serif;
+  --font-heading: 'Montserrat', 'Noto Sans Bengali', 'Anek Bangla', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-body: 'Roboto', 'Noto Sans Bengali', 'Anek Bangla', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-sans: 'Roboto', 'Noto Sans Bengali', 'Anek Bangla', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+html {
+  font-size: 14.5px; /* Reduced by one size from 16px default for a sleek, compact modern aesthetic */
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Roboto', 'Noto Sans Bengali', 'Anek Bangla', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #1e293b;
+  font-size: 14.5px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* English Typography Optimization */
+html[lang="en"] body {
+  font-family: 'Roboto', 'Noto Sans Bengali', 'Anek Bangla', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+
+html[lang="en"] h1,
+html[lang="en"] h2,
+html[lang="en"] h3,
+html[lang="en"] h4,
+html[lang="en"] h5,
+html[lang="en"] h6,
+html[lang="en"] .font-heading {
+  font-family: 'Montserrat', 'Noto Sans Bengali', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+/* Headings & Display Titles */
+h1, h2, h3, h4, h5, h6, .font-heading, .font-display {
+  font-family: 'Montserrat', 'Noto Sans Bengali', 'Anek Bangla', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  letter-spacing: normal;
+}
+
+/* Bengali UI Elements: Product Names, Menus, Buttons, Badges */
+.font-bengali,
+.font-siliguri, 
+.product-title, 
+.product-name, 
+.menu-item, 
+.nav-link,
+button,
+input,
+select,
+textarea {
+  font-family: 'Noto Sans Bengali', 'Anek Bangla', 'Hind Siliguri', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Product Descriptions, Specifications, Policy Copy & Long Paragraphs */
+.font-noto,
+.font-description,
+.font-desc,
+.product-description,
+.product-desc,
+.prose,
+.policy-content,
+.review-comment,
+.spec-description {
+  font-family: 'Noto Sans Bengali', 'Anek Bangla', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.7;
+}
+
+/* When site is switched to Bengali (html[lang="bn"]) */
+html[lang="bn"] {
+  font-size: 14px; /* Reduced by one size from 15px/16px for balanced Indic proportions */
+}
+
+html[lang="bn"] body {
+  font-family: 'Noto Sans Bengali', 'Anek Bangla', 'Hind Siliguri', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+}
+
+/* Mobile font-size optimization */
+@media (max-width: 640px) {
+  html {
+    font-size: 13.75px;
+  }
+  html[lang="bn"] {
+    font-size: 13.5px;
+  }
+}
+
+/* Crucial Fix: Letter spacing breaks Indic/Bengali conjuncts & ligatures.
+   Always ensure normal letter-spacing and full OpenType ligature support for Bengali */
+html[lang="bn"] *,
+.font-bengali,
+.font-bengali * {
+  letter-spacing: normal !important;
+}
+
+html[lang="bn"] h1, 
+html[lang="bn"] h2, 
+html[lang="bn"] h3, 
+html[lang="bn"] h4, 
+html[lang="bn"] h5, 
+html[lang="bn"] h6,
+html[lang="bn"] .font-heading {
+  font-family: 'Noto Sans Bengali', 'Anek Bangla', sans-serif;
+  font-weight: 700;
+  letter-spacing: normal !important;
+}
+
+html[lang="bn"] .font-description,
+html[lang="bn"] .prose,
+html[lang="bn"] .product-description,
+html[lang="bn"] .policy-content {
+  font-family: 'Noto Sans Bengali', 'Anek Bangla', sans-serif;
+  font-size: 14px;
+  line-height: 1.7;
+  letter-spacing: normal !important;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Sleek custom dark scrollbar for Admin and Store panels */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #14171E;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #2C323F;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #f59e0b;
+}
+
+/* Light sleek scrollbar */
+.custom-scrollbar-light::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar-light::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.custom-scrollbar-light::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.custom-scrollbar-light::-webkit-scrollbar-thumb:hover {
+  background: #f59e0b;
+}
+
+/* Print Optimization for Invoices */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 11pt !important;
+  }
+
+  /* Hide background elements during print */
+  header,
+  footer,
+  nav,
+  aside,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Ensure invoice modal backdrop is transparent and visible in print */
+  .invoice-modal-backdrop {
+    position: static !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    inset: auto !important;
+    z-index: auto !important;
+  }
+
+  .invoice-modal-card {
+    position: static !important;
+    max-height: none !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  .printable-invoice-area {
+    display: block !important;
+    position: static !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    background: #ffffff !important;
+    overflow: visible !important;
+  }
+
+  .printable-invoice-area > div {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 10mm 12mm;
+  }
+}
+

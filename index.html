@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="bn">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <title>SHOPNOVA - Bangladesh's Premier Lifestyle, Fashion & Tech Destination</title>
+    <meta name="description" content="Shop authentic fashion, watches, electronics, and lifestyle products with fast nationwide home delivery, easy returns, and secure payments across Bangladesh." />
+    <meta name="keywords" content="online shopping bangladesh, fashion bd, watches, electronics, cash on delivery, shopnova" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    
+    <!-- OpenGraph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SHOPNOVA - Exclusive Lifestyle & Modern Gadget Destination" />
+    <meta property="og:description" content="Shop authentic fashion, watches, electronics, and lifestyle products with fast nationwide home delivery across Bangladesh." />
+    <meta property="og:site_name" content="SHOPNOVA" />
+    <meta property="og:locale" content="bn_BD" />
+    <meta property="og:locale:alternate" content="en_US" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="SHOPNOVA - Exclusive Lifestyle & Modern Gadget Destination" />
+    <meta name="twitter:description" content="Shop authentic fashion, watches, electronics, and lifestyle products with fast nationwide home delivery across Bangladesh." />
+
+    <!-- Google Fonts: Noto Sans Bengali (Flawless Bengali glyphs, conjuncts, and numerals 0-9), Anek Bangla, Hind Siliguri, Montserrat & Roboto -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800;900&family=Anek+Bangla:wght@300;400;500;600;700;800&family=Hind+Siliguri:wght@300;400;500;600;700&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet" />
+    <script>
+      // Suppress benign Vite HMR WebSocket connection logs in sandbox preview
+      window.addEventListener('unhandledrejection', function(e) {
+        var str = (e && e.reason) ? (e.reason.message || String(e.reason)) : '';
+        if (str.indexOf('WebSocket') !== -1 || str.indexOf('websocket') !== -1) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+        }
+      });
+      window.addEventListener('error', function(e) {
+        var str = (e && e.message) ? String(e.message) : '';
+        if (str.indexOf('WebSocket') !== -1 || str.indexOf('websocket') !== -1) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

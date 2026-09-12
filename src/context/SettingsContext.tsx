@@ -186,9 +186,28 @@ You retain full rights to request verification, amendment, or removal of your pe
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
 export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [settings, setSettings] = useState<Partial<SiteSettings>>(defaultSettings);
+  const [settings, setSettings] = useState<Partial<SiteSettings>>(() => {
+    try {
+      const cached = localStorage.getItem('shopnova_cached_settings');
+      if (cached) {
+        return { ...defaultSettings, ...JSON.parse(cached) };
+      }
+    } catch (_) {}
+    return defaultSettings;
+  });
+
   const [shippingMethods, setShippingMethods] = useState<ShippingMethod[]>([]);
-  const [banners, setBanners] = useState<Banner[]>([]);
+
+  const [banners, setBanners] = useState<Banner[]>(() => {
+    try {
+      const cached = localStorage.getItem('shopnova_cached_banners');
+      if (cached) {
+        return JSON.parse(cached);
+      }
+    } catch (_) {}
+    return [];
+  });
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const refreshSettings = useCallback(async () => {
@@ -199,7 +218,13 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       ]);
 
       if (settingsRes?.success && settingsRes.settings) {
-        setSettings((prev) => ({ ...prev, ...settingsRes.settings }));
+        setSettings((prev) => {
+          const merged = { ...prev, ...settingsRes.settings };
+          try {
+            localStorage.setItem('shopnova_cached_settings', JSON.stringify(merged));
+          } catch (_) {}
+          return merged;
+        });
         if (settingsRes.shippingMethods) {
           setShippingMethods(settingsRes.shippingMethods);
         }
@@ -207,6 +232,9 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
       if (bannersRes?.success && bannersRes.banners) {
         setBanners(bannersRes.banners);
+        try {
+          localStorage.setItem('shopnova_cached_banners', JSON.stringify(bannersRes.banners));
+        } catch (_) {}
       }
     } catch (err) {
       console.warn('Failed to load settings:', err);
@@ -227,9 +255,17 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const updateSettings = async (newSettings: Partial<SiteSettings>) => {
     try {
+      // Optimistically update localStorage and state immediately
+      setSettings((prev) => {
+        const merged = { ...prev, ...newSettings };
+        try {
+          localStorage.setItem('shopnova_cached_settings', JSON.stringify(merged));
+        } catch (_) {}
+        return merged;
+      });
+
       const res = await api.updateSettings(newSettings);
       if (res.success) {
-        setSettings((prev) => ({ ...prev, ...newSettings }));
         refreshSettings();
         return { success: true };
       }

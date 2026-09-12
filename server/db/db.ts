@@ -214,20 +214,11 @@ export async function initDatabase(): Promise<void> {
     } catch (_) {}
   }
 
-  // Ensure 5 retained categories exist and are updated
+  // Ensure categories exist without overwriting user custom edits
   for (const cat of seedCategories) {
     dbInstance.run(
-      `INSERT INTO categories (id, name_en, name_bn, slug, description_en, description_bn, image, icon, sort_order)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-       ON CONFLICT(id) DO UPDATE SET
-         name_en=excluded.name_en,
-         name_bn=excluded.name_bn,
-         slug=excluded.slug,
-         description_en=excluded.description_en,
-         description_bn=excluded.description_bn,
-         image=excluded.image,
-         icon=excluded.icon,
-         sort_order=excluded.sort_order`,
+      `INSERT OR IGNORE INTO categories (id, name_en, name_bn, slug, description_en, description_bn, image, icon, sort_order)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [cat.id, cat.name_en, cat.name_bn, cat.slug, cat.description_en, cat.description_bn, cat.image, cat.icon, cat.sort_order]
     );
   }
@@ -239,17 +230,11 @@ export async function initDatabase(): Promise<void> {
     dbInstance.run(`DELETE FROM subcategories WHERE category_id IN ('cat_men', 'cat_women', 'cat_kids', 'cat_watches', 'cat_gadgets') AND id NOT IN (${placeholders})`, seedSubIds);
   } catch (_) {}
 
-  // Synchronize 10 subcategories with images
+  // Synchronize subcategories with images without overwriting user custom changes
   for (const sub of seedSubcategories) {
     dbInstance.run(
-      `INSERT INTO subcategories (id, category_id, name_en, name_bn, slug, image)
-       VALUES (?, ?, ?, ?, ?, ?)
-       ON CONFLICT(id) DO UPDATE SET
-         category_id=excluded.category_id,
-         name_en=excluded.name_en,
-         name_bn=excluded.name_bn,
-         slug=excluded.slug,
-         image=excluded.image`,
+      `INSERT OR IGNORE INTO subcategories (id, category_id, name_en, name_bn, slug, image)
+       VALUES (?, ?, ?, ?, ?, ?)`,
       [sub.id, sub.category_id, sub.name_en, sub.name_bn, sub.slug, sub.image || null]
     );
   }
@@ -767,7 +752,9 @@ Customer data is strictly never rented, sold, or disclosed to unauthorized third
 You retain full rights to request verification, amendment, or removal of your personal information from our active databases by contacting our privacy support desk.`
           });
         }
-        dbInstance.run('UPDATE site_settings SET value = ? WHERE key = "footer_service_links_json"', [JSON.stringify(updated)]);
+        if (!hasPrivacy) {
+          dbInstance.run('UPDATE site_settings SET value = ? WHERE key = "footer_service_links_json"', [JSON.stringify(updated)]);
+        }
       }
     }
   } catch (err) {

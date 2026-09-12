@@ -265,6 +265,7 @@ export interface SiteSettings {
   brand_symbol_url?: string;
   site_name: string;
   site_name_bn?: string;
+  default_language?: 'bn' | 'en';
   site_tagline_en: string;
   site_tagline_bn: string;
   header_badge_text_en?: string;

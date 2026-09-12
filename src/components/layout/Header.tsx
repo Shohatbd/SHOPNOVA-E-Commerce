@@ -12,7 +12,8 @@ import {
   Zap,
   ChevronDown,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Globe
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext.tsx';
 import { useAuth } from '../../context/AuthContext.tsx';
@@ -271,24 +272,31 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, currentPage, current
         {/* Right Actions: Language Toggle, Track, Wishlist, Cart, User / Admin */}
         <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
           {/* Language Switcher Button in Header */}
-          <div className="flex items-center bg-black/10 rounded-lg sm:rounded-xl p-0.5 text-[11px] sm:text-xs font-bold border border-black/10 shrink-0">
+          <div
+            className="flex items-center bg-white/95 backdrop-blur-xs rounded-lg sm:rounded-xl p-0.5 text-[11px] sm:text-xs font-bold border border-black/10 shadow-xs shrink-0"
+            title={isBn ? "ভাষা পরিবর্তন করুন (Change Language)" : "Switch Language / ভাষা পরিবর্তন"}
+          >
             <button
               type="button"
               onClick={() => setLang('bn')}
-              className={`px-1.5 sm:px-2.5 py-1 sm:py-1.5 rounded-md sm:rounded-lg transition-all text-[11px] sm:text-xs font-bold ${
-                isBn ? 'bg-slate-950 text-white shadow-xs' : 'text-slate-900 opacity-70 hover:opacity-100'
+              className={`flex items-center gap-1 px-1.5 sm:px-2.5 py-1 sm:py-1.5 rounded-md sm:rounded-lg transition-all text-[11px] sm:text-xs font-bold ${
+                isBn
+                  ? 'bg-slate-950 text-white shadow-xs'
+                  : 'text-slate-700 hover:text-slate-950 hover:bg-black/5'
               }`}
             >
-              বাং
+              <span className="font-siliguri font-bold">বাং</span>
             </button>
             <button
               type="button"
               onClick={() => setLang('en')}
-              className={`px-1.5 sm:px-2.5 py-1 sm:py-1.5 rounded-md sm:rounded-lg transition-all text-[11px] sm:text-xs font-bold ${
-                !isBn ? 'bg-slate-950 text-white shadow-xs' : 'text-slate-900 opacity-70 hover:opacity-100'
+              className={`flex items-center gap-1 px-1.5 sm:px-2.5 py-1 sm:py-1.5 rounded-md sm:rounded-lg transition-all text-[11px] sm:text-xs font-bold ${
+                !isBn
+                  ? 'bg-slate-950 text-white shadow-xs'
+                  : 'text-slate-700 hover:text-slate-950 hover:bg-black/5'
               }`}
             >
-              EN
+              <span>EN</span>
             </button>
           </div>
 

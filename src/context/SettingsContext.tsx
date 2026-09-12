@@ -16,6 +16,7 @@ interface SettingsContextType {
 const defaultSettings: Partial<SiteSettings> = {
   site_name: 'SHOPHATBD',
   site_name_bn: 'শপহাটবিডি',
+  default_language: 'bn',
   site_tagline_en: 'SHOP SMART LIVE BETTER',
   site_tagline_bn: 'স্মার্ট কেনাকাটা সুন্দর জীবন',
   currency: 'BDT',

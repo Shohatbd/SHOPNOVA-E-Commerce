@@ -496,7 +496,7 @@ interface AdminSettingsProps {
 }
 
 export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) => {
-  const { t, isBn } = useLanguage();
+  const { t, isBn, setLang } = useLanguage();
   const { settings, updateSettings, refreshSettings } = useSettings();
 
   const [activeTab, setActiveTab] = useState<'branding' | 'header' | 'flash_sale' | 'why_shop' | 'footer' | 'payments' | 'shipping' | 'contact' | 'system' | 'backup'>('branding');
@@ -807,6 +807,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
         site_name: formData.site_name || formData.site_name_en || 'SHOPNOVA',
         site_name_en: formData.site_name || formData.site_name_en || 'SHOPNOVA',
         site_name_bn: formData.site_name_bn || formData.site_name || 'শপনোভা',
+        default_language: formData.default_language || 'bn',
         site_tagline_en: formData.site_tagline_en || formData.tagline_en || 'Bangladesh’s Premier Lifestyle & Tech Destination',
         site_tagline_bn: formData.site_tagline_bn || formData.tagline_bn || 'বাংলাদেশের বিশ্বস্ত লাইফস্টাইল ও প্রিমিয়াম গ্যাজেট হাব',
         header_badge_text_en: formData.header_badge_text_en || 'Exclusive Fashion & Tech',
@@ -1763,6 +1764,70 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
                     placeholder="বাংলাদেশের বিশ্বস্ত লাইফস্টাইল ও প্রিমিয়াম গ্যাজেট হাব"
                     className="w-full bg-[#14171E] border border-[#2C323F] rounded-xl p-2.5 text-white focus:outline-none focus:border-amber-500"
                   />
+                </div>
+
+                {/* 3. Default Store Language & Language Switcher Control */}
+                <div className="md:col-span-2 pt-4 border-t border-[#2C323F]/80">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#14171E] border border-[#2C323F] p-4 rounded-xl">
+                    <div className="space-y-1">
+                      <label className="text-amber-400 font-bold text-sm flex items-center gap-2">
+                        <span>🌐</span>
+                        <span>{isBn ? 'স্টোরের প্রাথমিক/ডিফল্ট ভাষা (Primary Store Language)' : 'Primary Store Language'}</span>
+                      </label>
+                      <p className="text-xs text-slate-400">
+                        {isBn
+                          ? 'নতুন কোনো ক্রেতা ওয়েবসাইটে আসলে স্বয়ংক্রিয়ভাবে কোন ভাষায় সাইটটি লোড হবে।'
+                          : 'Choose which language is loaded by default when a new customer visits the website.'}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-2.5">
+                      <div className="flex items-center bg-[#1E222B] border border-[#2C323F] rounded-xl p-1">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFormData({ ...formData, default_language: 'bn' });
+                            setLang('bn');
+                          }}
+                          className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                            (formData.default_language || 'bn') === 'bn'
+                              ? 'bg-amber-500 text-slate-950 font-black shadow-xs'
+                              : 'text-slate-300 hover:text-white'
+                          }`}
+                        >
+                          <span>🇧🇩</span>
+                          <span>বাংলা (ডিফল্ট)</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFormData({ ...formData, default_language: 'en' });
+                            setLang('en');
+                          }}
+                          className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                            formData.default_language === 'en'
+                              ? 'bg-amber-500 text-slate-950 font-black shadow-xs'
+                              : 'text-slate-300 hover:text-white'
+                          }`}
+                        >
+                          <span>🇬🇧</span>
+                          <span>English</span>
+                        </button>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setLang('bn');
+                          setFormData({ ...formData, default_language: 'bn' });
+                        }}
+                        className="px-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition-colors shadow-xs shrink-0"
+                      >
+                        {isBn ? 'এখনই বাংলায় রূপান্তর' : 'Switch to Bangla Now'}
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

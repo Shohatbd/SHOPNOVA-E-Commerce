@@ -1,11 +1,11 @@
 import React from 'react';
-import { Phone, Mail, ShieldCheck } from 'lucide-react';
+import { Phone, Mail, ShieldCheck, Globe } from 'lucide-react';
 import { useSettings } from '../../context/SettingsContext.tsx';
 import { useLanguage } from '../../context/LanguageContext.tsx';
 
 export const AnnouncementBar: React.FC = () => {
   const { settings } = useSettings();
-  const { isBn } = useLanguage();
+  const { isBn, setLang } = useLanguage();
 
   if (settings.announcement_enabled === 'false') {
     return null;
@@ -33,7 +33,7 @@ export const AnnouncementBar: React.FC = () => {
           </span>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4">
           {settings.contact_email && (
             <a
               href={`mailto:${settings.contact_email}`}
@@ -55,6 +55,32 @@ export const AnnouncementBar: React.FC = () => {
               <span>{settings.contact_phone}</span>
             </a>
           )}
+
+          {/* Top Bar Quick Language Switcher */}
+          <div className="flex items-center bg-black/25 backdrop-blur-xs rounded-full p-0.5 text-[11px] font-bold border border-white/15 shrink-0">
+            <button
+              type="button"
+              onClick={() => setLang('bn')}
+              className={`px-2 py-0.5 rounded-full transition-all flex items-center gap-1 ${
+                isBn
+                  ? 'bg-white text-slate-950 font-black shadow-xs'
+                  : 'text-white/80 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              <span className="font-siliguri">বাংলা</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setLang('en')}
+              className={`px-2 py-0.5 rounded-full transition-all flex items-center gap-1 ${
+                !isBn
+                  ? 'bg-white text-slate-950 font-black shadow-xs'
+                  : 'text-white/80 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              <span>ENG</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

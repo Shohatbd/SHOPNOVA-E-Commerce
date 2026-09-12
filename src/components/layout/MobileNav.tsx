@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Home, Grid, Heart, ShoppingBag, User, Shield, Zap, X, Sparkles } from 'lucide-react';
+import { Home, Grid, Heart, ShoppingBag, User, Shield, Zap, X, Sparkles, Globe } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext.tsx';
 import { useAuth } from '../../context/AuthContext.tsx';
 import { useCart } from '../../context/CartContext.tsx';
@@ -14,7 +14,7 @@ interface MobileNavProps {
 }
 
 export const MobileNav: React.FC<MobileNavProps> = ({ onNavigate, currentPage, onOpenAuth }) => {
-  const { t, isBn } = useLanguage();
+  const { t, isBn, setLang } = useLanguage();
   const { user, isAdmin } = useAuth();
   const { itemCount, setIsCartOpen } = useCart();
   const { wishlistCount } = useWishlist();
@@ -50,7 +50,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ onNavigate, currentPage, o
           }`}
         >
           <Grid className="w-5 h-5" />
-          <span>Categories</span>
+          <span>{isBn ? 'ক্যাটাগরি' : 'Categories'}</span>
         </button>
 
         <button
@@ -163,6 +163,45 @@ export const MobileNav: React.FC<MobileNavProps> = ({ onNavigate, currentPage, o
             </div>
 
             <div className="flex-1 overflow-y-auto p-4 space-y-2">
+              {/* Mobile Drawer Language Switcher */}
+              <div className="bg-slate-100/90 rounded-2xl p-2.5 mb-3 border border-slate-200/80">
+                <div className="flex items-center justify-between mb-2 px-1">
+                  <span className="text-[11px] font-bold text-slate-600 flex items-center gap-1.5">
+                    <Globe className="w-3.5 h-3.5 text-amber-700" />
+                    {isBn ? 'ভাষা নির্বাচন' : 'Language / ভাষা'}
+                  </span>
+                  <span className="text-[10px] font-extrabold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-md">
+                    {isBn ? 'বাংলা সক্রিয়' : 'English Active'}
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setLang('bn')}
+                    className={`py-2 px-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                      isBn
+                        ? 'bg-slate-950 text-white shadow-sm'
+                        : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'
+                    }`}
+                  >
+                    <span>🇧🇩</span>
+                    <span className="font-siliguri font-bold">বাংলা</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setLang('en')}
+                    className={`py-2 px-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                      !isBn
+                        ? 'bg-slate-950 text-white shadow-sm'
+                        : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'
+                    }`}
+                  >
+                    <span>🇬🇧</span>
+                    <span>English</span>
+                  </button>
+                </div>
+              </div>
+
               <button
                 onClick={() => {
                   setIsDrawerOpen(false);
@@ -235,7 +274,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ onNavigate, currentPage, o
                   }}
                   className="w-full text-left p-2 text-sm text-slate-600 hover:text-slate-900"
                 >
-                  About Us
+                  {isBn ? 'আমাদের সম্পর্কে' : 'About Us'}
                 </button>
 
                 <button
@@ -245,7 +284,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ onNavigate, currentPage, o
                   }}
                   className="w-full text-left p-2 text-sm text-slate-600 hover:text-slate-900"
                 >
-                  Contact Us
+                  {isBn ? 'যোগাযোগ করুন' : 'Contact Us'}
                 </button>
 
                 {isAdmin && (

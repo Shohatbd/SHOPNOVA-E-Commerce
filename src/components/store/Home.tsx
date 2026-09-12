@@ -243,60 +243,84 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
 
           {/* 2 Stacked Promo Mini Banners on the Right (Daraz Style) */}
           <div className="grid grid-cols-2 lg:grid-cols-1 gap-3 sm:gap-4 lg:col-span-4 h-full">
-            {/* Promo Card 1: Trending Gadgets & Tech */}
+            {/* Promo Card 1: Top Side Banner */}
             <div
-              onClick={() => onNavigate('category', 'cat_gadgets')}
+              onClick={() => {
+                const targetLink = settings.side_banner_top_link || '/shop';
+                if (targetLink.startsWith('http://') || targetLink.startsWith('https://')) {
+                  window.open(targetLink, '_blank');
+                } else {
+                  const clean = targetLink.replace(/^\//, '');
+                  onNavigate(clean || 'shop');
+                }
+              }}
               className="group relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg border border-slate-200/60 cursor-pointer bg-slate-900 h-[140px] sm:h-[160px] lg:h-[202px] transition-all hover:shadow-xl hover:-translate-y-0.5"
             >
               <img
-                src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=600&q=80"
-                alt={isBn ? "স্মার্ট গ্যাজেট ডিল" : "Smart Gadgets Deal"}
+                src={settings.side_banner_top_image || "https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=600&q=80"}
+                alt={isBn ? (settings.side_banner_top_title_bn || "স্মার্ট গ্যাজেট ডিল") : (settings.side_banner_top_title_en || "Smart Gadgets Deal")}
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r from-slate-950/95 via-slate-950/75 to-transparent flex items-center">
                 <div className="p-3.5 sm:p-5 md:p-6 space-y-1 sm:space-y-1.5 max-w-[240px]">
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-rose-500/25 border border-rose-400/40 text-rose-300 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider backdrop-blur-md">
-                    <Flame className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-rose-400" />
-                    {isBn ? "হট ডিল • ৫০% ছাড়" : "HOT DEAL • 50% OFF"}
-                  </span>
+                  {(settings.side_banner_top_badge_bn || settings.side_banner_top_badge_en) && (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-rose-500/25 border border-rose-400/40 text-rose-300 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider backdrop-blur-md">
+                      <Flame className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-rose-400" />
+                      {isBn ? (settings.side_banner_top_badge_bn || settings.side_banner_top_badge_en) : (settings.side_banner_top_badge_en || settings.side_banner_top_badge_bn)}
+                    </span>
+                  )}
                   <h3 className="text-sm sm:text-base lg:text-lg font-black text-white leading-tight font-siliguri">
-                    {isBn ? "স্মার্ট গ্যাজেট ও ঘড়ি" : "Modern Tech & Watches"}
+                    {isBn ? (settings.side_banner_top_title_bn || settings.side_banner_top_title_en || "স্মার্ট গ্যাজেট ও ঘড়ি") : (settings.side_banner_top_title_en || "Modern Tech & Watches")}
                   </h3>
-                  <p className="text-[10px] sm:text-xs text-slate-300 line-clamp-1 font-siliguri hidden sm:block">
-                    {isBn ? "সেরা মূল্যে প্রিমিয়াম ব্র্যান্ড" : "Premium Gear at Best Value"}
-                  </p>
+                  {(settings.side_banner_top_subtitle_bn || settings.side_banner_top_subtitle_en) && (
+                    <p className="text-[10px] sm:text-xs text-slate-300 line-clamp-1 font-siliguri hidden sm:block">
+                      {isBn ? (settings.side_banner_top_subtitle_bn || settings.side_banner_top_subtitle_en) : (settings.side_banner_top_subtitle_en || settings.side_banner_top_subtitle_bn)}
+                    </p>
+                  )}
                   <span className="inline-flex items-center gap-1 text-[11px] sm:text-xs font-bold text-amber-400 group-hover:text-amber-300 transition-colors pt-0.5">
-                    <span>{isBn ? "এখনই কিনুন" : "Shop Now"}</span>
+                    <span>{isBn ? (settings.side_banner_top_button_bn || "এখনই কিনুন") : (settings.side_banner_top_button_en || "Shop Now")}</span>
                     <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
                   </span>
                 </div>
               </div>
             </div>
 
-            {/* Promo Card 2: Trending Fashion & Apparel */}
+            {/* Promo Card 2: Bottom Side Banner */}
             <div
-              onClick={() => onNavigate('category', 'cat_men')}
+              onClick={() => {
+                const targetLink = settings.side_banner_bottom_link || '/shop';
+                if (targetLink.startsWith('http://') || targetLink.startsWith('https://')) {
+                  window.open(targetLink, '_blank');
+                } else {
+                  const clean = targetLink.replace(/^\//, '');
+                  onNavigate(clean || 'shop');
+                }
+              }}
               className="group relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg border border-slate-200/60 cursor-pointer bg-slate-900 h-[140px] sm:h-[160px] lg:h-[202px] transition-all hover:shadow-xl hover:-translate-y-0.5"
             >
               <img
-                src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80"
-                alt={isBn ? "ফ্যাশন কালেকশন" : "Fashion Collection"}
+                src={settings.side_banner_bottom_image || "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80"}
+                alt={isBn ? (settings.side_banner_bottom_title_bn || "ফ্যাশন কালেকশন") : (settings.side_banner_bottom_title_en || "Fashion Collection")}
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r from-slate-950/95 via-slate-950/75 to-transparent flex items-center">
                 <div className="p-3.5 sm:p-5 md:p-6 space-y-1 sm:space-y-1.5 max-w-[240px]">
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/25 border border-emerald-400/40 text-emerald-300 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider backdrop-blur-md">
-                    <Truck className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-emerald-400" />
-                    {isBn ? "ফ্রি ডেলিভারি অফার" : "FREE HOME DELIVERY"}
-                  </span>
+                  {(settings.side_banner_bottom_badge_bn || settings.side_banner_bottom_badge_en) && (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/25 border border-emerald-400/40 text-emerald-300 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider backdrop-blur-md">
+                      <Truck className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-emerald-400" />
+                      {isBn ? (settings.side_banner_bottom_badge_bn || settings.side_banner_bottom_badge_en) : (settings.side_banner_bottom_badge_en || settings.side_banner_bottom_badge_bn)}
+                    </span>
+                  )}
                   <h3 className="text-sm sm:text-base lg:text-lg font-black text-white leading-tight font-siliguri">
-                    {isBn ? "লেটেস্ট ট্রেন্ডি ফ্যাশন" : "Latest Lifestyle Fashion"}
+                    {isBn ? (settings.side_banner_bottom_title_bn || settings.side_banner_bottom_title_en || "লেটেস্ট ট্রেন্ডি ফ্যাশন") : (settings.side_banner_bottom_title_en || "Latest Lifestyle Fashion")}
                   </h3>
-                  <p className="text-[10px] sm:text-xs text-slate-300 line-clamp-1 font-siliguri hidden sm:block">
-                    {isBn ? "নতুন প্রিমিয়াম পোশাক কালেকশন" : "Curated Apparel & Lifestyle"}
-                  </p>
+                  {(settings.side_banner_bottom_subtitle_bn || settings.side_banner_bottom_subtitle_en) && (
+                    <p className="text-[10px] sm:text-xs text-slate-300 line-clamp-1 font-siliguri hidden sm:block">
+                      {isBn ? (settings.side_banner_bottom_subtitle_bn || settings.side_banner_bottom_subtitle_en) : (settings.side_banner_bottom_subtitle_en || settings.side_banner_bottom_subtitle_bn)}
+                    </p>
+                  )}
                   <span className="inline-flex items-center gap-1 text-[11px] sm:text-xs font-bold text-emerald-400 group-hover:text-emerald-300 transition-colors pt-0.5">
-                    <span>{isBn ? "অফার দেখুন" : "Explore Deals"}</span>
+                    <span>{isBn ? (settings.side_banner_bottom_button_bn || "অফার দেখুন") : (settings.side_banner_bottom_button_en || "Explore Deals")}</span>
                     <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
                   </span>
                 </div>

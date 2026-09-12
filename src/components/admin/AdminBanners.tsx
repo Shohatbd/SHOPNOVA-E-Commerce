@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Image as ImageIcon, Plus, Trash2, Edit2, X, AlertCircle, Save, CheckCircle2 } from 'lucide-react';
+import { Image as ImageIcon, Plus, Trash2, Edit2, X, AlertCircle, Save, CheckCircle2, LayoutGrid, Sliders, ExternalLink, Sparkles, Flame, Truck } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext.tsx';
+import { useSettings } from '../../context/SettingsContext.tsx';
 import { Banner } from '../../types/index.ts';
 import { api } from '../../services/api.ts';
 import { ImageUploadField } from './ImageUploadField.tsx';
@@ -8,8 +9,88 @@ import { ImageUploadField } from './ImageUploadField.tsx';
 export const AdminBanners: React.FC = () => {
   const { t, language } = useLanguage();
   const isBn = language === 'bn';
+  const { settings, updateSettings } = useSettings();
+
+  const [activeTab, setActiveTab] = useState<'slider' | 'side_banners'>('slider');
   const [banners, setBanners] = useState<Banner[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Side Promos Form State (Daraz Style 2 Cards)
+  const [sidePromos, setSidePromos] = useState({
+    side_banner_top_enabled: '1',
+    side_banner_top_image: '',
+    side_banner_top_badge_en: '',
+    side_banner_top_badge_bn: '',
+    side_banner_top_title_en: '',
+    side_banner_top_title_bn: '',
+    side_banner_top_subtitle_en: '',
+    side_banner_top_subtitle_bn: '',
+    side_banner_top_button_en: '',
+    side_banner_top_button_bn: '',
+    side_banner_top_link: '/shop',
+
+    side_banner_bottom_enabled: '1',
+    side_banner_bottom_image: '',
+    side_banner_bottom_badge_en: '',
+    side_banner_bottom_badge_bn: '',
+    side_banner_bottom_title_en: '',
+    side_banner_bottom_title_bn: '',
+    side_banner_bottom_subtitle_en: '',
+    side_banner_bottom_subtitle_bn: '',
+    side_banner_bottom_button_en: '',
+    side_banner_bottom_button_bn: '',
+    side_banner_bottom_link: '/shop',
+  });
+  const [isSavingSidePromos, setIsSavingSidePromos] = useState(false);
+  const [sidePromosSuccessMsg, setSidePromosSuccessMsg] = useState('');
+
+  // Sync settings when loaded
+  useEffect(() => {
+    if (settings) {
+      setSidePromos({
+        side_banner_top_enabled: String(settings.side_banner_top_enabled ?? '1'),
+        side_banner_top_image: settings.side_banner_top_image || 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=600&q=80',
+        side_banner_top_badge_en: settings.side_banner_top_badge_en || 'HOT DEAL • 50% OFF',
+        side_banner_top_badge_bn: settings.side_banner_top_badge_bn || 'হট ডিল • ৫০% ছাড়',
+        side_banner_top_title_en: settings.side_banner_top_title_en || 'Modern Tech & Watches',
+        side_banner_top_title_bn: settings.side_banner_top_title_bn || 'স্মার্ট গ্যাজেট ও ঘড়ি',
+        side_banner_top_subtitle_en: settings.side_banner_top_subtitle_en || 'Premium Gear at Best Value',
+        side_banner_top_subtitle_bn: settings.side_banner_top_subtitle_bn || 'সেরা মূল্যে প্রিমিয়াম ব্র্যান্ড',
+        side_banner_top_button_en: settings.side_banner_top_button_en || 'Shop Now',
+        side_banner_top_button_bn: settings.side_banner_top_button_bn || 'এখনই কিনুন',
+        side_banner_top_link: settings.side_banner_top_link || '/shop',
+
+        side_banner_bottom_enabled: String(settings.side_banner_bottom_enabled ?? '1'),
+        side_banner_bottom_image: settings.side_banner_bottom_image || 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80',
+        side_banner_bottom_badge_en: settings.side_banner_bottom_badge_en || 'FREE HOME DELIVERY',
+        side_banner_bottom_badge_bn: settings.side_banner_bottom_badge_bn || 'ফ্রি ডেলিভারি অফার',
+        side_banner_bottom_title_en: settings.side_banner_bottom_title_en || 'Latest Lifestyle Fashion',
+        side_banner_bottom_title_bn: settings.side_banner_bottom_title_bn || 'লেটেস্ট ট্রেন্ডি ফ্যাশন',
+        side_banner_bottom_subtitle_en: settings.side_banner_bottom_subtitle_en || 'Curated Apparel & Lifestyle',
+        side_banner_bottom_subtitle_bn: settings.side_banner_bottom_subtitle_bn || 'নতুন প্রিমিয়াম পোশাক কালেকশন',
+        side_banner_bottom_button_en: settings.side_banner_bottom_button_en || 'Explore Deals',
+        side_banner_bottom_button_bn: settings.side_banner_bottom_button_bn || 'অফার দেখুন',
+        side_banner_bottom_link: settings.side_banner_bottom_link || '/shop',
+      });
+    }
+  }, [settings]);
+
+  const handleSaveSidePromos = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSavingSidePromos(true);
+    setSidePromosSuccessMsg('');
+    try {
+      const res = await updateSettings(sidePromos);
+      if (res.success) {
+        setSidePromosSuccessMsg(isBn ? 'সাইড ব্যানার সেটিংস সফলভাবে সংরক্ষিত হয়েছে!' : 'Side promo banners updated successfully!');
+        setTimeout(() => setSidePromosSuccessMsg(''), 4000);
+      }
+    } catch (err) {
+      console.error('Failed to save side promos:', err);
+    } finally {
+      setIsSavingSidePromos(false);
+    }
+  };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingBanner, setEditingBanner] = useState<Banner | null>(null);
@@ -162,84 +243,459 @@ export const AdminBanners: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between bg-slate-950 border border-slate-800 p-4 rounded-3xl">
-        <div>
-          <h2 className="text-base font-black text-white">
-            {isBn ? 'ব্যানার ও হিরো স্লাইডার' : 'Banners & Hero Sliders'}
-          </h2>
-          <p className="text-xs text-slate-400">
-            {isBn ? 'হোমপেজের টপ স্লাইডার এবং অফার ব্যানার ম্যানেজ করুন' : 'Manage top carousel sliders and promotional display boards'}
-          </p>
+      {/* Navigation Tabs: Hero Slider vs Side Promo Cards */}
+      <div className="flex flex-wrap items-center justify-between gap-4 bg-slate-950 border border-slate-800 p-3 sm:p-4 rounded-3xl">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setActiveTab('slider')}
+            className={`px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer ${
+              activeTab === 'slider'
+                ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
+                : 'text-slate-400 hover:text-white bg-slate-900 border border-slate-800'
+            }`}
+          >
+            <ImageIcon className="w-4 h-4" />
+            <span>{isBn ? 'মূল স্লাইডার ব্যানার' : 'Main Hero Slider'}</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('side_banners')}
+            className={`px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer ${
+              activeTab === 'side_banners'
+                ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
+                : 'text-slate-400 hover:text-white bg-slate-900 border border-slate-800'
+            }`}
+          >
+            <LayoutGrid className="w-4 h-4" />
+            <span>{isBn ? 'ডান পাশের ২টি অফার ব্যানার (দারাজ স্টাইল)' : 'Side Offer Cards (Daraz Style)'}</span>
+          </button>
         </div>
 
-        <button
-          onClick={handleOpenCreate}
-          className="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 shadow-md transition-colors"
-        >
-          <Plus className="w-4 h-4" />
-          <span>{isBn ? 'নতুন ব্যানার যোগ করুন' : 'Add Banner'}</span>
-        </button>
+        {activeTab === 'slider' && (
+          <button
+            onClick={handleOpenCreate}
+            className="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 shadow-md transition-colors cursor-pointer"
+          >
+            <Plus className="w-4 h-4" />
+            <span>{isBn ? 'নতুন ব্যানার যোগ করুন' : 'Add Banner'}</span>
+          </button>
+        )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {banners.map((b) => (
-          <div
-            key={b.id}
-            className="bg-slate-950 border border-slate-800 rounded-3xl overflow-hidden space-y-4 hover:border-slate-700 transition-colors"
-          >
-            <div className="relative aspect-video bg-slate-900 overflow-hidden">
-              <img src={b.image_url} alt={b.title_en} className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-4">
-                {(b.badge_bn || b.badge_en) && (
-                  <span className="inline-block self-start text-[10px] font-black uppercase tracking-wider bg-amber-500 text-slate-950 px-2 py-0.5 rounded-md mb-1">
-                    {isBn && b.badge_bn ? b.badge_bn : (b.badge_en || b.badge_bn)}
+      {/* TAB 1: Main Carousel Slider */}
+      {activeTab === 'slider' && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {banners.map((b) => (
+            <div
+              key={b.id}
+              className="bg-slate-950 border border-slate-800 rounded-3xl overflow-hidden space-y-4 hover:border-slate-700 transition-colors"
+            >
+              <div className="relative aspect-video bg-slate-900 overflow-hidden">
+                <img src={b.image_url} alt={b.title_en} className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-4">
+                  {(b.badge_bn || b.badge_en) && (
+                    <span className="inline-block self-start text-[10px] font-black uppercase tracking-wider bg-amber-500 text-slate-950 px-2 py-0.5 rounded-md mb-1">
+                      {isBn && b.badge_bn ? b.badge_bn : (b.badge_en || b.badge_bn)}
+                    </span>
+                  )}
+                  <p className="text-white font-black text-sm">{isBn && b.title_bn ? b.title_bn : b.title_en}</p>
+                  {(b.subtitle_bn || b.subtitle_en) && (
+                    <p className="text-slate-300 text-xs">{isBn && b.subtitle_bn ? b.subtitle_bn : b.subtitle_en}</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="p-4 pt-0 flex flex-wrap items-center justify-between gap-2 text-xs">
+                <div className="flex items-center gap-3">
+                  <span className="text-slate-400">{isBn ? `সিরিয়াল: #${b.sort_order}` : `Order: #${b.sort_order}`}</span>
+                  <button
+                    onClick={() => handleToggleStatus(b)}
+                    className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-colors flex items-center gap-1.5 cursor-pointer ${
+                      b.is_active === 1
+                        ? 'bg-emerald-950/60 border-emerald-800 text-emerald-400 hover:bg-emerald-900/60'
+                        : 'bg-slate-900 border-slate-700 text-slate-400 hover:bg-slate-800'
+                    }`}
+                    title={isBn ? 'স্ট্যাটাস টগল করতে ক্লিক করুন' : 'Click to toggle status'}
+                  >
+                    <span className={`w-1.5 h-1.5 rounded-full ${b.is_active === 1 ? 'bg-emerald-400 animate-pulse' : 'bg-slate-500'}`} />
+                    <span>{b.is_active === 1 ? (isBn ? 'পাবলিশড' : 'Active') : (isBn ? 'ড্রাফট (হাইড)' : 'Inactive')}</span>
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => handleOpenEdit(b)}
+                    className="px-3 py-1.5 text-slate-300 hover:text-white bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-xl flex items-center gap-1.5 transition-colors font-bold text-xs cursor-pointer"
+                    title={isBn ? 'এডিট করুন' : 'Edit Banner'}
+                  >
+                    <Edit2 className="w-3.5 h-3.5 text-amber-400" />
+                    <span>{isBn ? 'এডিট' : 'Edit'}</span>
+                  </button>
+                  <button
+                    onClick={() => setDeleteConfirmId(b.id)}
+                    className="p-1.5 text-slate-400 hover:text-rose-400 rounded-xl hover:bg-slate-900 transition-colors cursor-pointer"
+                    title={isBn ? 'ডিলিট করুন' : 'Delete'}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* TAB 2: Side Offer Cards (Daraz Style 2 Cards Beside Slider) */}
+      {activeTab === 'side_banners' && (
+        <form onSubmit={handleSaveSidePromos} className="space-y-6">
+          <div className="bg-slate-950 border border-slate-800 rounded-3xl p-5 sm:p-6 space-y-6">
+            <div className="border-b border-slate-800/80 pb-4 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h3 className="text-sm sm:text-base font-black text-white flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-amber-400" />
+                  <span>{isBn ? 'ডান পাশের ২টি অফার কার্ড সেটিংস (দারাজ স্টাইল)' : 'Side Offer Cards Settings (Daraz Style)'}</span>
+                </h3>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  {isBn
+                    ? 'মূল স্লাইডারের ডান পাশে প্রদর্শিত ২টি ছোট অফার ব্যানারের ছবি, টেক্সট এবং লিংক বাংলা ও ইংরেজিতে পরিবর্তন করুন।'
+                    : 'Customize image, texts, badge, and redirect link for the 2 side offer cards in both English & Bengali.'}
+                </p>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSavingSidePromos}
+                className="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-5 py-2.5 rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-amber-500/20 transition-all cursor-pointer disabled:opacity-50"
+              >
+                <Save className="w-4 h-4" />
+                <span>{isSavingSidePromos ? (isBn ? 'সংরক্ষণ হচ্ছে...' : 'Saving...') : (isBn ? 'পরিবর্তন সংরক্ষণ করুন' : 'Save Changes')}</span>
+              </button>
+            </div>
+
+            {sidePromosSuccessMsg && (
+              <div className="p-3 bg-emerald-950/70 border border-emerald-800 text-emerald-300 text-xs rounded-2xl flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span>{sidePromosSuccessMsg}</span>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* CARD 1: TOP SIDE BANNER */}
+              <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-4">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xs flex items-center justify-center border border-rose-500/30">
+                      1
+                    </span>
+                    <span className="font-black text-white text-sm">
+                      {isBn ? '১ম সাইড ব্যানার (উপরের কার্ড)' : 'Side Card 1 (Top Banner)'}
+                    </span>
+                  </div>
+                  <span className="text-[11px] font-bold text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded-md border border-rose-500/20">
+                    {isBn ? 'হট ডিল' : 'Hot Deal'}
                   </span>
-                )}
-                <p className="text-white font-black text-sm">{isBn && b.title_bn ? b.title_bn : b.title_en}</p>
-                {(b.subtitle_bn || b.subtitle_en) && (
-                  <p className="text-slate-300 text-xs">{isBn && b.subtitle_bn ? b.subtitle_bn : b.subtitle_en}</p>
-                )}
+                </div>
+
+                {/* Image Upload */}
+                <ImageUploadField
+                  label={isBn ? 'ব্যানার ইমেজ (Landscape Card Image) *' : 'Banner Image *'}
+                  value={sidePromos.side_banner_top_image}
+                  onChange={(url) => setSidePromos({ ...sidePromos, side_banner_top_image: url })}
+                  placeholder="https://images.unsplash.com/... or upload image"
+                  helpText={isBn ? 'ল্যাপটপ বা ডিভাইস থেকে ছবি আপলোড করুন।' : 'Upload or paste image URL.'}
+                  recommendedSize="600 x 380 px"
+                />
+
+                {/* Badge: English & Bangla */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-slate-300 font-bold text-xs block mb-1">
+                      {isBn ? 'ব্যাজ (English)' : 'Badge (English)'}
+                    </label>
+                    <input
+                      type="text"
+                      value={sidePromos.side_banner_top_badge_en}
+                      onChange={(e) => setSidePromos({ ...sidePromos, side_banner_top_badge_en: e.target.value })}
+                      placeholder="HOT DEAL • 50% OFF"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-white text-xs focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-slate-300 font-bold text-xs block mb-1">
+                      {isBn ? 'ব্যাজ (বাংলা)' : 'Badge (Bangla)'}
+                    </label>
+                    <input
+                      type="text"
+                      value={sidePromos.side_banner_top_badge_bn}
+                      onChange={(e) => setSidePromos({ ...sidePromos, side_banner_top_badge_bn: e.target.value })}
+                      placeholder="হট ডিল • ৫০% ছাড়"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-white text-xs focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+                </div>
+
+                {/* Title: English & Bangla */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-slate-300 font-bold text-xs block mb-1">
+                      {isBn ? 'শিরোনাম (English) *' : 'Title (English) *'}
+                    </label>
+                    <input
+                      type="text"
+                      value={sidePromos.side_banner_top_title_en}
+                      onChange={(e) => setSidePromos({ ...sidePromos, side_banner_top_title_en: e.target.value })}
+                      placeholder="Modern Tech & Watches"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-white text-xs focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-slate-300 font-bold text-xs block mb-1">
+                      {isBn ? 'শিরোনাম (বাংলা) *' : 'Title (Bangla) *'}
+                    </label>
+                    <input
+                      type="text"
+                      value={sidePromos.side_banner_top_title_bn}
+                      onChange={(e) => setSidePromos({ ...sidePromos, side_banner_top_title_bn: e.target.value })}
+                      placeholder="স্মার্ট গ্যাজেট ও ঘড়ি"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-white text-xs focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+                </div>
+
+                {/* Subtitle: English & Bangla */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-slate-300 font-bold text-xs block mb-1">
+                      {isBn ? 'সাব-টাইটেল (English)' : 'Subtitle (English)'}
+                    </label>
+                    <input
+                      type="text"
+                      value={sidePromos.side_banner_top_subtitle_en}
+                      onChange={(e) => setSidePromos({ ...sidePromos, side_banner_top_subtitle_en: e.target.value })}
+                      placeholder="Premium Gear at Best Value"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-white text-xs focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-slate-300 font-bold text-xs block mb-1">
+                      {isBn ? 'সাব-টাইটেল (বাংলা)' : 'Subtitle (Bangla)'}
+                    </label>
+                    <input
+                      type="text"
+                      value={sidePromos.side_banner_top_subtitle_bn}
+                      onChange={(e) => setSidePromos({ ...sidePromos, side_banner_top_subtitle_bn: e.target.value })}
+                      placeholder="সেরা মূল্যে প্রিমিয়াম ব্র্যান্ড"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-white text-xs focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+                </div>
+
+                {/* Button Text & Link */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label className="text-slate-300 font-bold text-xs block mb-1">
+                      {isBn ? 'বাটন (EN)' : 'Button (EN)'}
+                    </label>
+                    <input
+                      type="text"
+                      value={sidePromos.side_banner_top_button_en}
+                      onChange={(e) => setSidePromos({ ...sidePromos, side_banner_top_button_en: e.target.value })}
+                      placeholder="Shop Now"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-white text-xs focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-slate-300 font-bold text-xs block mb-1">
+                      {isBn ? 'বাটন (বাংলা)' : 'Button (BN)'}
+                    </label>
+                    <input
+                      type="text"
+                      value={sidePromos.side_banner_top_button_bn}
+                      onChange={(e) => setSidePromos({ ...sidePromos, side_banner_top_button_bn: e.target.value })}
+                      placeholder="এখনই কিনুন"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-white text-xs focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-slate-300 font-bold text-xs block mb-1">
+                      {isBn ? 'ক্লিক লিংক (URL)' : 'Click Link (URL)'}
+                    </label>
+                    <input
+                      type="text"
+                      value={sidePromos.side_banner_top_link}
+                      onChange={(e) => setSidePromos({ ...sidePromos, side_banner_top_link: e.target.value })}
+                      placeholder="/shop or /category/..."
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-white text-xs font-mono focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* CARD 2: BOTTOM SIDE BANNER */}
+              <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-4">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xs flex items-center justify-center border border-emerald-500/30">
+                      2
+                    </span>
+                    <span className="font-black text-white text-sm">
+                      {isBn ? '২য় সাইড ব্যানার (নিচের কার্ড)' : 'Side Card 2 (Bottom Banner)'}
+                    </span>
+                  </div>
+                  <span className="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
+                    {isBn ? 'ফ্রি ডেলিভারি' : 'Free Delivery'}
+                  </span>
+                </div>
+
+                {/* Image Upload */}
+                <ImageUploadField
+                  label={isBn ? 'ব্যানার ইমেজ (Landscape Card Image) *' : 'Banner Image *'}
+                  value={sidePromos.side_banner_bottom_image}
+                  onChange={(url) => setSidePromos({ ...sidePromos, side_banner_bottom_image: url })}
+                  placeholder="https://images.unsplash.com/... or upload image"
+                  helpText={isBn ? 'ল্যাপটপ বা ডিভাইস থেকে ছবি আপলোড করুন।' : 'Upload or paste image URL.'}
+                  recommendedSize="600 x 380 px"
+                />
+
+                {/* Badge: English & Bangla */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-slate-300 font-bold text-xs block mb-1">
+                      {isBn ? 'ব্যাজ (English)' : 'Badge (English)'}
+                    </label>
+                    <input
+                      type="text"
+                      value={sidePromos.side_banner_bottom_badge_en}
+                      onChange={(e) => setSidePromos({ ...sidePromos, side_banner_bottom_badge_en: e.target.value })}
+                      placeholder="FREE HOME DELIVERY"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-white text-xs focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-slate-300 font-bold text-xs block mb-1">
+                      {isBn ? 'ব্যাজ (বাংলা)' : 'Badge (Bangla)'}
+                    </label>
+                    <input
+                      type="text"
+                      value={sidePromos.side_banner_bottom_badge_bn}
+                      onChange={(e) => setSidePromos({ ...sidePromos, side_banner_bottom_badge_bn: e.target.value })}
+                      placeholder="ফ্রি ডেলিভারি অফার"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-white text-xs focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+                </div>
+
+                {/* Title: English & Bangla */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-slate-300 font-bold text-xs block mb-1">
+                      {isBn ? 'শিরোনাম (English) *' : 'Title (English) *'}
+                    </label>
+                    <input
+                      type="text"
+                      value={sidePromos.side_banner_bottom_title_en}
+                      onChange={(e) => setSidePromos({ ...sidePromos, side_banner_bottom_title_en: e.target.value })}
+                      placeholder="Latest Lifestyle Fashion"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-white text-xs focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-slate-300 font-bold text-xs block mb-1">
+                      {isBn ? 'শিরোনাম (বাংলা) *' : 'Title (Bangla) *'}
+                    </label>
+                    <input
+                      type="text"
+                      value={sidePromos.side_banner_bottom_title_bn}
+                      onChange={(e) => setSidePromos({ ...sidePromos, side_banner_bottom_title_bn: e.target.value })}
+                      placeholder="লেটেস্ট ট্রেন্ডি ফ্যাশন"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-white text-xs focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+                </div>
+
+                {/* Subtitle: English & Bangla */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-slate-300 font-bold text-xs block mb-1">
+                      {isBn ? 'সাব-টাইটেল (English)' : 'Subtitle (English)'}
+                    </label>
+                    <input
+                      type="text"
+                      value={sidePromos.side_banner_bottom_subtitle_en}
+                      onChange={(e) => setSidePromos({ ...sidePromos, side_banner_bottom_subtitle_en: e.target.value })}
+                      placeholder="Curated Apparel & Lifestyle"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-white text-xs focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-slate-300 font-bold text-xs block mb-1">
+                      {isBn ? 'সাব-টাইটেল (বাংলা)' : 'Subtitle (Bangla)'}
+                    </label>
+                    <input
+                      type="text"
+                      value={sidePromos.side_banner_bottom_subtitle_bn}
+                      onChange={(e) => setSidePromos({ ...sidePromos, side_banner_bottom_subtitle_bn: e.target.value })}
+                      placeholder="নতুন প্রিমিয়াম পোশাক কালেকশন"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-white text-xs focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+                </div>
+
+                {/* Button Text & Link */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label className="text-slate-300 font-bold text-xs block mb-1">
+                      {isBn ? 'বাটন (EN)' : 'Button (EN)'}
+                    </label>
+                    <input
+                      type="text"
+                      value={sidePromos.side_banner_bottom_button_en}
+                      onChange={(e) => setSidePromos({ ...sidePromos, side_banner_bottom_button_en: e.target.value })}
+                      placeholder="Explore Deals"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-white text-xs focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-slate-300 font-bold text-xs block mb-1">
+                      {isBn ? 'বাটন (বাংলা)' : 'Button (BN)'}
+                    </label>
+                    <input
+                      type="text"
+                      value={sidePromos.side_banner_bottom_button_bn}
+                      onChange={(e) => setSidePromos({ ...sidePromos, side_banner_bottom_button_bn: e.target.value })}
+                      placeholder="অফার দেখুন"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-white text-xs focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-slate-300 font-bold text-xs block mb-1">
+                      {isBn ? 'ক্লিক লিংক (URL)' : 'Click Link (URL)'}
+                    </label>
+                    <input
+                      type="text"
+                      value={sidePromos.side_banner_bottom_link}
+                      onChange={(e) => setSidePromos({ ...sidePromos, side_banner_bottom_link: e.target.value })}
+                      placeholder="/shop or /category/..."
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-white text-xs font-mono focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="p-4 pt-0 flex flex-wrap items-center justify-between gap-2 text-xs">
-              <div className="flex items-center gap-3">
-                <span className="text-slate-400">{isBn ? `সিরিয়াল: #${b.sort_order}` : `Order: #${b.sort_order}`}</span>
-                <button
-                  onClick={() => handleToggleStatus(b)}
-                  className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-colors flex items-center gap-1.5 cursor-pointer ${
-                    b.is_active === 1
-                      ? 'bg-emerald-950/60 border-emerald-800 text-emerald-400 hover:bg-emerald-900/60'
-                      : 'bg-slate-900 border-slate-700 text-slate-400 hover:bg-slate-800'
-                  }`}
-                  title={isBn ? 'স্ট্যাটাস টগল করতে ক্লিক করুন' : 'Click to toggle status'}
-                >
-                  <span className={`w-1.5 h-1.5 rounded-full ${b.is_active === 1 ? 'bg-emerald-400 animate-pulse' : 'bg-slate-500'}`} />
-                  <span>{b.is_active === 1 ? (isBn ? 'পাবলিশড' : 'Active') : (isBn ? 'ড্রাফট (হাইড)' : 'Inactive')}</span>
-                </button>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => handleOpenEdit(b)}
-                  className="px-3 py-1.5 text-slate-300 hover:text-white bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-xl flex items-center gap-1.5 transition-colors font-bold text-xs cursor-pointer"
-                  title={isBn ? 'এডিট করুন' : 'Edit Banner'}
-                >
-                  <Edit2 className="w-3.5 h-3.5 text-amber-400" />
-                  <span>{isBn ? 'এডিট' : 'Edit'}</span>
-                </button>
-                <button
-                  onClick={() => setDeleteConfirmId(b.id)}
-                  className="p-1.5 text-slate-400 hover:text-rose-400 rounded-xl hover:bg-slate-900 transition-colors cursor-pointer"
-                  title={isBn ? 'ডিলিট করুন' : 'Delete'}
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
+            <div className="flex items-center justify-end pt-2">
+              <button
+                type="submit"
+                disabled={isSavingSidePromos}
+                className="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-6 py-3 rounded-xl text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-amber-500/20 transition-all cursor-pointer disabled:opacity-50"
+              >
+                <Save className="w-4 h-4" />
+                <span>{isSavingSidePromos ? (isBn ? 'সংরক্ষণ হচ্ছে...' : 'Saving Changes...') : (isBn ? 'সকল পরিবর্তন সংরক্ষণ করুন' : 'Save All Changes')}</span>
+              </button>
             </div>
           </div>
-        ))}
-      </div>
+        </form>
+      )}
 
       {/* Delete Confirmation Modal */}
       {deleteConfirmId && (

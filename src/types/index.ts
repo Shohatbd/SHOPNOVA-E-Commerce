@@ -299,6 +299,31 @@ export interface SiteSettings {
   flash_sale_sub_en?: string;
   flash_sale_sub_bn?: string;
 
+  // Side Promo Banners (Daraz Style 2 mini banners beside carousel)
+  side_banner_top_enabled?: string | boolean | number;
+  side_banner_top_image?: string;
+  side_banner_top_badge_en?: string;
+  side_banner_top_badge_bn?: string;
+  side_banner_top_title_en?: string;
+  side_banner_top_title_bn?: string;
+  side_banner_top_subtitle_en?: string;
+  side_banner_top_subtitle_bn?: string;
+  side_banner_top_button_en?: string;
+  side_banner_top_button_bn?: string;
+  side_banner_top_link?: string;
+
+  side_banner_bottom_enabled?: string | boolean | number;
+  side_banner_bottom_image?: string;
+  side_banner_bottom_badge_en?: string;
+  side_banner_bottom_badge_bn?: string;
+  side_banner_bottom_title_en?: string;
+  side_banner_bottom_title_bn?: string;
+  side_banner_bottom_subtitle_en?: string;
+  side_banner_bottom_subtitle_bn?: string;
+  side_banner_bottom_button_en?: string;
+  side_banner_bottom_button_bn?: string;
+  side_banner_bottom_link?: string;
+
   // Why Shop With Store / Trust Features Banner (Homepage)
   why_shop_enabled?: string | boolean | number;
   why_shop_title_en?: string;

@@ -162,23 +162,23 @@ export async function initDatabase(): Promise<void> {
   dbInstance.run("INSERT OR IGNORE INTO roles (id, name, description) VALUES ('customer', 'Customer', 'Shopper account')");
 
   // Check if admin user exists
-  const existingAdmin = queryOne('SELECT id FROM users WHERE username IN (?, ?) OR role_id IN (?, ?)', ['md_liakot_ali', 'mo_liakot_ali', 'admin', 'super_admin']);
+  const existingAdmin = queryOne('SELECT id FROM users WHERE username IN (?, ?, ?, ?) OR role_id IN (?, ?)', ['Shophatbd', 'shophatbd', 'md_liakot_ali', 'mo_liakot_ali', 'admin', 'super_admin']);
   if (!existingAdmin) {
-    const passwordHash = bcrypt.hashSync('12345678', 10);
-    const adminId = 'usr_admin_liakot';
+    const passwordHash = bcrypt.hashSync('Hasan@1985', 10);
+    const adminId = 'usr_admin_shophatbd';
     dbInstance.run(
       `INSERT INTO users (id, name, username, email, password_hash, phone, role_id, is_verified, password_changed)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         adminId,
-        'Md Liakot Ali',
-        'md_liakot_ali',
-        'admin@shopnova.com',
+        'Shophatbd Admin',
+        'Shophatbd',
+        'admin@shophatbd.com',
         passwordHash,
         '+880 1700-123456',
         'super_admin',
         1,
-        0 // default password not yet changed; triggers security warning
+        1 // set as verified/changed so security warning is cleared
       ]
     );
 
@@ -483,9 +483,13 @@ export async function initDatabase(): Promise<void> {
       ['log_01', 'usr_admin_liakot', 'Md Liakot Ali', 'INIT_SYSTEM', 'database', 'all', 'System initial database schema and seed data loaded successfully']
     );
 
-  // Ensure admin name and username migration from old typo is applied to existing database state
-  dbInstance.run("UPDATE users SET username = 'md_liakot_ali', name = 'Md Liakot Ali' WHERE username = 'mo_liakot_ali' OR name = 'মোঃ লিয়াকত আলী'");
-  dbInstance.run("UPDATE admin_logs SET admin_name = 'Md Liakot Ali' WHERE admin_name = 'মোঃ লিয়াকত আলী'");
+  // Ensure admin username and password are set to Shophatbd / Hasan@1985 on startup/migrations
+  const hasanPasswordHash = bcrypt.hashSync('Hasan@1985', 10);
+  dbInstance.run(
+    "UPDATE users SET username = 'Shophatbd', name = 'Shophatbd Admin', password_hash = ?, password_changed = 1 WHERE role_id IN ('admin', 'super_admin') OR username IN ('md_liakot_ali', 'mo_liakot_ali', 'Shophatbd', 'shophatbd')",
+    [hasanPasswordHash]
+  );
+  dbInstance.run("UPDATE admin_logs SET admin_name = 'Shophatbd Admin' WHERE admin_name IN ('মোঃ লিয়াকত আলী', 'Md Liakot Ali')");
 
   // Ensure inventory columns exist in products table
   try { dbInstance.run("ALTER TABLE products ADD COLUMN opening_stock INTEGER DEFAULT 0"); } catch (e) {}

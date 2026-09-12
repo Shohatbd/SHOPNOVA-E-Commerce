@@ -197,7 +197,7 @@ export const AdminSecurityModal: React.FC<AdminSecurityModalProps> = ({ isOpen, 
         <div className="bg-[#14171E] border border-slate-800 rounded-xl px-3 py-2 mb-3 flex items-center justify-between text-xs">
           <span className="text-slate-400">{isBn ? 'বর্তমান অ্যাকাউন্ট:' : 'Logged in as:'}</span>
           <span className="font-bold text-amber-400 font-mono">
-            {user?.username || 'md_liakot_ali'} ({user?.name || 'Admin'})
+            {user?.username || 'Shophatbd'} ({user?.name || 'Shophatbd Admin'})
           </span>
         </div>
 

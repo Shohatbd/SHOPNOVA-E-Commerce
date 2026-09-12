@@ -24,7 +24,8 @@ import {
   Check,
   Palette,
   ImagePlus,
-  Sparkles
+  Sparkles,
+  ShieldCheck
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext.tsx';
 import { useSettings } from '../../context/SettingsContext.tsx';
@@ -115,6 +116,39 @@ export const AdminProducts: React.FC = () => {
   const [bulkCustomSize, setBulkCustomSize] = useState('');
   const [bulkStock, setBulkStock] = useState(10);
   const [bulkImage, setBulkImage] = useState('');
+
+  // Personal Product Protection & Demo Management
+  const [isClearingDemo, setIsClearingDemo] = useState(false);
+  const [showClearDemoModal, setShowClearDemoModal] = useState(false);
+  const [demoActionStatus, setDemoActionStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+
+  const demoProductsList = products.filter(
+    (p) =>
+      p.is_demo === 1 ||
+      (p.id && (p.id.startsWith('prod_men_') || p.id.startsWith('prod_w_') || p.id.startsWith('prod_k_') || p.id.startsWith('prod_wat_') || p.id.startsWith('prod_gad_')))
+  );
+  const demoProductsCount = demoProductsList.length;
+  const userProductsCount = products.length - demoProductsCount;
+
+  const handleClearDemoProducts = async () => {
+    setIsClearingDemo(true);
+    setDemoActionStatus(null);
+    try {
+      const res = await api.clearDemoProducts();
+      if (res.success) {
+        setDemoActionStatus({ type: 'success', message: res.message || 'সকল ডেমো প্রডাক্ট সফলভাবে মুছে ফেলা হয়েছে।' });
+        setShowClearDemoModal(false);
+        await loadData();
+      } else {
+        setDemoActionStatus({ type: 'error', message: res.message || 'ডেমো প্রডাক্ট মুছতে ব্যর্থ হয়েছে।' });
+      }
+    } catch (err: any) {
+      console.error('Clear demo error:', err);
+      setDemoActionStatus({ type: 'error', message: 'ডেমো প্রডাক্ট মুছে ফেলার সময় সমস্যা হয়েছে।' });
+    } finally {
+      setIsClearingDemo(false);
+    }
+  };
 
   const loadData = async () => {
     setIsLoading(true);
@@ -528,6 +562,64 @@ export const AdminProducts: React.FC = () => {
         </div>
       )}
 
+      {/* Personal Product Safeguard & Demo Cleanup Notice Banner */}
+      <div className="bg-[#14171E] border border-slate-800 rounded-2xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-sm">
+        <div className="flex items-start gap-3">
+          <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0 mt-0.5">
+            <ShieldCheck className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <h4 className="text-xs font-bold text-white">
+                {isBn ? 'ব্যক্তিগত পণ্য ও কাস্টমাইজেশন সুরক্ষা সক্রিয়' : 'Personal Product & Customization Safeguard Active'}
+              </h4>
+              <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                {isBn ? 'সুরক্ষিত ডেটাবেস' : 'Protected DB'}
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
+              {isBn
+                ? `আপনার আপলোড করা পণ্য (${userProductsCount}টি) এবং সেটিংস কঠোরভাবে সুরক্ষিত। সার্ভার রিস্টার্ট হলেও আপনার নিজস্ব পণ্য কখনোই মুছে যাবে না বা ডিফল্ট দিয়ে ওভাররাইট হবে না।`
+                : `Your custom uploaded products (${userProductsCount}) and settings are permanently safe. They will never be wiped or overwritten on server restarts.`}
+            </p>
+          </div>
+        </div>
+
+        {demoProductsCount > 0 ? (
+          <div className="flex items-center gap-2 shrink-0 self-stretch md:self-auto justify-end">
+            <button
+              type="button"
+              onClick={() => setShowClearDemoModal(true)}
+              disabled={isClearingDemo}
+              className="px-3.5 py-2 bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+            >
+              <Trash2 className="w-3.5 h-3.5 text-rose-400" />
+              <span>{isBn ? `সকল ডেমো পণ্য মুছুন (${demoProductsCount}টি)` : `Clear All Demo Products (${demoProductsCount})`}</span>
+            </button>
+          </div>
+        ) : (
+          <div className="px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[11px] font-bold flex items-center gap-1.5 shrink-0">
+            <CheckCircle2 className="w-3.5 h-3.5" />
+            <span>{isBn ? 'স্টোরে কোনো ডেমো পণ্য নেই (১০০% নিজস্ব)' : 'No Demo Products (100% Personal)'}</span>
+          </div>
+        )}
+      </div>
+
+      {demoActionStatus && (
+        <div className={`p-3.5 rounded-xl text-xs font-semibold flex items-center gap-2.5 animate-fadeIn border ${
+          demoActionStatus.type === 'success'
+            ? 'bg-emerald-950/70 border-emerald-800 text-emerald-300'
+            : 'bg-rose-950/70 border-rose-800 text-rose-300'
+        }`}>
+          {demoActionStatus.type === 'success' ? (
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+          ) : (
+            <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+          )}
+          <span>{demoActionStatus.message}</span>
+        </div>
+      )}
+
       {/* Products Table */}
       <div className="bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-sm overflow-hidden">
         {isLoading ? (
@@ -585,9 +677,20 @@ export const AdminProducts: React.FC = () => {
                           className="w-12 h-12 rounded-xl object-cover border border-slate-800 shrink-0"
                         />
                         <div className="min-w-0 max-w-xs">
-                          <p className="font-bold text-white truncate">
-                            {isBn ? (prod.name_bn || prod.name_en) : prod.name_en}
-                          </p>
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <p className="font-bold text-white truncate">
+                              {isBn ? (prod.name_bn || prod.name_en) : prod.name_en}
+                            </p>
+                            {(prod.is_demo === 1 || (prod.id && (prod.id.startsWith('prod_men_') || prod.id.startsWith('prod_w_') || prod.id.startsWith('prod_k_') || prod.id.startsWith('prod_wat_') || prod.id.startsWith('prod_gad_')))) ? (
+                              <span className="px-1.5 py-0.5 text-[9px] font-bold rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 font-mono shrink-0">
+                                {isBn ? 'ডিফল্ট ডেমো' : 'Demo'}
+                              </span>
+                            ) : (
+                              <span className="px-1.5 py-0.5 text-[9px] font-bold rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-mono shrink-0">
+                                {isBn ? 'ব্যক্তিগত পণ্য' : 'Personal'}
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </td>
@@ -1796,6 +1899,64 @@ export const AdminProducts: React.FC = () => {
                   {isDeleting
                     ? (isBn ? "মুছে ফেলা হচ্ছে..." : "Deleting...")
                     : (isBn ? "নিশ্চিত মুছুন" : "Confirm Delete")}
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Clear Demo Products Confirmation Modal */}
+      {showClearDemoModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fadeIn">
+          <div className="bg-[#1E222B] border border-rose-500/40 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400 shrink-0">
+                <Trash2 className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white">
+                  {isBn ? "সকল ডেমো পণ্য মুছে ফেলার নিশ্চিতকরণ" : "Clear All Demo Products Confirmation"}
+                </h3>
+                <p className="text-[11px] text-slate-400">
+                  {isBn ? `মোট ${demoProductsCount}টি নমুনা/ডিফল্ট ডেমো পণ্য ডাটাবেজ থেকে মুছে যাবে।` : `Total ${demoProductsCount} demo items will be removed from database.`}
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-[#14171E] border border-slate-800 rounded-xl p-3.5 space-y-2 text-xs">
+              <div className="flex items-center gap-2 text-emerald-400 font-bold">
+                <ShieldCheck className="w-4 h-4 shrink-0" />
+                <span>{isBn ? `আপনার নিজস্ব আপলোড (${userProductsCount}টি পণ্য) সম্পূর্ণ অক্ষত থাকবে!` : `Your own uploads (${userProductsCount} products) remain 100% safe!`}</span>
+              </div>
+              <p className="text-[11px] text-slate-400 leading-relaxed">
+                {isBn
+                  ? "শুধুমাত্র সিস্টেমের স্যাম্পল পণ্যগুলো মুছে ফেলা হবে, যাতে আপনার আসল পণ্যের সাথে ডেমো পণ্য মিশে ব্যবসার কোনো ক্ষতি না হয়।"
+                  : "Only the system default sample products will be removed so they do not mix with your actual customer-facing inventory."}
+              </p>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setShowClearDemoModal(false)}
+                disabled={isClearingDemo}
+                className="px-4 py-2 text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-800 rounded-xl text-xs font-semibold transition-colors"
+              >
+                {isBn ? "বাতিল" : "Cancel"}
+              </button>
+
+              <button
+                type="button"
+                disabled={isClearingDemo}
+                onClick={handleClearDemoProducts}
+                className="px-5 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold shadow-md transition-colors flex items-center gap-2 disabled:opacity-50"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>
+                  {isClearingDemo
+                    ? (isBn ? "মুছে ফেলা হচ্ছে..." : "Clearing...")
+                    : (isBn ? `হ্যাঁ, ${demoProductsCount}টি ডেমো পণ্য মুছুন` : `Yes, Clear ${demoProductsCount} Demo Items`)}
                 </span>
               </button>
             </div>

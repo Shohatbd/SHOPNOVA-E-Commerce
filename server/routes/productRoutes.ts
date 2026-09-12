@@ -661,4 +661,54 @@ router.post('/bulk', requireAdmin, (req: AuthenticatedRequest, res: Response) =>
   }
 });
 
+// 9. POST /api/products/clear-demo-products - Remove all default/sample demo products in 1 click
+router.post('/clear-demo-products', requireAdmin, (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const admin = req.user!;
+    
+    // Select all demo products (either flagged as is_demo = 1 or matching initial demo IDs)
+    const demoProducts = query<{ id: string; name_en: string }>(
+      `SELECT id, name_en FROM products WHERE is_demo = 1 OR id LIKE 'prod_men_%' OR id LIKE 'prod_w_%' OR id LIKE 'prod_k_%' OR id LIKE 'prod_wat_%' OR id LIKE 'prod_gad_%'`
+    );
+
+    if (demoProducts.length === 0) {
+      res.json({
+        success: true,
+        message: 'কোনো ডেমো পণ্য খুঁজে পাওয়া যায়নি। আপনার স্টোরে এখন কেবল নিজস্ব পণ্য রয়েছে।',
+        deleted_count: 0
+      });
+      return;
+    }
+
+    const demoIds = demoProducts.map(p => p.id);
+    const placeholders = demoIds.map(() => '?').join(',');
+
+    run(`DELETE FROM inventory_history WHERE product_id IN (${placeholders})`, demoIds);
+    run(`DELETE FROM product_variants WHERE product_id IN (${placeholders})`, demoIds);
+    run(`DELETE FROM product_images WHERE product_id IN (${placeholders})`, demoIds);
+    run(`DELETE FROM reviews WHERE product_id IN (${placeholders})`, demoIds);
+    run(`DELETE FROM wishlists WHERE product_id IN (${placeholders})`, demoIds);
+    run(`DELETE FROM products WHERE id IN (${placeholders})`, demoIds);
+
+    logAdminAction(
+      admin.id,
+      admin.name,
+      'CLEAR_DEMO_PRODUCTS',
+      'product',
+      null,
+      `Removed ${demoIds.length} sample demo products cleanly to keep store strictly authentic`,
+      req.ip || '127.0.0.1'
+    );
+
+    res.json({
+      success: true,
+      message: `সাফল্যের সাথে ${demoIds.length}টি ডেমো পণ্য মুছে ফেলা হয়েছে। আপনার আপলোড করা নিজস্ব পণ্য ১০০% নিরাপদ ও অপরিবর্তিত রয়েছে।`,
+      deleted_count: demoIds.length
+    });
+  } catch (error) {
+    console.error('Clear demo products error:', error);
+    res.status(500).json({ success: false, message: 'Failed to clear demo products.' });
+  }
+});
+
 export default router;

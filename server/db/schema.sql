@@ -88,6 +88,7 @@ CREATE TABLE IF NOT EXISTS products (
   seo_title TEXT,
   seo_description TEXT,
   seo_keywords TEXT,
+  is_demo INTEGER DEFAULT 0,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (category_id) REFERENCES categories(id),

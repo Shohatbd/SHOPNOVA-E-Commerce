@@ -156,15 +156,47 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, currentPage, current
 
             {/* Brand Name & Tagline (Hidden if image-only mode) */}
             {settings.logo_type !== 'image' && (
-              <div className="min-w-0 flex-1">
-                <span className="text-base sm:text-xl lg:text-2xl font-black tracking-tight font-heading block leading-tight truncate" style={{ color: headerTextColor }}>
-                  {isBn && settings.site_name_bn ? settings.site_name_bn : (settings.site_name || settings.site_name_en || 'SHOPNOVA')}
+              <div className="inline-flex flex-col justify-center min-w-0">
+                <span
+                  className="text-base sm:text-xl lg:text-2xl font-black tracking-tight font-heading block leading-none uppercase truncate"
+                  style={{ color: headerTextColor }}
+                >
+                  {isBn && settings.site_name_bn ? settings.site_name_bn : (settings.site_name || 'SHOPHATBD')}
                 </span>
-                <span className={`text-[9.5px] sm:text-[11px] uppercase font-bold block mt-0.5 opacity-90 truncate max-w-[140px] sm:max-w-xs md:max-w-none ${isBn ? 'tracking-normal font-bengali' : 'tracking-wider sm:tracking-widest'}`}>
-                  {isBn
-                    ? settings.site_tagline_bn || 'প্রিমিয়াম লাইফস্টাইল ও আধুনিক গ্যাজেট'
-                    : settings.site_tagline_en || 'Premium Lifestyle & Modern Gadget Destination'}
-                </span>
+                {(() => {
+                  const taglineText = isBn
+                    ? (settings.site_tagline_bn || 'স্মার্ট কেনাকাটা সুন্দর জীবন')
+                    : (settings.site_tagline_en || 'SHOP SMART LIVE BETTER');
+                  const words = taglineText.trim().split(/\s+/);
+                  return words.length > 1 ? (
+                    <div
+                      className={`w-full flex justify-between items-center text-[7px] sm:text-[8px] lg:text-[8.5px] font-extrabold uppercase opacity-90 leading-none mt-1 select-none ${
+                        isBn ? 'font-bengali' : ''
+                      }`}
+                      style={{ color: headerTextColor }}
+                    >
+                      {words.map((w, idx) => (
+                        <span
+                          key={idx}
+                          className={`shrink-0 ${
+                            isBn ? '' : 'tracking-[0.03em] sm:tracking-[0.05em]'
+                          }`}
+                        >
+                          {w}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <div
+                      className={`w-full text-center text-[7px] sm:text-[8px] lg:text-[8.5px] font-extrabold uppercase opacity-90 leading-none mt-1 select-none ${
+                        isBn ? 'font-bengali' : 'tracking-[0.08em]'
+                      }`}
+                      style={{ color: headerTextColor }}
+                    >
+                      {taglineText}
+                    </div>
+                  );
+                })()}
               </div>
             )}
           </button>

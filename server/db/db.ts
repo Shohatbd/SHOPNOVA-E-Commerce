@@ -156,7 +156,23 @@ export async function initDatabase(): Promise<void> {
     dbInstance.run('UPDATE products SET opening_stock = stock_quantity WHERE (opening_stock = 0 OR opening_stock IS NULL) AND stock_quantity > 0');
   } catch (_) {}
 
-  // Seed default roles
+  // Ensure inventory and demo columns exist in products table
+  try { dbInstance.run("ALTER TABLE products ADD COLUMN is_demo INTEGER DEFAULT 0"); } catch (_) {}
+  try { dbInstance.run("ALTER TABLE products ADD COLUMN opening_stock INTEGER DEFAULT 0"); } catch (_) {}
+  try { dbInstance.run("ALTER TABLE products ADD COLUMN total_received INTEGER DEFAULT 0"); } catch (_) {}
+  try { dbInstance.run("ALTER TABLE products ADD COLUMN total_delivered INTEGER DEFAULT 0"); } catch (_) {}
+  try { dbInstance.run("ALTER TABLE products ADD COLUMN total_returned INTEGER DEFAULT 0"); } catch (_) {}
+  try { dbInstance.run("ALTER TABLE inventory_history ADD COLUMN reference_id TEXT"); } catch (_) {}
+  try { dbInstance.run("ALTER TABLE inventory_history ADD COLUMN reference_type TEXT"); } catch (_) {}
+  try { dbInstance.run("ALTER TABLE inventory_history ADD COLUMN supplier_name TEXT"); } catch (_) {}
+  try { dbInstance.run("ALTER TABLE inventory_history ADD COLUMN challan_no TEXT"); } catch (_) {}
+  try { dbInstance.run("ALTER TABLE product_variants ADD COLUMN image TEXT"); } catch (_) {}
+
+  // Check if store has completed initial setup/seeding
+  const storeInitRow = queryOne<{ value: string }>("SELECT value FROM site_settings WHERE key = 'store_data_initialized'");
+  const isStoreInitialized = Boolean(storeInitRow && storeInitRow.value === '1');
+
+  // Ensure default roles
   dbInstance.run("INSERT OR IGNORE INTO roles (id, name, description) VALUES ('super_admin', 'Super Admin', 'Full platform control')");
   dbInstance.run("INSERT OR IGNORE INTO roles (id, name, description) VALUES ('admin', 'Admin', 'Store and product manager')");
   dbInstance.run("INSERT OR IGNORE INTO roles (id, name, description) VALUES ('customer', 'Customer', 'Shopper account')");
@@ -173,12 +189,12 @@ export async function initDatabase(): Promise<void> {
         adminId,
         'Shophatbd Admin',
         'Shophatbd',
-        'admin@shophatbd.com',
+        'liakot911@gmail.com',
         passwordHash,
-        '+880 1700-123456',
+        '01724709454',
         'super_admin',
         1,
-        1 // set as verified/changed so security warning is cleared
+        1
       ]
     );
 
@@ -201,20 +217,7 @@ export async function initDatabase(): Promise<void> {
     );
   }
 
-  // Ensure all seed categories, subcategories, products, banners, coupons, shipping methods exist
-  console.log('Synchronizing seed categories, products, banners, and settings...');
-
-  // Remove obsolete categories and clean up subcategories
-  const obsoleteCats = ['cat_wallets', 'cat_trimmers', 'cat_laptops', 'cat_glasses'];
-  for (const oldCat of obsoleteCats) {
-    try {
-      dbInstance.run('UPDATE products SET category_id = ? WHERE category_id = ?', ['cat_gadgets', oldCat]);
-      dbInstance.run('DELETE FROM subcategories WHERE category_id = ?', [oldCat]);
-      dbInstance.run('DELETE FROM categories WHERE id = ?', [oldCat]);
-    } catch (_) {}
-  }
-
-  // Ensure categories exist without overwriting user custom edits
+  // Ensure default categories exist without overwriting any user customizations
   for (const cat of seedCategories) {
     dbInstance.run(
       `INSERT OR IGNORE INTO categories (id, name_en, name_bn, slug, description_en, description_bn, image, icon, sort_order)
@@ -223,14 +226,6 @@ export async function initDatabase(): Promise<void> {
     );
   }
 
-  // Remove old subcategories that are no longer in seedSubcategories
-  const seedSubIds = seedSubcategories.map(s => s.id);
-  const placeholders = seedSubIds.map(() => '?').join(',');
-  try {
-    dbInstance.run(`DELETE FROM subcategories WHERE category_id IN ('cat_men', 'cat_women', 'cat_kids', 'cat_watches', 'cat_gadgets') AND id NOT IN (${placeholders})`, seedSubIds);
-  } catch (_) {}
-
-  // Synchronize subcategories with images without overwriting user custom changes
   for (const sub of seedSubcategories) {
     dbInstance.run(
       `INSERT OR IGNORE INTO subcategories (id, category_id, name_en, name_bn, slug, image)
@@ -239,125 +234,53 @@ export async function initDatabase(): Promise<void> {
     );
   }
 
-  // Clean up legacy demo products not in seedProducts
-  const currentSeedProductIds = seedProducts.map(p => p.id);
-  const seedProdPlaceholders = currentSeedProductIds.map(() => '?').join(',');
-  try {
-    // Remap legacy order_items product IDs so foreign relations are preserved cleanly
-    const legacyProductRemaps: Record<string, string> = {
-      'prod_m_01': 'prod_men_panjabi_01',
-      'prod_men_tshirt_01': 'prod_men_shirt_01',
-      'prod_men_tshirt_02': 'prod_men_shirt_01',
-      'prod_men_tshirt_03': 'prod_men_shirt_01',
-      'prod_men_tshirt_04': 'prod_men_shirt_01',
-      'prod_w_01': 'prod_w_saree_01',
-      'prod_w_02': 'prod_w_salwar_01',
-      'prod_k_01': 'prod_k_boys_01',
-      'prod_k_02': 'prod_k_girls_01',
-      'prod_wat_01': 'prod_wat_luxury_01',
-      'prod_wat_02': 'prod_wat_smart_01',
-      'prod_gad_01': 'prod_gad_audio_01',
-      'prod_gad_02': 'prod_gad_power_01'
-    };
-    for (const [oldId, newId] of Object.entries(legacyProductRemaps)) {
-      dbInstance.run(`UPDATE order_items SET product_id = ? WHERE product_id = ?`, [newId, oldId]);
-    }
+  // ONLY ON FIRST INITIALIZATION: Seed demo products, banners, and coupons
+  if (!isStoreInitialized) {
+    console.log('Performing first-time initial store seeding...');
 
-    // Delete orphan product images and variants of old seed products
-    dbInstance.run(
-      `DELETE FROM product_images WHERE product_id NOT IN (${seedProdPlaceholders}) AND product_id LIKE 'prod_%'`,
-      currentSeedProductIds
-    );
-    dbInstance.run(
-      `DELETE FROM product_variants WHERE product_id NOT IN (${seedProdPlaceholders}) AND product_id LIKE 'prod_%'`,
-      currentSeedProductIds
-    );
-    // Delete old seed products not in the active seed product list
-    dbInstance.run(
-      `DELETE FROM products WHERE id NOT IN (${seedProdPlaceholders}) AND id LIKE 'prod_%'`,
-      currentSeedProductIds
-    );
-  } catch (err) {
-    console.warn('Product cleanup warning:', err);
-  }
-
-  for (const prod of seedProducts) {
-    // Prevent unique constraint clash on slug or sku if changed
-    try {
-      dbInstance.run(`DELETE FROM products WHERE (slug = ? OR sku = ?) AND id != ?`, [prod.slug, prod.sku, prod.id]);
-    } catch (_) {}
-
-    dbInstance.run(
-      `INSERT INTO products (
-        id, sku, name_en, name_bn, slug, short_description_en, short_description_bn,
-        description_en, description_bn, category_id, subcategory_id, brand,
-        regular_price, sale_price, discount_percentage, opening_stock, total_received, total_delivered, total_returned, stock_quantity, low_stock_threshold,
-        thumbnail, weight, is_featured, is_bestseller, is_new_arrival, is_flash_sale,
-        rating, review_count, tags, seo_title, seo_description, seo_keywords
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      ON CONFLICT(id) DO UPDATE SET
-        sku=excluded.sku,
-        name_en=excluded.name_en,
-        name_bn=excluded.name_bn,
-        slug=excluded.slug,
-        short_description_en=excluded.short_description_en,
-        short_description_bn=excluded.short_description_bn,
-        description_en=excluded.description_en,
-        description_bn=excluded.description_bn,
-        category_id=excluded.category_id,
-        subcategory_id=excluded.subcategory_id,
-        brand=excluded.brand,
-        regular_price=excluded.regular_price,
-        sale_price=excluded.sale_price,
-        discount_percentage=excluded.discount_percentage,
-        thumbnail=excluded.thumbnail,
-        weight=excluded.weight,
-        is_featured=excluded.is_featured,
-        is_bestseller=excluded.is_bestseller,
-        is_new_arrival=excluded.is_new_arrival,
-        is_flash_sale=excluded.is_flash_sale,
-        rating=excluded.rating,
-        review_count=excluded.review_count,
-        tags=excluded.tags,
-        seo_title=excluded.seo_title,
-        seo_description=excluded.seo_description,
-        seo_keywords=excluded.seo_keywords`,
-      [
-        prod.id, prod.sku, prod.name_en, prod.name_bn, prod.slug,
-        prod.short_description_en, prod.short_description_bn,
-        prod.description_en, prod.description_bn,
-        prod.category_id, prod.subcategory_id || null, prod.brand,
-        prod.regular_price, prod.sale_price || null, prod.discount_percentage || 0,
-        prod.stock_quantity, prod.stock_quantity, prod.low_stock_threshold,
-        prod.thumbnail, prod.weight, prod.is_featured, prod.is_bestseller,
-        prod.is_new_arrival, prod.is_flash_sale,
-        prod.rating, prod.review_count, prod.tags,
-        prod.seo_title, prod.seo_description, prod.seo_keywords
-      ]
-    );
-
-    // Add / sync product images
-    dbInstance.run(`DELETE FROM product_images WHERE product_id = ?`, [prod.id]);
-    let imgIdx = 0;
-    for (const imgUrl of prod.images) {
+    for (const prod of seedProducts) {
       dbInstance.run(
-        `INSERT OR IGNORE INTO product_images (id, product_id, image_url, is_primary, sort_order)
-         VALUES (?, ?, ?, ?, ?)`,
-        [`img_${prod.id}_${imgIdx}`, prod.id, imgUrl, imgIdx === 0 ? 1 : 0, imgIdx]
+        `INSERT OR IGNORE INTO products (
+          id, sku, name_en, name_bn, slug, short_description_en, short_description_bn,
+          description_en, description_bn, category_id, subcategory_id, brand,
+          regular_price, sale_price, discount_percentage, opening_stock, total_received, total_delivered, total_returned, stock_quantity, low_stock_threshold,
+          thumbnail, weight, is_featured, is_bestseller, is_new_arrival, is_flash_sale,
+          rating, review_count, tags, seo_title, seo_description, seo_keywords, is_demo
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)`,
+        [
+          prod.id, prod.sku, prod.name_en, prod.name_bn, prod.slug,
+          prod.short_description_en, prod.short_description_bn,
+          prod.description_en, prod.description_bn,
+          prod.category_id, prod.subcategory_id || null, prod.brand,
+          prod.regular_price, prod.sale_price || null, prod.discount_percentage || 0,
+          prod.stock_quantity, prod.stock_quantity, prod.low_stock_threshold,
+          prod.thumbnail, prod.weight, prod.is_featured, prod.is_bestseller,
+          prod.is_new_arrival, prod.is_flash_sale,
+          prod.rating, prod.review_count, prod.tags,
+          prod.seo_title, prod.seo_description, prod.seo_keywords
+        ]
       );
-      imgIdx++;
-    }
 
-    // Add / sync product variants
-    dbInstance.run(`DELETE FROM product_variants WHERE product_id = ?`, [prod.id]);
-    for (const v of prod.variants) {
-      dbInstance.run(
-        `INSERT OR IGNORE INTO product_variants (id, product_id, sku, size, color, color_code, price_adjustment, stock_quantity, image)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [v.id, prod.id, v.sku, v.size || null, v.color || null, v.color_code || null, v.price_adjustment || 0, v.stock_quantity, v.image || null]
-      );
+      // Add product images
+      let imgIdx = 0;
+      for (const imgUrl of prod.images) {
+        dbInstance.run(
+          `INSERT OR IGNORE INTO product_images (id, product_id, image_url, is_primary, sort_order)
+           VALUES (?, ?, ?, ?, ?)`,
+          [`img_${prod.id}_${imgIdx}`, prod.id, imgUrl, imgIdx === 0 ? 1 : 0, imgIdx]
+        );
+        imgIdx++;
+      }
+
+      // Add product variants
+      for (const v of prod.variants) {
+        dbInstance.run(
+          `INSERT OR IGNORE INTO product_variants (id, product_id, sku, size, color, color_code, price_adjustment, stock_quantity, image)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          [v.id, prod.id, v.sku, v.size || null, v.color || null, v.color_code || null, v.price_adjustment || 0, v.stock_quantity, v.image || null]
+        );
+      }
     }
-  }
 
     for (const b of seedBanners) {
       dbInstance.run(
@@ -383,12 +306,25 @@ export async function initDatabase(): Promise<void> {
       );
     }
 
-    for (const st of seedSettings) {
-      dbInstance.run(
-        `INSERT OR IGNORE INTO site_settings (id, key, value) VALUES (?, ?, ?)`,
-        [`st_${st.key}`, st.key, st.value]
-      );
-    }
+    // Mark store data as initialized so seed demo data is never repeated or overwritten
+    dbInstance.run(
+      `INSERT OR REPLACE INTO site_settings (id, key, value) VALUES ('st_store_data_initialized', 'store_data_initialized', '1')`
+    );
+  } else {
+    console.log('Store data already initialized. All custom products, edits, categories, and settings are strictly preserved.');
+    // Flag any initial demo products as is_demo = 1 if not set
+    try {
+      dbInstance.run(`UPDATE products SET is_demo = 1 WHERE id LIKE 'prod_men_%' OR id LIKE 'prod_w_%' OR id LIKE 'prod_k_%' OR id LIKE 'prod_wat_%' OR id LIKE 'prod_gad_%'`);
+    } catch (_) {}
+  }
+
+  // Insert any missing site settings using INSERT OR IGNORE (NEVER overwrite existing custom settings)
+  for (const st of seedSettings) {
+    dbInstance.run(
+      `INSERT OR IGNORE INTO site_settings (id, key, value) VALUES (?, ?, ?)`,
+      [`st_${st.key}`, st.key, st.value]
+    );
+  }
 
     // Seed sample reviews
     dbInstance.run(
@@ -483,13 +419,39 @@ export async function initDatabase(): Promise<void> {
       ['log_01', 'usr_admin_liakot', 'Md Liakot Ali', 'INIT_SYSTEM', 'database', 'all', 'System initial database schema and seed data loaded successfully']
     );
 
-  // Ensure admin username and password are set to Shophatbd / Hasan@1985 on startup/migrations
-  const hasanPasswordHash = bcrypt.hashSync('Hasan@1985', 10);
-  dbInstance.run(
-    "UPDATE users SET username = 'Shophatbd', name = 'Shophatbd Admin', password_hash = ?, password_changed = 1 WHERE role_id IN ('admin', 'super_admin') OR username IN ('md_liakot_ali', 'mo_liakot_ali', 'Shophatbd', 'shophatbd')",
-    [hasanPasswordHash]
+  // Ensure admin username and password are set to Shophatbd / Hasan@1985 only if not already customized
+  const existingAdminUser = queryOne<{ id: string; password_changed: number }>(
+    "SELECT id, password_changed FROM users WHERE username = 'Shophatbd' OR role_id IN ('admin', 'super_admin')"
   );
+  if (existingAdminUser && existingAdminUser.password_changed !== 1) {
+    const hasanPasswordHash = bcrypt.hashSync('Hasan@1985', 10);
+    dbInstance.run(
+      "UPDATE users SET username = 'Shophatbd', name = 'Shophatbd Admin', email = 'liakot911@gmail.com', password_hash = ?, password_changed = 1 WHERE id = ?",
+      [hasanPasswordHash, existingAdminUser.id]
+    );
+  }
   dbInstance.run("UPDATE admin_logs SET admin_name = 'Shophatbd Admin' WHERE admin_name IN ('মোঃ লিয়াকত আলী', 'Md Liakot Ali')");
+
+  // Ensure site branding defaults without overwriting user custom changes
+  dbInstance.run("UPDATE site_settings SET value = 'SHOPHATBD' WHERE key = 'site_name' AND (value = 'SHOPNOVA' OR value = '' OR value IS NULL)");
+  dbInstance.run("UPDATE site_settings SET value = 'শপহাটবিডি' WHERE key = 'site_name_bn' AND (value = 'SHOPNOVA' OR value = '' OR value IS NULL)");
+  dbInstance.run("UPDATE site_settings SET value = 'SHOP SMART LIVE BETTER' WHERE key = 'site_tagline_en' AND (value = '' OR value IS NULL OR value LIKE '%SHOPNOVA%')");
+  dbInstance.run("UPDATE site_settings SET value = 'স্মার্ট কেনাকাটা সুন্দর জীবন' WHERE key = 'site_tagline_bn' AND (value = '' OR value IS NULL OR value LIKE '%শপনোভা%')");
+  dbInstance.run("UPDATE site_settings SET value = 'JOIN THE SHOPHATBD CLUB' WHERE key = 'footer_newsletter_title_en' AND (value LIKE '%SHOPNOVA%' OR value = '' OR value IS NULL)");
+  dbInstance.run("UPDATE site_settings SET value = 'শপহাটবিডি ক্লাবে যুক্ত থাকুন' WHERE key = 'footer_newsletter_title_bn' AND (value LIKE '%SHOPNOVA%' OR value = '' OR value IS NULL)");
+  dbInstance.run("UPDATE site_settings SET value = 'liakot911@gmail.com' WHERE key = 'contact_email' AND (value = 'support@shopnova.com' OR value = '' OR value IS NULL)");
+  dbInstance.run("UPDATE site_settings SET value = 'liakot911@gmail.com' WHERE key = 'admin_notification_email' AND (value = '' OR value IS NULL)");
+  dbInstance.run("UPDATE site_settings SET value = 'Shophatbd Customer Care' WHERE key = 'smtp_from_name' AND (value = 'SHOPNOVA Customer Care' OR value = '' OR value IS NULL)");
+  dbInstance.run("UPDATE site_settings SET value = '01724709454' WHERE key = 'contact_phone' AND (value LIKE '%1700%' OR value = '' OR value IS NULL)");
+  dbInstance.run("UPDATE site_settings SET value = 'https://wa.me/8801724709454' WHERE key = 'contact_whatsapp' AND (value LIKE '%1700%' OR value = '' OR value IS NULL)");
+  dbInstance.run("UPDATE site_settings SET value = '01724709454' WHERE key = 'whatsapp_chat_number' AND (value LIKE '%1700%' OR value = '' OR value IS NULL)");
+  dbInstance.run("UPDATE site_settings SET value = 'মহেশপুর, ঝিনাইদহ, বাংলাদেশ' WHERE key = 'company_address_bn' AND (value LIKE '%বনানী%' OR value = '' OR value IS NULL)");
+  dbInstance.run("UPDATE site_settings SET value = 'Maheshpur, Jhenaidah, Bangladesh' WHERE key = 'company_address_en' AND (value LIKE '%Banani%' OR value = '' OR value IS NULL)");
+  dbInstance.run("UPDATE site_settings SET value = '/logo.png' WHERE key = 'logo_url' AND (value IS NULL OR value = '' OR value LIKE '%shopnova%')");
+
+  // Ensure payment gateways have user's personal bKash/Nagad number only if not set
+  dbInstance.run("UPDATE payment_gateways SET account_number = '01724709454', account_type = 'Personal', instruction_bn = 'বিকাশ পার্সোনাল নম্বর ০১৭২৪৭০৯৪৫৪ এ সেন্ড মানি করুন।', instruction_en = 'Send money to bKash Personal Number 01724709454.' WHERE gateway_type = 'bkash' AND (account_number IS NULL OR account_number = '' OR account_number = 'N/A')");
+  dbInstance.run("UPDATE payment_gateways SET account_number = '01724709454', account_type = 'Personal', instruction_bn = 'নগদ পার্সোনাল নম্বর ০১৭২৪৭০৯৪৫৪ এ সেন্ড মানি করুন।', instruction_en = 'Send money to Nagad Personal Number 01724709454.' WHERE gateway_type = 'nagad' AND (account_number IS NULL OR account_number = '' OR account_number = 'N/A')");
 
   // Ensure inventory columns exist in products table
   try { dbInstance.run("ALTER TABLE products ADD COLUMN opening_stock INTEGER DEFAULT 0"); } catch (e) {}
@@ -570,28 +532,28 @@ export async function initDatabase(): Promise<void> {
       },
       {
         id: 'gw_bkash',
-        name_en: 'bKash Online & Send Money',
-        name_bn: 'বিকাশ পেমেন্ট / মার্চেন্ট একাউন্ট',
+        name_en: 'bKash Send Money / Payment',
+        name_bn: 'বিকাশ পেমেন্ট / সেন্ড মানি',
         gateway_type: 'bkash',
-        account_number: '01700-123456',
-        account_type: 'Merchant',
+        account_number: '01724709454',
+        account_type: 'Personal',
         charge_percentage: 1.5,
-        instruction_en: 'Make Payment / Send Money to Merchant No: 01700-123456. Use your Order ID as reference.',
-        instruction_bn: 'মার্চেন্ট নম্বর ০১৭০০-১২৩৪৫৬ এ পেমেন্ট করুন। রেফারেন্স হিসেবে আপনার অর্ডার নম্বর দিন।',
+        instruction_en: 'Send Money to bKash Personal Number: 01724709454. Enter Order ID in reference.',
+        instruction_bn: 'বিকাশ পার্সোনাল নম্বর ০১৭২৪৭০৯৪৫৪ এ সেন্ড মানি করুন এবং রেফারেন্সে আপনার অর্ডার নম্বর দিন।',
         logo_url: 'https://images.unsplash.com/photo-1616077168079-7e09a677fb2c?auto=format&fit=crop&w=200&q=80',
         sort_order: 2,
         is_active: 1
       },
       {
         id: 'gw_nagad',
-        name_en: 'Nagad Direct Payment',
+        name_en: 'Nagad Send Money / Payment',
         name_bn: 'নগদ পেমেন্ট গেটওয়ে',
         gateway_type: 'nagad',
-        account_number: '01800-654321',
-        account_type: 'Merchant',
+        account_number: '01724709454',
+        account_type: 'Personal',
         charge_percentage: 1.2,
-        instruction_en: 'Pay through Nagad app to Merchant Number: 01800-654321.',
-        instruction_bn: 'নগদ অ্যাপ অথবা ডায়াল করে মার্চেন্ট নম্বর ০১৮০০-৬৫৪৩২১ এ পেমেন্ট সম্পন্ন করুন।',
+        instruction_en: 'Send Money to Nagad Personal Number: 01724709454.',
+        instruction_bn: 'নগদ পার্সোনাল নম্বর ০১৭২৪৭০৯৪৫৪ এ সেন্ড মানি অথবা পেমেন্ট সম্পন্ন করুন।',
         logo_url: 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=200&q=80',
         sort_order: 3,
         is_active: 1

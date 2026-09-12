@@ -141,6 +141,7 @@ export const api = {
   deleteProduct: (id: string) => request<any>(`/products/${id}`, { method: 'DELETE' }),
   duplicateProduct: (id: string) => request<any>(`/products/${id}/duplicate`, { method: 'POST' }),
   bulkProductAction: (body: any) => request<any>('/products/bulk', { method: 'POST', body: JSON.stringify(body) }),
+  clearDemoProducts: () => request<any>('/products/clear-demo-products', { method: 'POST' }),
 
   // Categories
   getCategories: () => request<any>('/categories'),

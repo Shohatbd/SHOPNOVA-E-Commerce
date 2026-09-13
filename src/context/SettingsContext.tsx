@@ -16,7 +16,7 @@ interface SettingsContextType {
 const defaultSettings: Partial<SiteSettings> = {
   site_name: 'SHOPHATBD',
   site_name_bn: 'শপহাটবিডি',
-  default_language: 'bn',
+  default_language: 'en',
   site_tagline_en: 'SHOP SMART LIVE BETTER',
   site_tagline_bn: 'স্মার্ট কেনাকাটা সুন্দর জীবন',
   currency: 'BDT',
@@ -89,11 +89,11 @@ const defaultSettings: Partial<SiteSettings> = {
       label_bn: 'আমাদের সম্পর্কে',
       page: 'about',
       is_active: true,
-      short_description_bn: 'SHOPNOVA হলো বাংলাদেশের বিশ্বস্ত অনলাইন শপিং প্ল্যাটফর্ম, যেখানে প্রিমিয়াম কোয়ালিটি ও সেরা কাস্টমার সেবার নিশ্চয়তা দেওয়া হয়।',
-      short_description: "SHOPNOVA is Bangladesh's premier online shopping destination, guaranteeing 100% authentic quality and attentive customer care.",
-      description_bn: `স্বাগতম SHOPNOVA-তে!
+      short_description_bn: 'শপহাটবিডি হলো বাংলাদেশের বিশ্বস্ত অনলাইন শপিং প্ল্যাটফর্ম, যেখানে প্রিমিয়াম কোয়ালিটি ও সেরা কাস্টমার সেবার নিশ্চয়তা দেওয়া হয়।',
+      short_description: "SHOPHATBD is Bangladesh's premier online shopping destination, guaranteeing 100% authentic quality and attentive customer care.",
+      description_bn: `স্বাগতম শপহাটবিডি-তে!
 
-SHOPNOVA বাংলাদেশের অন্যতম নির্ভরযোগ্য ও বিশ্বস্ত অনলাইন শপিং প্ল্যাটফর্ম। আমাদের মূল লক্ষ্য হলো সারা দেশের প্রতিটি প্রান্তে প্রিমিয়াম কোয়ালিটির পণ্য সাশ্রয়ী মূল্যে এবং দ্রুততম সময়ে গ্রাহকের কাছে পৌঁছে দেওয়া।
+শপহাটবিডি বাংলাদেশের অন্যতম নির্ভরযোগ্য ও বিশ্বস্ত অনলাইন শপিং প্ল্যাটফর্ম। আমাদের মূল লক্ষ্য হলো সারা দেশের প্রতিটি প্রান্তে প্রিমিয়াম কোয়ালিটির পণ্য সাশ্রয়ী মূল্যে এবং দ্রুততম সময়ে গ্রাহকের কাছে পৌঁছে দেওয়া।
 
 আমাদের বিশেষত্বসমূহ:
 ১. ১০০% জেনুইন ও প্রিমিয়াম কোয়ালিটি পণ্য: প্রতিটি পণ্য অভিজ্ঞ টিম দ্বারা কঠোরভাবে মান পরীক্ষা করে ডেলিভারির জন্য প্রস্তুত করা হয়।
@@ -102,10 +102,10 @@ SHOPNOVA বাংলাদেশের অন্যতম নির্ভরয
 ৪. ৭ দিনের সহজ ও ঝামেলামুক্ত রিপ্লেসমেন্ট: পণ্য প্রাপ্তির পর কোনো সমস্যা বা অসঙ্গতি দেখা দিলে সহজ রিপ্লেসমেন্ট পলিসি।
 ৫. সার্বক্ষণিক ফ্রেন্ডলি কাস্টমার কেয়ার ও বিক্রয়োত্তর সেবা: যেকোনো সময় আপনার পাশে আমাদের কাস্টমার প্রতিনিধি দল।
 
-গ্রাহকের বিশ্বস্ততা ও সন্তুষ্টিই আমাদের প্রতিটি অর্ডারের মূল প্রেরণা। SHOPNOVA-র সাথে আপনার অনলাইন কেনাকাটা হোক নিরাপদ ও আনন্দদায়ক।`,
-      description_en: `Welcome to SHOPNOVA!
+গ্রাহকের বিশ্বস্ততা ও সন্তুষ্টিই আমাদের প্রতিটি অর্ডারের মূল প্রেরণা। শপহাটবিডি-র সাথে আপনার অনলাইন কেনাকাটা হোক নিরাপদ ও আনন্দদায়ক।`,
+      description_en: `Welcome to SHOPHATBD!
 
-SHOPNOVA is one of the most reliable and trusted online shopping destinations in Bangladesh. Our mission is to bring premium quality lifestyle and tech products at affordable prices with lightning-fast delivery to every corner of the country.
+SHOPHATBD is one of the most reliable and trusted online shopping destinations in Bangladesh. Our mission is to bring premium quality lifestyle and tech products at affordable prices with lightning-fast delivery to every corner of the country.
 
 Why Choose Us:
 1. 100% Genuine & Premium Products: Every product is thoroughly inspected and quality-checked by our experienced inspection team before packaging.
@@ -114,7 +114,7 @@ Why Choose Us:
 4. 7-Day Hassle-Free Exchange: Simple and transparent replacement process in case of sizing or manufacturing defects.
 5. Dedicated 24/7 Customer Care: A warm, friendly support team always ready to assist you before and after purchase.
 
-Your trust and satisfaction inspire every single order we package. We wish you a delightful and confident shopping experience with SHOPNOVA!`
+Your trust and satisfaction inspire every single order we package. We wish you a delightful and confident shopping experience with SHOPHATBD!`
     },
     {
       id: '2',
@@ -190,9 +190,9 @@ You retain full rights to request verification, amendment, or removal of your pe
     }
   ]),
   footer_social_links_json: JSON.stringify([
-    { id: 'soc_fb', platform: 'facebook', name: 'Facebook Page', url: 'https://facebook.com/shopnovabd', is_active: true },
-    { id: 'soc_ig', platform: 'instagram', name: 'Instagram Profile', url: 'https://instagram.com/shopnovabd', is_active: true },
-    { id: 'soc_yt', platform: 'youtube', name: 'YouTube Channel', url: 'https://youtube.com/@shopnovabd', is_active: true },
+    { id: 'soc_fb', platform: 'facebook', name: 'Facebook Page', url: 'https://facebook.com/shophatbd', is_active: true },
+    { id: 'soc_ig', platform: 'instagram', name: 'Instagram Profile', url: 'https://instagram.com/shophatbd', is_active: true },
+    { id: 'soc_yt', platform: 'youtube', name: 'YouTube Channel', url: 'https://youtube.com/@shophatbd', is_active: true },
     { id: 'soc_wa', platform: 'whatsapp', name: 'WhatsApp Helpline', url: 'https://wa.me/8801700000000', is_active: true }
   ]),
   store_policies_json: JSON.stringify([
@@ -205,20 +205,51 @@ You retain full rights to request verification, amendment, or removal of your pe
   footer_policies_title: 'CUSTOMER SERVICE & POLICIES',
   footer_policies_title_en: 'CUSTOMER SERVICE & POLICIES',
   footer_policies_title_bn: 'গ্রাহক সেবা ও পলিসি',
-  seo_meta_title: "SHOPNOVA - Bangladesh's Premier Lifestyle & Tech Destination",
-  seo_meta_title_bn: 'শপনোভা - প্রিমিয়াম লাইফস্টাইল ও আধুনিক গ্যাজেট অনলাইন শপিং বাংলাদেশ',
-  seo_description: 'Shop authentic fashion, watches, electronics, and lifestyle products with fast nationwide home delivery, easy returns, and secure payments across Bangladesh.',
-  seo_description_bn: 'সেরা মানের পোশাক, ঘড়ি ও ট্রেন্ডিং গ্যাজেট কিনুন সুলভ মূল্যে। দ্রুত হোম ডেলিভারি ও সহজ রিটার্ন সুবিধা সমগ্র বাংলাদেশে।'
+  seo_meta_title: "SHOPHATBD - SMART SHOPPING, BETTER LIVING",
+  seo_meta_title_bn: 'শপহাটবিডি - স্মার্ট কেনাকাটা সুন্দর জীবন',
+  seo_description: 'Shop authentic fashion, watches, electronics, and lifestyle products at SHOPHATBD with fast nationwide home delivery, easy returns, and secure payments across Bangladesh.',
+  seo_description_bn: 'শপহাটবিডি থেকে সেরা মানের পোশাক, ঘড়ি ও ট্রেন্ডিং গ্যাজেট কিনুন সুলভ মূল্যে। দ্রুত হোম ডেলিভারি ও সহজ রিটার্ন সুবিধা সমগ্র বাংলাদেশে।'
 };
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
+function sanitizeBranding(raw: Partial<SiteSettings>): Partial<SiteSettings> {
+  const s = { ...raw };
+  if (!s.site_name || s.site_name === 'SHOPNOVA' || s.site_name.toLowerCase() === 'shopnova') {
+    s.site_name = 'SHOPHATBD';
+  }
+  if (!s.site_name_bn || s.site_name_bn === 'SHOPNOVA' || s.site_name_bn === 'শপনোভা') {
+    s.site_name_bn = 'শপহাটবিডি';
+  }
+  if (!s.site_name_en || s.site_name_en === 'SHOPNOVA') {
+    s.site_name_en = 'SHOPHATBD';
+  }
+  if (s.seo_meta_title && (s.seo_meta_title.includes('SHOPNOVA') || s.seo_meta_title.includes('শপনোভা'))) {
+    s.seo_meta_title = s.seo_meta_title.replace(/SHOPNOVA/gi, 'SHOPHATBD').replace(/শপনোভা/g, 'শপহাটবিডি');
+  }
+  if (s.seo_meta_title_bn && (s.seo_meta_title_bn.includes('SHOPNOVA') || s.seo_meta_title_bn.includes('শপনোভা'))) {
+    s.seo_meta_title_bn = s.seo_meta_title_bn.replace(/SHOPNOVA/gi, 'SHOPHATBD').replace(/শপনোভা/g, 'শপহাটবিডি');
+  }
+  if (s.meta_title_en && s.meta_title_en.includes('SHOPNOVA')) {
+    s.meta_title_en = s.meta_title_en.replace(/SHOPNOVA/gi, 'SHOPHATBD');
+  }
+  if (s.meta_title_bn && (s.meta_title_bn.includes('SHOPNOVA') || s.meta_title_bn.includes('শপনোভা'))) {
+    s.meta_title_bn = s.meta_title_bn.replace(/SHOPNOVA/gi, 'SHOPHATBD').replace(/শপনোভা/g, 'শপহাটবিডি');
+  }
+  if (s.contact_email && s.contact_email.includes('shopnova.com')) {
+    s.contact_email = s.contact_email.replace(/shopnova\.com/g, 'shophatbd.com');
+  }
+  return s;
+}
+
 export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [settings, setSettings] = useState<Partial<SiteSettings>>(() => {
     try {
-      const cached = localStorage.getItem('shopnova_cached_settings');
+      const cached = localStorage.getItem('shophatbd_cached_settings') || localStorage.getItem('shopnova_cached_settings');
       if (cached) {
-        return { ...defaultSettings, ...JSON.parse(cached) };
+        const parsed = JSON.parse(cached);
+        const clean = sanitizeBranding(parsed);
+        return { ...defaultSettings, ...clean };
       }
     } catch (_) {}
     return defaultSettings;
@@ -228,7 +259,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const [banners, setBanners] = useState<Banner[]>(() => {
     try {
-      const cached = localStorage.getItem('shopnova_cached_banners');
+      const cached = localStorage.getItem('shophatbd_cached_banners') || localStorage.getItem('shopnova_cached_banners');
       if (cached) {
         return JSON.parse(cached);
       }
@@ -247,8 +278,9 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
       if (settingsRes?.success && settingsRes.settings) {
         setSettings((prev) => {
-          const merged = { ...prev, ...settingsRes.settings };
+          const merged = sanitizeBranding({ ...prev, ...settingsRes.settings });
           try {
+            localStorage.setItem('shophatbd_cached_settings', JSON.stringify(merged));
             localStorage.setItem('shopnova_cached_settings', JSON.stringify(merged));
           } catch (_) {}
           return merged;
@@ -261,6 +293,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       if (bannersRes?.success && bannersRes.banners) {
         setBanners(bannersRes.banners);
         try {
+          localStorage.setItem('shophatbd_cached_banners', JSON.stringify(bannersRes.banners));
           localStorage.setItem('shopnova_cached_banners', JSON.stringify(bannersRes.banners));
         } catch (_) {}
       }
@@ -285,8 +318,9 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     try {
       // Optimistically update localStorage and state immediately
       setSettings((prev) => {
-        const merged = { ...prev, ...newSettings };
+        const merged = sanitizeBranding({ ...prev, ...newSettings });
         try {
+          localStorage.setItem('shophatbd_cached_settings', JSON.stringify(merged));
           localStorage.setItem('shopnova_cached_settings', JSON.stringify(merged));
         } catch (_) {}
         return merged;

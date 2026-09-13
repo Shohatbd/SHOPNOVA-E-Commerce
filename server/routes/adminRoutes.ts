@@ -752,7 +752,7 @@ router.get('/backup/export-json', requireAdmin, (req: AuthenticatedRequest, res:
 
     const backupPayload = {
       version: '2.0',
-      system: 'ShopNova E-Commerce Store Engine',
+      system: 'SHOPHATBD E-Commerce Store Engine',
       exported_at: new Date().toISOString(),
       exported_by: {
         id: admin.id,
@@ -781,7 +781,7 @@ router.get('/backup/export-json', requireAdmin, (req: AuthenticatedRequest, res:
     logAdminAction(admin.id, admin.name, 'EXPORT_STORE_DATA', 'system', 'all', 'Downloaded complete store JSON backup', req.ip || '127.0.0.1');
 
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const filename = `shopnova_store_backup_${timestamp}.json`;
+    const filename = `shophatbd_store_backup_${timestamp}.json`;
 
     res.setHeader('Content-Type', 'application/json; charset=utf-8');
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
@@ -803,7 +803,7 @@ router.get('/backup/export-db', requireAdmin, (req: AuthenticatedRequest, res: R
     logAdminAction(admin.id, admin.name, 'EXPORT_DATABASE_BINARY', 'database', 'sqlite', 'Downloaded full SQLite shopnova.db file', req.ip || '127.0.0.1');
 
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const filename = `shopnova_database_${timestamp}.db`;
+    const filename = `shophatbd_database_${timestamp}.db`;
 
     res.setHeader('Content-Type', 'application/x-sqlite3');
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
@@ -848,7 +848,7 @@ router.get('/backup/export-products-csv', requireAdmin, (req: AuthenticatedReque
     logAdminAction(admin.id, admin.name, 'EXPORT_PRODUCTS_CSV', 'products', 'csv', 'Downloaded products catalog spreadsheet', req.ip || '127.0.0.1');
 
     const timestamp = new Date().toISOString().split('T')[0];
-    const filename = `shopnova_products_${timestamp}.csv`;
+    const filename = `shophatbd_products_${timestamp}.csv`;
 
     res.setHeader('Content-Type', 'text/csv; charset=utf-8');
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);

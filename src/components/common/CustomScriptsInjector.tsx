@@ -13,6 +13,7 @@ export const CustomScriptsInjector: React.FC = () => {
   useEffect(() => {
     // 0. Store settings on window for analytics tracker reference & init attribution
     if (typeof window !== 'undefined') {
+      window._shophatbd_settings = settings;
       window._shopnova_settings = settings;
       initAttribution();
     }

@@ -215,7 +215,7 @@ export const fallbackProducts: Product[] = [
   {
     id: 'prod_men_tshirt_01',
     sku: 'SN-MEN-TSHIRT-01',
-    brand: 'SHOPNOVA Casuals',
+    brand: 'SHOPHATBD Casuals',
     name_en: 'Premium Combed Cotton Crewneck T-Shirt',
     name_bn: 'প্রিমিয়াম কম্বড কটন ক্রু-নেক টি-শার্ট',
     slug: 'premium-combed-cotton-crewneck-tshirt',
@@ -258,7 +258,7 @@ export const fallbackProducts: Product[] = [
   {
     id: 'prod_men_tshirt_02',
     sku: 'SN-MEN-TSHIRT-02',
-    brand: 'SHOPNOVA Streetwear',
+    brand: 'SHOPHATBD Streetwear',
     name_en: 'Minimalist Drop-Shoulder Oversized T-Shirt',
     name_bn: 'মিনিমালিস্ট ড্রপ-শোল্ডার ওভারসাইজড টি-শার্ট',
     slug: 'minimalist-drop-shoulder-oversized-tshirt',
@@ -300,7 +300,7 @@ export const fallbackProducts: Product[] = [
   {
     id: 'prod_men_tshirt_03',
     sku: 'SN-MEN-TSHIRT-03',
-    brand: 'SHOPNOVA Casuals',
+    brand: 'SHOPHATBD Casuals',
     name_en: 'Classic Cotton Casual Pocket T-Shirt',
     name_bn: 'ক্লাসিক কটন ক্যাজুয়াল পকেট টি-শার্ট',
     slug: 'classic-cotton-casual-pocket-tshirt',
@@ -342,7 +342,7 @@ export const fallbackProducts: Product[] = [
   {
     id: 'prod_men_tshirt_04',
     sku: 'SN-MEN-TSHIRT-04',
-    brand: 'SHOPNOVA Active',
+    brand: 'SHOPHATBD Active',
     name_en: 'Active Dry-Fit Sports Athletic T-Shirt',
     name_bn: 'অ্যাক্টিভ ড্রাই-ফিট স্পোর্টস অ্যাথলেটিক টি-শার্ট',
     slug: 'active-dry-fit-sports-athletic-tshirt',

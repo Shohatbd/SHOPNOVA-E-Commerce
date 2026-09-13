@@ -3,14 +3,17 @@ import { fallbackCategories, fallbackProducts, fallbackBanners } from '../data/f
 const API_BASE = '/api';
 
 export function getAuthToken(): string | null {
-  return localStorage.getItem('shopnova_token');
+  return localStorage.getItem('shophatbd_token') || localStorage.getItem('shopnova_token') || localStorage.getItem('token');
 }
 
 export function setAuthToken(token: string | null): void {
   if (token) {
+    localStorage.setItem('shophatbd_token', token);
     localStorage.setItem('shopnova_token', token);
   } else {
+    localStorage.removeItem('shophatbd_token');
     localStorage.removeItem('shopnova_token');
+    localStorage.removeItem('token');
   }
 }
 
@@ -96,7 +99,8 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
         return {
           success: true,
           settings: {
-            site_name: 'SHOPNOVA',
+            site_name: 'SHOPHATBD',
+            site_name_bn: 'শপহাটবিডি',
             currency: 'BDT',
             currency_symbol: '৳'
           }

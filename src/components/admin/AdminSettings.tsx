@@ -395,9 +395,9 @@ export interface FooterServiceLinkItem {
   is_active?: boolean;
 }
 
-const SAMPLE_ABOUT_US_BN = `স্বাগতম SHOPNOVA-তে!
+const SAMPLE_ABOUT_US_BN = `স্বাগতম SHOPHATBD-তে!
 
-SHOPNOVA বাংলাদেশের অন্যতম নির্ভরযোগ্য ও বিশ্বস্ত অনলাইন শপিং প্ল্যাটফর্ম। আমাদের মূল লক্ষ্য হলো সারা দেশের প্রতিটি প্রান্তে প্রিমিয়াম কোয়ালিটির পণ্য সাশ্রয়ী মূল্যে এবং দ্রুততম সময়ে গ্রাহকের কাছে পৌঁছে দেওয়া।
+SHOPHATBD বাংলাদেশের অন্যতম নির্ভরযোগ্য ও বিশ্বস্ত অনলাইন শপিং প্ল্যাটফর্ম। আমাদের মূল লক্ষ্য হলো সারা দেশের প্রতিটি প্রান্তে প্রিমিয়াম কোয়ালিটির পণ্য সাশ্রয়ী মূল্যে এবং দ্রুততম সময়ে গ্রাহকের কাছে পৌঁছে দেওয়া।
 
 আমাদের বিশেষত্বসমূহ:
 ১. ১০০% জেনুইন ও প্রিমিয়াম কোয়ালিটি পণ্য: প্রতিটি পণ্য অভিজ্ঞ টিম দ্বারা কঠোরভাবে মান পরীক্ষা করে ডেলিভারির জন্য প্রস্তুত করা হয়।
@@ -406,9 +406,9 @@ SHOPNOVA বাংলাদেশের অন্যতম নির্ভরয
 ৪. ৭ দিনের সহজ ও ঝামেলামুক্ত রিপ্লেসমেন্ট: পণ্য প্রাপ্তির পর কোনো সমস্যা বা অসঙ্গতি দেখা দিলে সহজ রিপ্লেসমেন্ট পলিসি।
 ৫. সার্বক্ষণিক ফ্রেন্ডলি কাস্টমার কেয়ার ও বিক্রয়োত্তর সেবা: যেকোনো সময় আপনার পাশে আমাদের কাস্টমার প্রতিনিধি দল।
 
-গ্রাহকের বিশ্বস্ততা ও সন্তুষ্টিই আমাদের প্রতিটি অর্ডারের মূল প্রেরণা। SHOPNOVA-র সাথে আপনার অনলাইন কেনাকাটা হোক নিরাপদ ও আনন্দদায়ক।`;
+গ্রাহকের বিশ্বস্ততা ও সন্তুষ্টিই আমাদের প্রতিটি অর্ডারের মূল প্রেরণা। SHOPHATBD-র সাথে আপনার অনলাইন কেনাকাটা হোক নিরাপদ ও আনন্দদায়ক।`;
 
-const SAMPLE_ABOUT_US_SHORT_BN = `SHOPNOVA হলো বাংলাদেশের বিশ্বস্ত অনলাইন শপিং প্ল্যাটফর্ম, যেখানে প্রিমিয়াম কোয়ালিটি ও সেরা কাস্টমার সেবার নিশ্চয়তা দেওয়া হয়।`;
+const SAMPLE_ABOUT_US_SHORT_BN = `SHOPHATBD হলো বাংলাদেশের বিশ্বস্ত অনলাইন শপিং প্ল্যাটফর্ম, যেখানে প্রিমিয়াম কোয়ালিটি ও সেরা কাস্টমার সেবার নিশ্চয়তা দেওয়া হয়।`;
 
 const SAMPLE_CONTACT_BN = `কাস্টমার সাপোর্ট ও হেল্পলাইন:
 
@@ -443,9 +443,9 @@ const SAMPLE_NEW_LINK_BN = `গ্রাহক সেবা ও প্রয়ো�
 
 const SAMPLE_NEW_LINK_SHORT_BN = `গ্রাহকদের জন্য প্রয়োজনীয় তথ্য ও নির্দেশিকার সংক্ষিপ্ত বিবরণ এখানে প্রদর্শিত হবে।`;
 
-const SAMPLE_ABOUT_US_EN = `Welcome to SHOPNOVA!
+const SAMPLE_ABOUT_US_EN = `Welcome to SHOPHATBD!
 
-SHOPNOVA is one of the most reliable and trusted online shopping destinations in Bangladesh. Our mission is to bring premium quality lifestyle and tech products at affordable prices with lightning-fast delivery to every corner of the country.
+SHOPHATBD is one of the most reliable and trusted online shopping destinations in Bangladesh. Our mission is to bring premium quality lifestyle and tech products at affordable prices with lightning-fast delivery to every corner of the country.
 
 Why Choose Us:
 1. 100% Genuine & Premium Products: Every product is thoroughly inspected and quality-checked by our experienced inspection team before packaging.
@@ -454,9 +454,9 @@ Why Choose Us:
 4. 7-Day Hassle-Free Exchange: Simple and transparent replacement process in case of sizing or manufacturing defects.
 5. Dedicated 24/7 Customer Care: A warm, friendly support team always ready to assist you before and after purchase.
 
-Your trust and satisfaction inspire every single order we package. We wish you a delightful and confident shopping experience with SHOPNOVA!`;
+Your trust and satisfaction inspire every single order we package. We wish you a delightful and confident shopping experience with SHOPHATBD!`;
 
-const SAMPLE_ABOUT_US_SHORT_EN = `SHOPNOVA is Bangladesh's premier online shopping destination, guaranteeing 100% authentic quality and attentive customer care.`;
+const SAMPLE_ABOUT_US_SHORT_EN = `SHOPHATBD is Bangladesh's premier online shopping destination, guaranteeing 100% authentic quality and attentive customer care.`;
 
 const SAMPLE_CONTACT_EN = `Customer Support & Helpline:
 
@@ -507,7 +507,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
 
   // Sample logos presets for quick one-click selection
   const sampleLogos = [
-    { name: 'ShopNova Gold Luxury', url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=160&auto=format&fit=crop&q=60' },
+    { name: 'SHOPHATBD Gold Luxury', url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=160&auto=format&fit=crop&q=60' },
     { name: 'Minimalist Monogram', url: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=160&auto=format&fit=crop&q=60' },
     { name: 'Modern Lifestyle', url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=160&auto=format&fit=crop&q=60' },
   ];
@@ -741,9 +741,9 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
         label: 'About Us',
         label_bn: 'আমাদের সম্পর্কে',
         short_description_bn: SAMPLE_ABOUT_US_SHORT_BN,
-        short_description: 'SHOPNOVA is a premier online shopping platform in Bangladesh.',
+        short_description: 'SHOPHATBD is a premier online shopping platform in Bangladesh.',
         description_bn: SAMPLE_ABOUT_US_BN,
-        description_en: 'Welcome to SHOPNOVA! We provide authentic premium products nationwide.',
+        description_en: 'Welcome to SHOPHATBD! We provide authentic premium products nationwide.',
         page: 'about',
         is_active: true
       },
@@ -767,21 +767,21 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
         id: 'soc_fb',
         platform: 'facebook',
         name: 'Facebook Page',
-        url: cur.facebook_url || 'https://facebook.com/shopnovabd',
+        url: cur.facebook_url || 'https://facebook.com/shophatbdbd',
         is_active: true
       },
       {
         id: 'soc_ig',
         platform: 'instagram',
         name: 'Instagram Profile',
-        url: cur.instagram_url || 'https://instagram.com/shopnovabd',
+        url: cur.instagram_url || 'https://instagram.com/shophatbdbd',
         is_active: true
       },
       {
         id: 'soc_yt',
         platform: 'youtube',
         name: 'YouTube Channel',
-        url: cur.youtube_url || 'https://youtube.com/@shopnovabd',
+        url: cur.youtube_url || 'https://youtube.com/@shophatbdbd',
         is_active: true
       },
       {
@@ -804,10 +804,10 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
     try {
       const payload: any = {
         ...formData,
-        site_name: formData.site_name || formData.site_name_en || 'SHOPNOVA',
-        site_name_en: formData.site_name || formData.site_name_en || 'SHOPNOVA',
-        site_name_bn: formData.site_name_bn || formData.site_name || 'শপনোভা',
-        default_language: formData.default_language || 'bn',
+        site_name: formData.site_name || formData.site_name_en || 'SHOPHATBD',
+        site_name_en: formData.site_name || formData.site_name_en || 'SHOPHATBD',
+        site_name_bn: formData.site_name_bn || formData.site_name || 'শপহাটবিডি',
+        default_language: formData.default_language || 'en',
         site_tagline_en: formData.site_tagline_en || formData.tagline_en || 'Bangladesh’s Premier Lifestyle & Tech Destination',
         site_tagline_bn: formData.site_tagline_bn || formData.tagline_bn || 'বাংলাদেশের বিশ্বস্ত লাইফস্টাইল ও প্রিমিয়াম গ্যাজেট হাব',
         header_badge_text_en: formData.header_badge_text_en || 'Exclusive Fashion & Tech',
@@ -997,7 +997,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
   };
 
   const handleShareWhatsApp = (title: string, url: string) => {
-    const text = encodeURIComponent(`${title} - ${formData.site_name || 'SHOPNOVA'}:\n${url}`);
+    const text = encodeURIComponent(`${title} - ${formData.site_name || 'SHOPHATBD'}:\n${url}`);
     window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
   };
 
@@ -1610,7 +1610,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-sm text-white">
-                        {formData.site_name || formData.site_name_en || 'SHOPNOVA'}
+                        {formData.site_name || formData.site_name_en || 'SHOPHATBD'}
                       </span>
                       <span className="text-[10px] bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded font-semibold">
                         {formData.logo_url
@@ -1734,7 +1734,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
                     type="text"
                     value={formData.site_name_bn || ''}
                     onChange={(e) => setFormData({ ...formData, site_name_bn: e.target.value })}
-                    placeholder="শপনোভা"
+                    placeholder="শপহাটবিডি"
                     className="w-full bg-[#14171E] border border-[#2C323F] rounded-xl p-2.5 text-white focus:outline-none focus:border-amber-500"
                   />
                 </div>
@@ -1768,63 +1768,92 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
 
                 {/* 3. Default Store Language & Language Switcher Control */}
                 <div className="md:col-span-2 pt-4 border-t border-[#2C323F]/80">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#14171E] border border-[#2C323F] p-4 rounded-xl">
-                    <div className="space-y-1">
-                      <label className="text-amber-400 font-bold text-sm flex items-center gap-2">
-                        <span>🌐</span>
-                        <span>{isBn ? 'স্টোরের প্রাথমিক/ডিফল্ট ভাষা (Primary Store Language)' : 'Primary Store Language'}</span>
+                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-[#14171E] border border-[#2C323F] p-4 sm:p-5 rounded-2xl shadow-inner">
+                    <div className="space-y-1.5 max-w-xl">
+                      <label className="text-amber-400 font-bold text-sm sm:text-base flex items-center gap-2">
+                        <span className="text-lg">🌐</span>
+                        <span>{isBn ? 'স্টোরের প্রাথমিক/ডিফল্ট ভাষা (Primary Store Language)' : 'Primary Store Language (Audience Default)'}</span>
                       </label>
-                      <p className="text-xs text-slate-400">
+                      <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
                         {isBn
-                          ? 'নতুন কোনো ক্রেতা ওয়েবসাইটে আসলে স্বয়ংক্রিয়ভাবে কোন ভাষায় সাইটটি লোড হবে।'
-                          : 'Choose which language is loaded by default when a new customer visits the website.'}
+                          ? 'ওয়েবসাইটের সাধারণ ডিফল্ট ভাষা ইংরেজি। আপনি এখান থেকে যে ভাষা নির্বাচন করে সেভ করবেন, আপনার সব অডিয়েন্স ও ভিজিটররা সাইটে প্রবেশ করলে স্বয়ংক্রিয়ভাবে সেই ভাষায় পুরো ওয়েবসাইটটি দেখতে পাবেন।'
+                          : 'The website default language is English. Whichever language you select and save here will be the default language your audience and visitors see when visiting your website.'}
                       </p>
+                      <div className="flex items-center gap-2 pt-1 text-xs text-amber-300 font-semibold">
+                        <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span>
+                          {isBn
+                            ? `বর্তমানে স্টোরের ভাষা: ${(formData.default_language || 'en') === 'bn' ? 'বাংলা (Bangla)' : 'English (ইংরেজি - ডিফল্ট)'}`
+                            : `Active Store Language: ${(formData.default_language || 'en') === 'bn' ? 'Bangla (বাংলা)' : 'English (Default)'}`}
+                        </span>
+                      </div>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-2.5">
-                      <div className="flex items-center bg-[#1E222B] border border-[#2C323F] rounded-xl p-1">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setFormData({ ...formData, default_language: 'bn' });
-                            setLang('bn');
-                          }}
-                          className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
-                            (formData.default_language || 'bn') === 'bn'
-                              ? 'bg-amber-500 text-slate-950 font-black shadow-xs'
-                              : 'text-slate-300 hover:text-white'
-                          }`}
-                        >
-                          <span>🇧🇩</span>
-                          <span>বাংলা (ডিফল্ট)</span>
-                        </button>
-
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 shrink-0">
+                      {/* Language Selection Buttons */}
+                      <div className="flex items-center bg-[#1E222B] border border-[#2C323F] rounded-xl p-1 shadow-xs">
                         <button
                           type="button"
                           onClick={() => {
                             setFormData({ ...formData, default_language: 'en' });
-                            setLang('en');
                           }}
-                          className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
-                            formData.default_language === 'en'
-                              ? 'bg-amber-500 text-slate-950 font-black shadow-xs'
-                              : 'text-slate-300 hover:text-white'
+                          className={`px-3.5 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                            (formData.default_language || 'en') === 'en'
+                              ? 'bg-amber-500 text-slate-950 font-black shadow-md'
+                              : 'text-slate-300 hover:text-white hover:bg-white/5'
                           }`}
                         >
                           <span>🇬🇧</span>
-                          <span>English</span>
+                          <span>English (Default)</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFormData({ ...formData, default_language: 'bn' });
+                          }}
+                          className={`px-3.5 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                            formData.default_language === 'bn'
+                              ? 'bg-amber-500 text-slate-950 font-black shadow-md'
+                              : 'text-slate-300 hover:text-white hover:bg-white/5'
+                          }`}
+                        >
+                          <span>🇧🇩</span>
+                          <span>বাংলা (Bangla)</span>
                         </button>
                       </div>
 
+                      {/* Quick Save & Apply Button */}
                       <button
                         type="button"
-                        onClick={() => {
-                          setLang('bn');
-                          setFormData({ ...formData, default_language: 'bn' });
+                        onClick={async () => {
+                          const chosenLang = formData.default_language || 'en';
+                          setIsSaving(true);
+                          try {
+                            const res = await updateSettings({
+                              ...formData,
+                              default_language: chosenLang,
+                            });
+                            if (res.success) {
+                              setLang(chosenLang);
+                              setSuccessMsg(
+                                isBn
+                                  ? `স্টোরের ভাষা সফলভাবে "${chosenLang === 'bn' ? 'বাংলা' : 'English'}" হিসেবে সেভ করা হয়েছে! এখন অডিয়েন্সরা এই ভাষায় সাইট দেখতে পাবে।`
+                                  : `Store language successfully saved to "${chosenLang === 'bn' ? 'Bangla' : 'English'}"! Your audience will now see the website in this language.`
+                              );
+                              setTimeout(() => setSuccessMsg(''), 4000);
+                            }
+                          } catch (err: any) {
+                            setErrorMsg(err.message || 'Failed to update store language');
+                          } finally {
+                            setIsSaving(false);
+                          }
                         }}
-                        className="px-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition-colors shadow-xs shrink-0"
+                        disabled={isSaving}
+                        className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white rounded-xl text-xs font-bold transition-all shadow-md flex items-center justify-center gap-1.5 shrink-0"
                       >
-                        {isBn ? 'এখনই বাংলায় রূপান্তর' : 'Switch to Bangla Now'}
+                        <span>✓</span>
+                        <span>{isBn ? 'সেভ ও অ্যাপ্লাই করুন' : 'Save & Apply Now'}</span>
                       </button>
                     </div>
                   </div>
@@ -2631,7 +2660,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
                     type="email"
                     value={formData.contact_email || ''}
                     onChange={(e) => setFormData({ ...formData, contact_email: e.target.value })}
-                    placeholder="support@shopnova.com"
+                    placeholder="support@shophatbd.com"
                     className="w-full bg-[#14171E] border border-[#2C323F] rounded-xl p-2.5 text-white text-xs"
                   />
                 </div>
@@ -2956,7 +2985,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
                   </h3>
                   <p className="text-slate-400 text-[11px] mt-0.5">
                     {isBn
-                      ? 'হোমপেজে প্রদর্শিত "Why Shop with SHOPNOVA" ট্রাস্ট ও ভ্যালু কার্ডসমূহ কাস্টমাইজ করুন।'
+                      ? 'হোমপেজে প্রদর্শিত "Why Shop with SHOPHATBD" ট্রাস্ট ও ভ্যালু কার্ডসমূহ কাস্টমাইজ করুন।'
                       : 'Customize the "Why Shop With Us" trust highlights, guarantees, and value badges on the storefront.'}
                   </p>
                 </div>
@@ -2989,7 +3018,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
                     type="text"
                     value={formData.why_shop_title_en || ''}
                     onChange={(e) => setFormData({ ...formData, why_shop_title_en: e.target.value })}
-                    placeholder="Why Shop with SHOPNOVA"
+                    placeholder="Why Shop with SHOPHATBD"
                     className="w-full bg-[#14171E] border border-[#2C323F] rounded-xl p-2.5 text-white focus:outline-none focus:border-amber-500 text-xs"
                   />
                 </div>
@@ -3002,7 +3031,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
                     type="text"
                     value={formData.why_shop_title_bn || ''}
                     onChange={(e) => setFormData({ ...formData, why_shop_title_bn: e.target.value })}
-                    placeholder="কেন শপনোভা থেকে কেনাকাটা করবেন?"
+                    placeholder="কেন শপহাটবিডি থেকে কেনাকাটা করবেন?"
                     className="w-full bg-[#14171E] border border-[#2C323F] rounded-xl p-2.5 text-white focus:outline-none focus:border-amber-500 text-xs"
                   />
                 </div>
@@ -3279,7 +3308,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
                       style={{ color: formData.why_shop_title_color || '#FFFFFF' }}
                       className="text-sm font-black tracking-tight"
                     >
-                      {formData.why_shop_title_en || 'Why Shop with SHOPNOVA'}
+                      {formData.why_shop_title_en || 'Why Shop with SHOPHATBD'}
                     </h4>
                     <p
                       style={{ color: formData.why_shop_subtitle_color || '#94A3B8' }}
@@ -3604,7 +3633,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
                     type="text"
                     value={formData.footer_copyright_en || ''}
                     onChange={(e) => setFormData({ ...formData, footer_copyright_en: e.target.value })}
-                    placeholder="© 2026 SHOPNOVA Bangladesh. All Rights Reserved."
+                    placeholder="© 2026 SHOPHATBD Bangladesh. All Rights Reserved."
                     className="w-full bg-[#14171E] border border-[#2C323F] rounded-xl p-2.5 text-xs text-white"
                   />
                 </div>
@@ -3617,7 +3646,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
                     type="text"
                     value={formData.footer_copyright_bn || ''}
                     onChange={(e) => setFormData({ ...formData, footer_copyright_bn: e.target.value })}
-                    placeholder="© ২০২৬ শপনোভা বাংলাদেশ। সর্বস্বত্ব সংরক্ষিত।"
+                    placeholder="© ২০২৬ শপহাটবিডি বাংলাদেশ। সর্বস্বত্ব সংরক্ষিত।"
                     className="w-full bg-[#14171E] border border-[#2C323F] rounded-xl p-2.5 text-xs text-white"
                   />
                 </div>
@@ -3657,7 +3686,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
                     type="text"
                     value={formData.footer_newsletter_title_en !== undefined ? formData.footer_newsletter_title_en : (formData.footer_newsletter_title || '')}
                     onChange={(e) => setFormData({ ...formData, footer_newsletter_title_en: e.target.value, footer_newsletter_title: e.target.value })}
-                    placeholder="JOIN THE SHOPNOVA CLUB"
+                    placeholder="JOIN THE SHOPHATBD CLUB"
                     className="w-full bg-[#14171E] border border-[#2C323F] rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-amber-500"
                   />
                 </div>
@@ -3811,7 +3840,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
                   >
                     {isBn
                       ? (formData.footer_newsletter_title_bn || 'অফার ও নিউজলেটার')
-                      : (formData.footer_newsletter_title_en || formData.footer_newsletter_title || 'JOIN THE SHOPNOVA CLUB')}
+                      : (formData.footer_newsletter_title_en || formData.footer_newsletter_title || 'JOIN THE SHOPHATBD CLUB')}
                   </p>
                   <p
                     style={{ color: formData.footer_text_color || '#0F172A' }}
@@ -4531,7 +4560,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
                     type="email"
                     value={formData.contact_email || ''}
                     onChange={(e) => setFormData({ ...formData, contact_email: e.target.value })}
-                    placeholder="contact@shopnova.com"
+                    placeholder="contact@shophatbd.com"
                     className="w-full bg-[#14171E] border border-[#2C323F] rounded-xl p-2.5 text-white"
                   />
                 </div>
@@ -4703,9 +4732,9 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
                           </label>
                           <input
                             type="text"
-                            value={formData.whatsapp_chat_greeting !== undefined ? formData.whatsapp_chat_greeting : 'Hello SHOPNOVA, I want to know more about your products.'}
+                            value={formData.whatsapp_chat_greeting !== undefined ? formData.whatsapp_chat_greeting : 'Hello SHOPHATBD, I want to know more about your products.'}
                             onChange={(e) => setFormData({ ...formData, whatsapp_chat_greeting: e.target.value })}
-                            placeholder="Hello SHOPNOVA, I want to know more about your products."
+                            placeholder="Hello SHOPHATBD, I want to know more about your products."
                             className="w-full bg-[#14171E] border border-[#2C323F] rounded-xl p-2.5 text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-[#25D366]"
                           />
                         </div>
@@ -4725,7 +4754,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
                           onClick={() => {
                             let raw = (formData.whatsapp_chat_number || formData.contact_whatsapp || formData.contact_phone || '').replace(/[^0-9]/g, '');
                             if (raw.length === 11 && raw.startsWith('01')) raw = '88' + raw;
-                            const greeting = formData.whatsapp_chat_greeting || 'Hello SHOPNOVA, I want to know more about your products.';
+                            const greeting = formData.whatsapp_chat_greeting || 'Hello SHOPHATBD, I want to know more about your products.';
                             if (raw) {
                               window.open(`https://wa.me/${raw}?text=${encodeURIComponent(greeting)}`, '_blank');
                             }
@@ -4782,13 +4811,13 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
                       <div>
                         <label className="text-slate-300 font-bold block mb-1 text-xs flex items-center justify-between">
                           <span>{isBn ? 'ফেসবুক পেজ ইউজারনেম বা লিঙ্ক (Facebook Page Username or URL)' : 'Facebook Page Username / m.me Link'} <span className="text-rose-400">*</span></span>
-                          <span className="text-[10px] text-slate-400 font-normal">e.g. shopnovabd / https://m.me/shopnovabd</span>
+                          <span className="text-[10px] text-slate-400 font-normal">e.g. shophatbdbd / https://m.me/shophatbdbd</span>
                         </label>
                         <input
                           type="text"
                           value={formData.messenger_page_username !== undefined ? formData.messenger_page_username : (formData.facebook_url || '')}
                           onChange={(e) => setFormData({ ...formData, messenger_page_username: e.target.value })}
-                          placeholder="shopnovabd বা https://m.me/shopnovabd বা https://facebook.com/shopnovabd"
+                          placeholder="shophatbdbd বা https://m.me/shophatbdbd বা https://facebook.com/shophatbdbd"
                           className="w-full bg-[#14171E] border border-[#2C323F] rounded-xl p-2.5 text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-[#0084FF]"
                         />
                         <p className="text-[10px] text-slate-400 mt-1">
@@ -4804,7 +4833,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
                           <span className="text-[11px] text-slate-400">{isBn ? 'মেসেঞ্জার লিঙ্ক প্রিভিউ:' : 'Direct Messenger Link:'}</span>
                           <code className="bg-[#14171E] text-[#00B2FF] px-2 py-0.5 rounded text-[11px] font-mono truncate max-w-xs sm:max-w-md">
                             {(() => {
-                              const raw = (formData.messenger_page_username || formData.facebook_url || 'shopnovabd').trim();
+                              const raw = (formData.messenger_page_username || formData.facebook_url || 'shophatbdbd').trim();
                               if (raw.startsWith('http://') || raw.startsWith('https://')) {
                                 if (raw.includes('m.me/')) return raw;
                                 const match = raw.match(/facebook\.com\/([^/?#]+)/);
@@ -5464,11 +5493,11 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
                       G
                     </div>
                     <span className="text-[11px] text-slate-800 truncate">
-                      {formData.canonical_url || 'https://www.shopnova.com.bd'}
+                      {formData.canonical_url || 'https://www.shophatbd.com.bd'}
                     </span>
                   </div>
                   <h4 className="text-sm sm:text-base font-semibold text-[#1a0dab] hover:underline cursor-pointer leading-snug">
-                    {formData.meta_title_bn || formData.meta_title_en || formData.site_name || 'SHOPNOVA Bangladesh | সেরা অনলাইন শপিং ও ট্রেন্ডি কালেকশন'}
+                    {formData.meta_title_bn || formData.meta_title_en || formData.site_name || 'SHOPHATBD Bangladesh | সেরা অনলাইন শপিং ও ট্রেন্ডি কালেকশন'}
                   </h4>
                   <p className="text-xs text-[#4d5156] mt-1 leading-relaxed line-clamp-2">
                     {formData.meta_description_bn || formData.meta_description_en || 'বাংলাদেশের সবচেয়ে বিশ্বস্ত অনলাইন শপিং প্ল্যাটফর্ম। প্রিমিয়াম পাঞ্জাবি, শার্ট, স্মার্টওয়াচ ও গ্যাজেট দ্রুত হোম ডেলিভারিতে অর্ডার করুন।'}
@@ -5486,7 +5515,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
                     type="text"
                     value={formData.meta_title_en || ''}
                     onChange={(e) => setFormData({ ...formData, meta_title_en: e.target.value })}
-                    placeholder="SHOPNOVA Bangladesh | Premier Online Shopping"
+                    placeholder="SHOPHATBD Bangladesh | Premier Online Shopping"
                     className="w-full bg-[#14171E] border border-[#2C323F] rounded-xl p-2.5 text-white text-xs focus:outline-none focus:border-amber-500"
                   />
                   <p className="text-[10px] text-slate-400 mt-1">
@@ -5502,7 +5531,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
                     type="text"
                     value={formData.meta_title_bn || ''}
                     onChange={(e) => setFormData({ ...formData, meta_title_bn: e.target.value })}
-                    placeholder="শপনোভা বাংলাদেশ | সেরা অনলাইন শপিং ও ট্রেন্ডি কালেকশন"
+                    placeholder="শপহাটবিডি বাংলাদেশ | সেরা অনলাইন শপিং ও ট্রেন্ডি কালেকশন"
                     className="w-full bg-[#14171E] border border-[#2C323F] rounded-xl p-2.5 text-white text-xs focus:outline-none focus:border-amber-500"
                   />
                   <p className="text-[10px] text-slate-400 mt-1">
@@ -6287,7 +6316,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
               ...editingLink,
               short_description_bn: SAMPLE_ABOUT_US_SHORT_BN,
               description_bn: SAMPLE_ABOUT_US_BN,
-              description_en: 'Welcome to SHOPNOVA! Your premium online shopping destination in Bangladesh.'
+              description_en: 'Welcome to SHOPHATBD! Your premium online shopping destination in Bangladesh.'
             });
           } else if (lbl.includes('contact') || lbl.includes('যোগাযোগ') || lbl.includes('সাপোর্ট')) {
             setEditingLink({
@@ -6389,7 +6418,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
                       rows={2}
                       value={editingLink.short_description_bn || ''}
                       onChange={(e) => setEditingLink({ ...editingLink, short_description_bn: e.target.value })}
-                      placeholder={isBn ? 'যেমন: SHOPNOVA হলো বাংলাদেশের নির্ভরযোগ্য ও দ্রুততম অনলাইন শপিং প্ল্যাটফর্ম...' : 'e.g. SHOPNOVA is a reliable online shopping platform...'}
+                      placeholder={isBn ? 'যেমন: SHOPHATBD হলো বাংলাদেশের নির্ভরযোগ্য ও দ্রুততম অনলাইন শপিং প্ল্যাটফর্ম...' : 'e.g. SHOPHATBD is a reliable online shopping platform...'}
                       className="w-full bg-[#14171E] border border-[#2C323F] focus:border-amber-500 rounded-xl p-2.5 text-white text-xs outline-none leading-relaxed resize-none"
                     />
                   </div>

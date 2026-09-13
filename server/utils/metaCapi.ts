@@ -123,7 +123,7 @@ export async function sendMetaCapiEvent(
       event_name: payload.event_name,
       event_time: eventTime,
       event_id: payload.event_id,
-      event_source_url: payload.event_source_url || process.env.APP_URL || 'https://shopnova.com',
+      event_source_url: payload.event_source_url || process.env.APP_URL || 'https://shophatbd.com',
       action_source: 'website',
       user_data: formattedUserData
     };

@@ -32,7 +32,7 @@ export const CardModal: React.FC<CardModalProps> = ({
   formatPrice,
   onSuccess,
   isBn,
-  siteName = 'SHOPNOVA',
+  siteName = 'SHOPHATBD',
   customerName = '',
   customerPhone = ''
 }) => {

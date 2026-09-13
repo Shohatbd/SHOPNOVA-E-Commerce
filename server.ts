@@ -42,7 +42,7 @@ async function startServer() {
   app.get('/api/health', (_req, res) => {
     res.json({
       status: 'ok',
-      service: 'SHOPNOVA Full-Stack E-Commerce API',
+      service: 'SHOPHATBD Full-Stack E-Commerce API',
       timestamp: new Date().toISOString()
     });
   });
@@ -92,7 +92,7 @@ async function startServer() {
       for (const cat of categories) {
         const catLastMod = cat.updated_at ? cat.updated_at.split(' ')[0] : now;
         xml += `  <url>\n`;
-        xml += `    <loc>${baseUrl}/shop?category=${encodeURIComponent(cat.slug || cat.id)}</loc>\n`;
+        xml += `    <loc>${baseUrl}/category/${encodeURIComponent(cat.slug || cat.id)}</loc>\n`;
         xml += `    <lastmod>${catLastMod}</lastmod>\n`;
         xml += `    <changefreq>daily</changefreq>\n`;
         xml += `    <priority>0.8</priority>\n`;
@@ -200,10 +200,10 @@ async function startServer() {
   }
 
   app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 SHOPNOVA server running at http://0.0.0.0:${PORT}`);
+    console.log(`🚀 SHOPHATBD server running at http://0.0.0.0:${PORT}`);
   });
 }
 
 startServer().catch((err) => {
-  console.error('Failed to start SHOPNOVA server:', err);
+  console.error('Failed to start SHOPHATBD server:', err);
 });

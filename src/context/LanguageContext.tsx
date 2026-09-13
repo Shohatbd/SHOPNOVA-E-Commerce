@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { Language } from '../types/index.ts';
 import { translations } from '../i18n/translations.ts';
+import { useSettings } from './SettingsContext.tsx';
 
 interface LanguageContextType {
   lang: Language;
@@ -10,20 +11,28 @@ interface LanguageContextType {
   toggleLang: () => void;
   t: (key: keyof typeof translations.en) => string;
   isBn: boolean;
+  storeDefaultLang: Language;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { settings } = useSettings();
+
+  // Admin-configured default language (defaults to 'en' per user requirement)
+  const storeDefaultLang: Language =
+    settings?.default_language === 'bn' || settings?.default_language === 'en'
+      ? settings.default_language
+      : 'en';
+
   const [lang, setLangState] = useState<Language>(() => {
-    // Check URL parameters for explicit language switch (e.g. ?lang=bn or ?lang=en)
+    // 1. Check URL parameters for explicit language switch (e.g. ?lang=bn or ?lang=en)
     if (typeof window !== 'undefined') {
       try {
         const params = new URLSearchParams(window.location.search);
         const urlLang = params.get('lang');
         if (urlLang === 'bn' || urlLang === 'en') {
-          localStorage.setItem('shophatbd_lang', urlLang);
-          localStorage.setItem('shopnova_lang', urlLang);
+          sessionStorage.setItem('shophatbd_manual_lang', urlLang);
           return urlLang;
         }
       } catch {
@@ -31,49 +40,110 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       }
     }
 
-    const saved = localStorage.getItem('shophatbd_lang') || localStorage.getItem('shopnova_lang');
-    return (saved === 'bn' || saved === 'en') ? saved : 'bn';
+    // 2. Check if user manually switched language during this browsing session
+    if (typeof window !== 'undefined') {
+      try {
+        const sessionLang = sessionStorage.getItem('shophatbd_manual_lang');
+        if (sessionLang === 'bn' || sessionLang === 'en') {
+          return sessionLang;
+        }
+      } catch {
+        // ignore
+      }
+    }
+
+    // 3. Check previously stored choice
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('shophatbd_lang');
+        if (saved === 'bn' || saved === 'en') {
+          return saved;
+        }
+      } catch {
+        // ignore
+      }
+    }
+
+    // 4. Default language of the website is 'en' (English)
+    return 'en';
   });
 
-  const setLang = (newLang: Language) => {
-    setLangState(newLang);
+  // When admin changes the store language in Settings:
+  useEffect(() => {
+    if (!settings?.default_language) return;
+
+    const targetLang: Language =
+      settings.default_language === 'bn' || settings.default_language === 'en'
+        ? settings.default_language
+        : 'en';
+
+    let lastAdminLang = null;
     try {
-      localStorage.setItem('shophatbd_lang', newLang);
-      localStorage.setItem('shopnova_lang', newLang);
-      document.documentElement.lang = newLang;
+      lastAdminLang = localStorage.getItem('shophatbd_admin_configured_lang');
     } catch {
       // ignore
     }
-  };
 
-  const toggleLang = () => {
+    if (lastAdminLang !== targetLang) {
+      try {
+        localStorage.setItem('shophatbd_admin_configured_lang', targetLang);
+        sessionStorage.removeItem('shophatbd_manual_lang');
+      } catch {
+        // ignore
+      }
+      setLangState(targetLang);
+      document.documentElement.lang = targetLang;
+    }
+  }, [settings?.default_language]);
+
+  const setLang = useCallback((newLang: Language) => {
+    setLangState(newLang);
+    document.documentElement.lang = newLang;
+    try {
+      sessionStorage.setItem('shophatbd_manual_lang', newLang);
+      localStorage.setItem('shophatbd_lang', newLang);
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  const toggleLang = useCallback(() => {
     setLang(lang === 'bn' ? 'en' : 'bn');
-  };
-
-  useEffect(() => {
-    document.documentElement.lang = lang;
-  }, [lang]);
+  }, [lang, setLang]);
 
   // Keep synced across browser tabs
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
       if ((e.key === 'shophatbd_lang' || e.key === 'shopnova_lang') && (e.newValue === 'bn' || e.newValue === 'en')) {
         setLangState(e.newValue);
+        document.documentElement.lang = e.newValue;
       }
     };
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  const isBn = lang === 'bn';
-
-  const t = (key: keyof typeof translations.en): string => {
-    const currentDict = isBn ? translations.bn : translations.en;
+  const t = useCallback((key: keyof typeof translations.en): string => {
+    const currentDict = lang === 'bn' ? translations.bn : translations.en;
     return (currentDict as any)[key] || translations.en[key] || String(key);
-  };
+  }, [lang]);
+
+  const value = useMemo(
+    () => ({
+      lang,
+      language: lang,
+      setLang,
+      setLanguage: setLang,
+      toggleLang,
+      t,
+      isBn: lang === 'bn',
+      storeDefaultLang,
+    }),
+    [lang, setLang, toggleLang, t, storeDefaultLang]
+  );
 
   return (
-    <LanguageContext.Provider value={{ lang, language: lang, setLang, setLanguage: setLang, toggleLang, t, isBn }}>
+    <LanguageContext.Provider value={value}>
       {children}
     </LanguageContext.Provider>
   );

@@ -36,7 +36,7 @@ router.post('/register', (req: Request, res: Response) => {
 
     res.status(201).json({
       success: true,
-      message: 'Registration successful! Welcome to SHOPNOVA.',
+      message: 'Registration successful! Welcome to SHOPHATBD.',
       token,
       user
     });

@@ -28,9 +28,9 @@ export function getSmtpConfig(): SmtpConfig {
   const secure = map['smtp_secure'] === '1' || port === 465;
   const user = map['smtp_user'] || process.env.SMTP_USER || '';
   const pass = map['smtp_pass'] || process.env.SMTP_PASS || '';
-  const siteName = map['site_name'] || 'SHOPNOVA';
+  const siteName = map['site_name'] || 'SHOPHATBD';
   const fromName = map['smtp_from_name'] || `${siteName} Support`;
-  const fromEmail = map['smtp_from_email'] || user || map['contact_email'] || 'noreply@shopnova.com';
+  const fromEmail = map['smtp_from_email'] || user || map['contact_email'] || 'noreply@shophatbd.com';
   const adminEmail = map['admin_notification_email'] || map['contact_email'] || 'liakot911@gmail.com';
 
   return {
@@ -84,7 +84,7 @@ export async function sendAdminNewMessageAlert(params: {
 
   try {
     const transporter = createTransporter(config);
-    const siteName = queryOne<any>('SELECT value FROM site_settings WHERE key = "site_name"')?.value || 'SHOPNOVA';
+    const siteName = queryOne<any>('SELECT value FROM site_settings WHERE key = "site_name"')?.value || 'SHOPHATBD';
 
     const html = `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
@@ -156,7 +156,7 @@ export async function sendCustomerAutoReply(params: {
 
   try {
     const transporter = createTransporter(config);
-    const siteName = queryOne<any>('SELECT value FROM site_settings WHERE key = "site_name"')?.value || 'SHOPNOVA';
+    const siteName = queryOne<any>('SELECT value FROM site_settings WHERE key = "site_name"')?.value || 'SHOPHATBD';
 
     const html = `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
@@ -209,7 +209,7 @@ export async function sendAdminDirectReply(params: {
 
   try {
     const transporter = createTransporter(config);
-    const siteName = queryOne<any>('SELECT value FROM site_settings WHERE key = "site_name"')?.value || 'SHOPNOVA';
+    const siteName = queryOne<any>('SELECT value FROM site_settings WHERE key = "site_name"')?.value || 'SHOPHATBD';
 
     const html = `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
@@ -279,9 +279,9 @@ export async function testSmtpSettings(testConfig: Partial<SmtpConfig> & { test_
     const recipient = testConfig.test_recipient || config.admin_notification_email || config.smtp_user;
 
     await transporter.sendMail({
-      from: `"${config.smtp_from_name || 'SHOPNOVA'}" <${config.smtp_from_email || config.smtp_user}>`,
+      from: `"${config.smtp_from_name || 'SHOPHATBD'}" <${config.smtp_from_email || config.smtp_user}>`,
       to: recipient,
-      subject: '✅ SHOPNOVA - SMTP টেস্ট সফল হয়েছে',
+      subject: '✅ SHOPHATBD - SMTP টেস্ট সফল হয়েছে',
       html: `
         <div style="font-family: sans-serif; padding: 20px; border: 1px solid #10b981; border-radius: 8px; background: #ecfdf5;">
           <h2 style="color: #065f46; margin-top: 0;">🎉 টেস্ট ইমেইল সফলভাবে পাঠানো হয়েছে!</h2>

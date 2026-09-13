@@ -1,4 +1,4 @@
--- SHOPNOVA Full-Stack Relational E-Commerce Database Schema
+-- SHOPHATBD Full-Stack Relational E-Commerce Database Schema
 -- Compatible with SQLite, PostgreSQL, and MySQL
 
 CREATE TABLE IF NOT EXISTS roles (

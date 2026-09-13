@@ -330,7 +330,7 @@ export const AdminSecurityModal: React.FC<AdminSecurityModalProps> = ({ isOpen, 
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@shopnova.com"
+                  placeholder="admin@shophatbd.com"
                   className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-white text-xs focus:outline-none focus:border-amber-500"
                 />
               </div>

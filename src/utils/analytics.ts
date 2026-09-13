@@ -5,6 +5,7 @@ declare global {
     dataLayer: any[];
     gtag?: (...args: any[]) => void;
     fbq?: (...args: any[]) => void;
+    _shophatbd_settings?: Partial<SiteSettings>;
     _shopnova_settings?: Partial<SiteSettings>;
   }
 }
@@ -57,7 +58,7 @@ export function initAttribution(): AttributionData {
 
   let savedAttr: AttributionData = {};
   try {
-    const raw = sessionStorage.getItem('shopnova_attribution') || localStorage.getItem('shopnova_attribution');
+    const raw = sessionStorage.getItem('shophatbd_attribution') || localStorage.getItem('shophatbd_attribution') || sessionStorage.getItem('shopnova_attribution') || localStorage.getItem('shopnova_attribution');
     if (raw) savedAttr = JSON.parse(raw);
   } catch {}
 
@@ -77,8 +78,8 @@ export function initAttribution(): AttributionData {
   };
 
   try {
-    sessionStorage.setItem('shopnova_attribution', JSON.stringify(currentAttr));
-    localStorage.setItem('shopnova_attribution', JSON.stringify(currentAttr));
+    sessionStorage.setItem('shophatbd_attribution', JSON.stringify(currentAttr));
+    localStorage.setItem('shophatbd_attribution', JSON.stringify(currentAttr));
   } catch {}
 
   return currentAttr;
@@ -86,7 +87,7 @@ export function initAttribution(): AttributionData {
 
 export function getAttribution(): AttributionData {
   try {
-    const raw = sessionStorage.getItem('shopnova_attribution') || localStorage.getItem('shopnova_attribution');
+    const raw = sessionStorage.getItem('shophatbd_attribution') || localStorage.getItem('shophatbd_attribution') || sessionStorage.getItem('shopnova_attribution') || localStorage.getItem('shopnova_attribution');
     if (raw) return JSON.parse(raw);
   } catch {}
   return initAttribution();
@@ -154,12 +155,16 @@ async function dispatchMetaCapi(payload: any) {
 // 5. Unified Tracker Engine
 // --------------------------------------------------------------------------
 
+const getActiveSettings = (settings?: Partial<SiteSettings>): Partial<SiteSettings> => {
+  return settings || window._shophatbd_settings || window._shopnova_settings || {};
+};
+
 export const tracker = {
   /**
    * Track Page View
    */
   trackPageView(pageUrl = window.location.pathname, pageTitle = document.title, settings?: Partial<SiteSettings>) {
-    const s = settings || window._shopnova_settings || {};
+    const s = getActiveSettings(settings);
     const eventId = generateEventId('pv');
     const attr = getAttribution();
 
@@ -206,7 +211,7 @@ export const tracker = {
    */
   trackViewItem(product: Product, settings?: Partial<SiteSettings>) {
     if (!product) return;
-    const s = settings || window._shopnova_settings || {};
+    const s = getActiveSettings(settings);
     const eventId = generateEventId(`vi_${product.id}`);
     const price = product.sale_price ?? product.regular_price;
     const currency = s.currency || 'BDT';
@@ -226,7 +231,7 @@ export const tracker = {
             item_name: product.name_en,
             price,
             item_category: product.category_id,
-            item_brand: product.brand || s.site_name || 'SHOPNOVA',
+            item_brand: product.brand || s.site_name || 'SHOPHATBD',
             quantity: 1
           }
         ]
@@ -286,7 +291,7 @@ export const tracker = {
    */
   trackSearch(searchTerm: string, settings?: Partial<SiteSettings>) {
     if (!searchTerm?.trim()) return;
-    const s = settings || window._shopnova_settings || {};
+    const s = getActiveSettings(settings);
     const eventId = generateEventId('search');
     const cleanQuery = searchTerm.trim();
 
@@ -330,7 +335,7 @@ export const tracker = {
    */
   trackAddToCart(product: Product, quantity = 1, variant?: ProductVariant, settings?: Partial<SiteSettings>) {
     if (!product) return;
-    const s = settings || window._shopnova_settings || {};
+    const s = getActiveSettings(settings);
     const eventId = generateEventId(`atc_${product.id}`);
     const unitPrice = (product.sale_price ?? product.regular_price) + (variant?.price_adjustment ?? 0);
     const totalPrice = unitPrice * quantity;
@@ -418,7 +423,7 @@ export const tracker = {
    */
   trackRemoveFromCart(product: Product, quantity = 1, variant?: ProductVariant, settings?: Partial<SiteSettings>) {
     if (!product) return;
-    const s = settings || window._shopnova_settings || {};
+    const s = getActiveSettings(settings);
     const unitPrice = (product.sale_price ?? product.regular_price) + (variant?.price_adjustment ?? 0);
     const totalPrice = unitPrice * quantity;
     const currency = s.currency || 'BDT';
@@ -462,7 +467,7 @@ export const tracker = {
    * Track View Cart
    */
   trackViewCart(items: CartItem[], subtotal: number, settings?: Partial<SiteSettings>) {
-    const s = settings || window._shopnova_settings || {};
+    const s = getActiveSettings(settings);
     const currency = s.currency || 'BDT';
 
     window.dataLayer = window.dataLayer || [];
@@ -498,7 +503,7 @@ export const tracker = {
    * Track Begin Checkout / Initiate Checkout
    */
   trackBeginCheckout(items: CartItem[], grandTotal: number, coupon?: string, settings?: Partial<SiteSettings>) {
-    const s = settings || window._shopnova_settings || {};
+    const s = getActiveSettings(settings);
     const eventId = generateEventId('ic');
     const currency = s.currency || 'BDT';
     const attr = getAttribution();
@@ -579,7 +584,7 @@ export const tracker = {
    */
   async trackPurchase(order: Order, items: any[] = [], settings?: Partial<SiteSettings>) {
     if (!order || !order.order_number) return;
-    const s = settings || window._shopnova_settings || {};
+    const s = getActiveSettings(settings);
     const orderNumber = order.order_number;
 
     // Strict Purchase Deduplication Check
@@ -716,7 +721,7 @@ export const tracker = {
    * Track Lead (e.g. Contact Form or Newsletter)
    */
   trackLead(leadData: { name?: string; email?: string; phone?: string; message?: string }, settings?: Partial<SiteSettings>) {
-    const s = settings || window._shopnova_settings || {};
+    const s = getActiveSettings(settings);
     const eventId = generateEventId('lead');
     const attr = getAttribution();
 

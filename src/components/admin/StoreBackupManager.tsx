@@ -51,7 +51,7 @@ export const StoreBackupManager: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const getToken = () => {
-    return getAuthToken() || localStorage.getItem('shopnova_token') || localStorage.getItem('token') || '';
+    return getAuthToken() || localStorage.getItem('shophatbd_token') || localStorage.getItem('shopnova_token') || localStorage.getItem('token') || '';
   };
 
   const fetchSummary = async () => {
@@ -99,7 +99,7 @@ export const StoreBackupManager: React.FC = () => {
       const a = document.createElement('a');
       a.href = url;
       const timestamp = new Date().toISOString().split('T')[0];
-      a.download = `shopnova_store_backup_${timestamp}.json`;
+      a.download = `shophatbd_store_backup_${timestamp}.json`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
@@ -133,7 +133,7 @@ export const StoreBackupManager: React.FC = () => {
       const a = document.createElement('a');
       a.href = url;
       const timestamp = new Date().toISOString().split('T')[0];
-      a.download = `shopnova_database_${timestamp}.db`;
+      a.download = `shophatbd_database_${timestamp}.db`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
@@ -167,7 +167,7 @@ export const StoreBackupManager: React.FC = () => {
       const a = document.createElement('a');
       a.href = url;
       const timestamp = new Date().toISOString().split('T')[0];
-      a.download = `shopnova_products_${timestamp}.csv`;
+      a.download = `shophatbd_products_${timestamp}.csv`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
@@ -379,8 +379,8 @@ export const StoreBackupManager: React.FC = () => {
               </h4>
               <p className="text-xs text-slate-400 mt-1">
                 {isBn
-                  ? 'সার্ভারের আসল ডাটাবেজ ফাইল (shopnova.db)। হোস্টিংয়ে সরাসরি ব্যবহারের জন্য উপযুক্ত।'
-                  : 'Direct server database file (shopnova.db), ready for direct VPS or cPanel deployment.'}
+                  ? 'সার্ভারের আসল ডাটাবেজ ফাইল (.db)। হোস্টিংয়ে সরাসরি ব্যবহারের জন্য উপযুক্ত।'
+                  : 'Direct server database file (.db), ready for direct VPS or cPanel deployment.'}
               </p>
             </div>
           </div>

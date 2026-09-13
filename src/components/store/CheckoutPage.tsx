@@ -677,7 +677,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 bg-pink-50/60 rounded-xl border border-pink-100">
                             <div>
                               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
-                                {isBn ? 'শপনোভা বিকাশ একাউন্ট নম্বর' : 'Merchant bKash Number'}
+                                {isBn ? (settings?.site_name_bn ? `${settings.site_name_bn} বিকাশ একাউন্ট নম্বর` : 'শপহাটবিডি বিকাশ একাউন্ট নম্বর') : 'Merchant bKash Number'}
                               </span>
                               <div className="flex items-center gap-2 mt-0.5">
                                 <span className="text-base font-black text-[#E2136E] font-mono select-all">
@@ -825,7 +825,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 bg-orange-50/60 rounded-xl border border-orange-100">
                         <div>
                           <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
-                            {isBn ? 'শপনোভা নগদ একাউন্ট নম্বর' : 'Merchant Nagad Number'}
+                            {isBn ? (settings?.site_name_bn ? `${settings.site_name_bn} নগদ একাউন্ট নম্বর` : 'শপহাটবিডি নগদ একাউন্ট নম্বর') : 'Merchant Nagad Number'}
                           </span>
                           <div className="flex items-center gap-2 mt-0.5">
                             <span className="text-base font-black text-orange-600 font-mono select-all">
@@ -1230,7 +1230,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
         formatPrice={formatPrice}
         onSuccess={handleOnlinePaymentSuccess}
         isBn={isBn}
-        siteName={settings?.site_name || 'SHOPNOVA'}
+        siteName={(isBn ? settings?.site_name_bn : settings?.site_name) || (isBn ? 'শপহাটবিডি' : 'SHOPHATBD')}
       />
 
       {/* Card / 3D Secure Bank Modal */}
@@ -1241,7 +1241,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
         formatPrice={formatPrice}
         onSuccess={handleCardOnlinePaymentSuccess}
         isBn={isBn}
-        siteName={settings?.site_name || 'SHOPNOVA'}
+        siteName={(isBn ? settings?.site_name_bn : settings?.site_name) || (isBn ? 'শপহাটবিডি' : 'SHOPHATBD')}
         customerName={customerName}
         customerPhone={customerPhone}
       />

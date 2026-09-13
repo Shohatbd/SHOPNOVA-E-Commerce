@@ -228,7 +228,7 @@ export const seedProducts: SeedProduct[] = [
     description_bn: 'ঈদ ও বিশেষ অনুষ্ঠানের জন্য আধুনিক কাট ও ট্র্যাডিশনাল লুকের এক্সক্লুসিভ পাঞ্জাবি। উন্নত মানের ফেব্রিক ও নিখুঁত সেলাই।',
     category_id: 'cat_men',
     subcategory_id: 'sub_m_panjabi',
-    brand: 'SHOPNOVA Ethnic',
+    brand: 'SHOPHATBD Ethnic',
     regular_price: 3200,
     sale_price: 2490,
     discount_percentage: 22,
@@ -253,7 +253,7 @@ export const seedProducts: SeedProduct[] = [
     rating: 4.9,
     review_count: 54,
     tags: 'panjabi, ethnic wear, men, eid, festive, traditional',
-    seo_title: 'Royal Embroidered Silk Blend Panjabi | SHOPNOVA',
+    seo_title: 'Royal Embroidered Silk Blend Panjabi | SHOPHATBD',
     seo_description: 'Buy premium embroidered festive panjabi for men online in Bangladesh.',
     seo_keywords: 'panjabi bd, eid panjabi, mens ethnic wear'
   },
@@ -271,7 +271,7 @@ export const seedProducts: SeedProduct[] = [
     description_bn: 'অফিস কিংবা আউটিংয়ে পরার জন্য আরামদায়ক ও নিখুঁত ফিটিংয়ের সুতি শার্ট। সহজে ভাঁজ পড়ে না এবং কালার ১০০% পাকা।',
     category_id: 'cat_men',
     subcategory_id: 'sub_m_shirts',
-    brand: 'SHOPNOVA Casuals',
+    brand: 'SHOPHATBD Casuals',
     regular_price: 1650,
     sale_price: 1250,
     discount_percentage: 24,
@@ -296,7 +296,7 @@ export const seedProducts: SeedProduct[] = [
     rating: 4.8,
     review_count: 38,
     tags: 'shirt, casual shirt, formal shirt, cotton shirt, men',
-    seo_title: 'Premium Combed Cotton Casual Shirt | SHOPNOVA',
+    seo_title: 'Premium Combed Cotton Casual Shirt | SHOPHATBD',
     seo_description: 'Buy stylish 100% cotton casual and formal shirts for men in Bangladesh.',
     seo_keywords: 'mens shirt bd, cotton shirt, casual shirts'
   },
@@ -314,7 +314,7 @@ export const seedProducts: SeedProduct[] = [
     description_bn: 'ঐতিহ্যবাহী কারিগরদের হাতে বোনা হালকা ও আরামদায়ক পিওর মসলিন সিল্ক জামদানি শাড়ি। সাথে পাচ্ছেন ম্যাচিং ব্লাউজ পিস।',
     category_id: 'cat_women',
     subcategory_id: 'sub_w_saree',
-    brand: 'SHOPNOVA Weaves',
+    brand: 'SHOPHATBD Weaves',
     regular_price: 8900,
     sale_price: 6990,
     discount_percentage: 21,
@@ -336,7 +336,7 @@ export const seedProducts: SeedProduct[] = [
     rating: 5.0,
     review_count: 42,
     tags: 'saree, jamdani, muslin, silk, traditional, women',
-    seo_title: 'Pure Muslin Silk Jamdani Saree | SHOPNOVA',
+    seo_title: 'Pure Muslin Silk Jamdani Saree | SHOPHATBD',
     seo_description: 'Handcrafted Jamdani Muslin Saree with pure zari artwork in Bangladesh.',
     seo_keywords: 'jamdani saree bd, muslin saree, bridal saree'
   },
@@ -354,7 +354,7 @@ export const seedProducts: SeedProduct[] = [
     description_bn: 'উৎসব ও পার্টিতে পরার জন্য নজরকাড়া পান্না সবুজ চান্দেরি কুর্তি থ্রি-পিস সেট। নরম ও আরামদায়ক ফেব্রিক।',
     category_id: 'cat_women',
     subcategory_id: 'sub_w_salwar',
-    brand: 'SHOPNOVA Couture',
+    brand: 'SHOPHATBD Couture',
     regular_price: 5200,
     sale_price: 4150,
     discount_percentage: 20,
@@ -378,7 +378,7 @@ export const seedProducts: SeedProduct[] = [
     rating: 4.9,
     review_count: 27,
     tags: 'salwar kameez, kurti, three-piece, partywear, women',
-    seo_title: 'Designer Three-Piece Salwar Kameez | SHOPNOVA',
+    seo_title: 'Designer Three-Piece Salwar Kameez | SHOPHATBD',
     seo_description: 'Buy designer 3-piece salwar kameez with organza dupatta in Bangladesh.',
     seo_keywords: 'salwar kameez bd, partywear women, three piece'
   },
@@ -396,7 +396,7 @@ export const seedProducts: SeedProduct[] = [
     description_bn: 'শিশুদের কোমল ত্বকের কথা মাথায় রেখে তৈরি আরামদায়ক ও ট্রেন্ডি ক্যাজুয়াল পোশাক।',
     category_id: 'cat_kids',
     subcategory_id: 'sub_k_boys',
-    brand: 'SHOPNOVA Kids',
+    brand: 'SHOPHATBD Kids',
     regular_price: 1650,
     sale_price: 1290,
     discount_percentage: 22,
@@ -420,7 +420,7 @@ export const seedProducts: SeedProduct[] = [
     rating: 4.9,
     review_count: 31,
     tags: 'kids, boys, clothing set, cotton, summer',
-    seo_title: 'Organic Cotton Boys Shirt & Shorts Set | SHOPNOVA',
+    seo_title: 'Organic Cotton Boys Shirt & Shorts Set | SHOPHATBD',
     seo_description: 'Comfortable summer cotton clothing sets for boys in Bangladesh.',
     seo_keywords: 'kids clothing bd, boys clothing set, baby outfit'
   },
@@ -438,7 +438,7 @@ export const seedProducts: SeedProduct[] = [
     description_bn: 'জন্মদিন ও পার্টিতে পরার জন্য নজরকাড়া ও পরতে আরামদায়ক পার্টি ড্রেস।',
     category_id: 'cat_kids',
     subcategory_id: 'sub_k_girls',
-    brand: 'SHOPNOVA Kids',
+    brand: 'SHOPHATBD Kids',
     regular_price: 2450,
     sale_price: 1950,
     discount_percentage: 20,
@@ -462,7 +462,7 @@ export const seedProducts: SeedProduct[] = [
     rating: 4.8,
     review_count: 18,
     tags: 'kids, frock, dress, girls, party, princess',
-    seo_title: 'Girls Floral Party Frock | SHOPNOVA',
+    seo_title: 'Girls Floral Party Frock | SHOPHATBD',
     seo_description: 'Princess party wear frocks for girls with pure cotton lining in Bangladesh.',
     seo_keywords: 'girls frock bd, baby dress, birthday dress'
   },
@@ -480,7 +480,7 @@ export const seedProducts: SeedProduct[] = [
     description_bn: 'হাই-ডেফিনিশন ভয়েস কলিং ও হেলথ মনিটরিং সমৃদ্ধ আধুনিক ও ট্রেন্ডি স্মার্টওয়াচ।',
     category_id: 'cat_watches',
     subcategory_id: 'sub_w_smart',
-    brand: 'SHOPNOVA Tech',
+    brand: 'SHOPHATBD Tech',
     regular_price: 4990,
     sale_price: 3690,
     discount_percentage: 26,
@@ -503,7 +503,7 @@ export const seedProducts: SeedProduct[] = [
     rating: 4.8,
     review_count: 64,
     tags: 'smartwatch, amoled, bluetooth call, fitness, watch',
-    seo_title: 'Aegis Pro AMOLED Calling Smartwatch | SHOPNOVA',
+    seo_title: 'Aegis Pro AMOLED Calling Smartwatch | SHOPHATBD',
     seo_description: 'Best Bluetooth Calling AMOLED Smartwatch price in Bangladesh.',
     seo_keywords: 'smartwatch bd, calling watch, amoled fitness tracker'
   },
@@ -544,7 +544,7 @@ export const seedProducts: SeedProduct[] = [
     rating: 5.0,
     review_count: 56,
     tags: 'watch, chronograph, automatic, sapphire, luxury, analog',
-    seo_title: 'Nova Chrono Sapphire Automatic Watch | SHOPNOVA',
+    seo_title: 'Nova Chrono Sapphire Automatic Watch | SHOPHATBD',
     seo_description: 'Luxury automatic mechanical watch in Bangladesh with sapphire crystal glass.',
     seo_keywords: 'automatic watch bd, luxury watch, chronograph'
   },
@@ -585,7 +585,7 @@ export const seedProducts: SeedProduct[] = [
     rating: 4.9,
     review_count: 88,
     tags: 'earbuds, tws, anc, wireless, audio, headphones, gadgets',
-    seo_title: 'SonicPod ANC Wireless Earbuds | SHOPNOVA',
+    seo_title: 'SonicPod ANC Wireless Earbuds | SHOPHATBD',
     seo_description: 'Best Active Noise Cancelling TWS Earbuds price in BD.',
     seo_keywords: 'tws earbuds bd, anc wireless earphones, bluetooth buds'
   },
@@ -625,7 +625,7 @@ export const seedProducts: SeedProduct[] = [
     rating: 4.8,
     review_count: 45,
     tags: 'powerbank, 65w, pd, laptop charger, battery, gadgets',
-    seo_title: 'VoltMax 65W PD 20000mAh Power Bank | SHOPNOVA',
+    seo_title: 'VoltMax 65W PD 20000mAh Power Bank | SHOPHATBD',
     seo_description: 'Fast charge laptops and mobiles with VoltMax 65W Power Bank in BD.',
     seo_keywords: 'power bank bd, 65w laptop powerbank, fast charger'
   }
@@ -739,6 +739,7 @@ export const seedShippingMethods = [
 export const seedSettings = [
   { key: 'site_name', value: 'SHOPHATBD' },
   { key: 'site_name_bn', value: 'শপহাটবিডি' },
+  { key: 'default_language', value: 'en' },
   { key: 'site_tagline_en', value: 'SHOP SMART LIVE BETTER' },
   { key: 'site_tagline_bn', value: 'স্মার্ট কেনাকাটা সুন্দর জীবন' },
   { key: 'currency', value: 'BDT' },
@@ -768,12 +769,12 @@ export const seedSettings = [
         label_bn: 'আমাদের সম্পর্কে',
         page: 'about',
         is_active: true,
-        short_description_bn: 'শপনোভা-এর মিশন, প্রিমিয়াম পণ্যের প্রতিশ্রুতি ও ৬৪ জেলায় দ্রুততম হোম ডেলিভারির গল্প।',
-        short_description: 'Discover the story, mission, and dedication to authentic quality driving SHOPNOVA across Bangladesh.',
+        short_description_bn: 'শপহাটবিডি-এর মিশন, প্রিমিয়াম পণ্যের প্রতিশ্রুতি ও ৬৪ জেলায় দ্রুততম হোম ডেলিভারির গল্প।',
+        short_description: 'Discover the story, mission, and dedication to authentic quality driving SHOPHATBD across Bangladesh.',
         description_bn: `আমাদের গল্প ও অঙ্গীকার:
-শপনোভা বাংলাদেশের একটি শীর্ষস্থানীয় আধুনিক ফ্যাশন ও স্মার্ট টেকনোলজি ই-কমার্স প্ল্যাটফর্ম। আমাদের মূল লক্ষ্য হলো দেশের প্রতিটি প্রান্তে মানুষের কাছে ১০০% অরিজিনাল, প্রিমিয়াম কোয়ালিটির লাইফস্টাইল পণ্য ও গ্যাজেট দ্রুততম সময়ে পৌঁছে দেওয়া।
+শপহাটবিডি বাংলাদেশের একটি শীর্ষস্থানীয় আধুনিক ফ্যাশন ও স্মার্ট টেকনোলজি ই-কমার্স প্ল্যাটফর্ম। আমাদের মূল লক্ষ্য হলো দেশের প্রতিটি প্রান্তে মানুষের কাছে ১০০% অরিজিনাল, প্রিমিয়াম কোয়ালিটির লাইফস্টাইল পণ্য ও গ্যাজেট দ্রুততম সময়ে পৌঁছে দেওয়া।
 
-আমরা বিশ্বাস করি শুধুমাত্র পণ্য বিক্রয় করাই আমাদের শেষ কথা নয়; বরং সততা, বিশ্বস্ত কোয়ালিটি এবং অতুলনীয় আন্তরিক গ্রাহক সেবার মাধ্যমে একটি দীর্ঘমেয়াদী পারিবারিক আস্থার সম্পর্ক গড়ে তোলাই আমাদের সার্থকতা। ৬৪ জেলার প্রতিটি গ্রাহকের মুখে সন্তুষ্টির হাসি ফোটানোই শপনোভা টিমের প্রতিটি সদস্যের নিরন্তর প্রচেষ্টা।`,
+আমরা বিশ্বাস করি শুধুমাত্র পণ্য বিক্রয় করাই আমাদের শেষ কথা নয়; বরং সততা, বিশ্বস্ত কোয়ালিটি এবং অতুলনীয় আন্তরিক গ্রাহক সেবার মাধ্যমে একটি দীর্ঘমেয়াদী পারিবারিক আস্থার সম্পর্ক গড়ে তোলাই আমাদের সার্থকতা। ৬৪ জেলার প্রতিটি গ্রাহকের মুখে সন্তুষ্টির হাসি ফোটানোই শপহাটবিডি টিমের প্রতিটি সদস্যের নিরন্তর প্রচেষ্টা।`,
         description_en: `Our Story & Purpose:
 We are a premier lifestyle and tech destination in Bangladesh, committed to curating 100% authentic apparel, modern accessories, and smart gadgets with seamless nationwide doorstep fulfillment.
 
@@ -840,10 +841,10 @@ You retain full rights to request verification, amendment, or removal of your pe
   {
     key: 'footer_social_links_json',
     value: JSON.stringify([
-      { id: 'soc_fb', platform: 'facebook', name: 'Facebook Page', url: 'https://facebook.com/shopnovabd', is_active: true },
-      { id: 'soc_ig', platform: 'instagram', name: 'Instagram Profile', url: 'https://instagram.com/shopnovabd', is_active: true },
-      { id: 'soc_yt', platform: 'youtube', name: 'YouTube Channel', url: 'https://youtube.com/@shopnovabd', is_active: true },
-      { id: 'soc_wa', platform: 'whatsapp', name: 'WhatsApp Helpline', url: 'https://wa.me/8801700000000', is_active: true }
+      { id: 'soc_fb', platform: 'facebook', name: 'Facebook Page', url: 'https://facebook.com/shophatbd', is_active: true },
+      { id: 'soc_ig', platform: 'instagram', name: 'Instagram Profile', url: 'https://instagram.com/shophatbd', is_active: true },
+      { id: 'soc_yt', platform: 'youtube', name: 'YouTube Channel', url: 'https://youtube.com/@shophatbd', is_active: true },
+      { id: 'soc_wa', platform: 'whatsapp', name: 'WhatsApp Helpline', url: 'https://wa.me/8801724709454', is_active: true }
     ])
   },
   {

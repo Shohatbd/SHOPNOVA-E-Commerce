@@ -12,8 +12,7 @@ import {
   Zap,
   ChevronDown,
   ChevronLeft,
-  ChevronRight,
-  Globe
+  ChevronRight
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext.tsx';
 import { useAuth } from '../../context/AuthContext.tsx';
@@ -31,7 +30,7 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ onNavigate, currentPage, currentParam, onOpenAuth }) => {
-  const { t, isBn, setLang } = useLanguage();
+  const { t, isBn } = useLanguage();
   const { user, isAdmin, logout } = useAuth();
   const { itemCount, setIsCartOpen } = useCart();
   const { wishlistCount } = useWishlist();
@@ -127,7 +126,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, currentPage, current
   return (
     <header
       style={{ backgroundColor: headerBgColor, color: headerTextColor }}
-      className="sticky top-0 z-40 border-b border-black/10 shadow-xs transition-colors"
+      className="border-b border-black/10 transition-colors"
     >
       {/* Main Bar */}
       <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-2 sm:py-3 flex items-center justify-between gap-1.5 sm:gap-4">
@@ -157,9 +156,9 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, currentPage, current
 
             {/* Brand Name & Tagline (Hidden if image-only mode) */}
             {settings.logo_type !== 'image' && (
-              <div className="inline-flex flex-col justify-center min-w-0">
+              <div className="inline-flex flex-col justify-center min-w-0 overflow-visible py-0.5">
                 <span
-                  className="text-base sm:text-xl lg:text-2xl font-black tracking-tight font-heading block leading-none uppercase truncate"
+                  className="text-base sm:text-xl lg:text-2xl font-black tracking-tight font-heading block leading-tight uppercase whitespace-nowrap pt-1 pb-0.5 overflow-visible"
                   style={{ color: headerTextColor }}
                 >
                   {isBn && settings.site_name_bn ? settings.site_name_bn : (settings.site_name || 'SHOPHATBD')}
@@ -171,7 +170,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, currentPage, current
                   const words = taglineText.trim().split(/\s+/);
                   return words.length > 1 ? (
                     <div
-                      className={`w-full flex justify-between items-center text-[7px] sm:text-[8px] lg:text-[8.5px] font-extrabold uppercase opacity-90 leading-none mt-1 select-none ${
+                      className={`w-full flex justify-between items-center text-[7px] sm:text-[8px] lg:text-[8.5px] font-extrabold uppercase opacity-90 leading-tight mt-0.5 select-none ${
                         isBn ? 'font-bengali' : ''
                       }`}
                       style={{ color: headerTextColor }}
@@ -189,7 +188,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, currentPage, current
                     </div>
                   ) : (
                     <div
-                      className={`w-full text-center text-[7px] sm:text-[8px] lg:text-[8.5px] font-extrabold uppercase opacity-90 leading-none mt-1 select-none ${
+                      className={`w-full text-center text-[7px] sm:text-[8px] lg:text-[8.5px] font-extrabold uppercase opacity-90 leading-tight mt-0.5 select-none ${
                         isBn ? 'font-bengali' : 'tracking-[0.08em]'
                       }`}
                       style={{ color: headerTextColor }}
@@ -269,45 +268,17 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, currentPage, current
           )}
         </div>
 
-        {/* Right Actions: Language Toggle, Track, Wishlist, Cart, User / Admin */}
+        {/* Right Actions: Track, Wishlist, Cart, User / Admin */}
         <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-          {/* Language Switcher Button in Header */}
-          <div
-            className="flex items-center bg-white/95 backdrop-blur-xs rounded-lg sm:rounded-xl p-0.5 text-[11px] sm:text-xs font-bold border border-black/10 shadow-xs shrink-0"
-            title={isBn ? "ভাষা পরিবর্তন করুন (Change Language)" : "Switch Language / ভাষা পরিবর্তন"}
-          >
-            <button
-              type="button"
-              onClick={() => setLang('bn')}
-              className={`flex items-center gap-1 px-1.5 sm:px-2.5 py-1 sm:py-1.5 rounded-md sm:rounded-lg transition-all text-[11px] sm:text-xs font-bold ${
-                isBn
-                  ? 'bg-slate-950 text-white shadow-xs'
-                  : 'text-slate-700 hover:text-slate-950 hover:bg-black/5'
-              }`}
-            >
-              <span className="font-siliguri font-bold">বাং</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setLang('en')}
-              className={`flex items-center gap-1 px-1.5 sm:px-2.5 py-1 sm:py-1.5 rounded-md sm:rounded-lg transition-all text-[11px] sm:text-xs font-bold ${
-                !isBn
-                  ? 'bg-slate-950 text-white shadow-xs'
-                  : 'text-slate-700 hover:text-slate-950 hover:bg-black/5'
-              }`}
-            >
-              <span>EN</span>
-            </button>
-          </div>
-
           {/* Order Tracking Button */}
           <button
             onClick={() => onNavigate('track')}
-            className="hidden lg:inline-flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl bg-black/10 hover:bg-black/15 transition-colors shrink-0"
+            className="flex items-center gap-1.5 text-xs font-bold px-2 sm:px-3 py-2 rounded-lg sm:rounded-xl bg-black/10 hover:bg-black/15 transition-colors shrink-0"
             style={{ color: headerTextColor }}
+            title={t('track_order')}
           >
             <Truck className="w-4 h-4" />
-            <span>{t('track_order')}</span>
+            <span className="hidden md:inline font-bold">{t('track_order')}</span>
           </button>
 
           {/* Wishlist Button */}

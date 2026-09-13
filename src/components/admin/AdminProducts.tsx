@@ -210,8 +210,8 @@ export const AdminProducts: React.FC = () => {
       name_en: '',
       name_bn: '',
       slug: '',
-      sku: `SN-${Math.floor(1000 + Math.random() * 9000)}`,
-      brand: 'SHOPNOVA Luxury',
+      sku: `SH-${Math.floor(1000 + Math.random() * 9000)}`,
+      brand: 'SHOPHATBD Luxury',
       category_id: firstCat,
       subcategory_id: '',
       regular_price: 1500,
@@ -957,7 +957,7 @@ export const AdminProducts: React.FC = () => {
                       required
                       value={formData.brand}
                       onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
-                      placeholder="SHOPNOVA Luxury"
+                      placeholder="SHOPHATBD Luxury"
                       className="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-white focus:outline-none focus:border-amber-500 text-xs"
                     />
                   </div>

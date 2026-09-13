@@ -110,7 +110,7 @@ Reach out to our customer support team via hotline or official WhatsApp/Facebook
 ওয়েবসাইটে প্রদর্শিত যেকোনো পণ্যের মূল্য বা ডিসকাউন্ট অফার পূর্ব নোটিশ ছাড়াই পরিবর্তনযোগ্য। তবে গ্রাহক কর্তৃক ইতিমধ্যে সফলভাবে নিশ্চিতকৃত অর্ডারের ক্ষেত্রে চেকআউটের সময় সম্মত মূল্যই কার্যকর থাকবে।
 
 ৪. মেধা সম্পত্তি ও ব্র্যান্ড স্বত্বাধিকার:
-ওয়েবসাইটে ব্যবহৃত সকল লোগো, গ্রাফিক্স, ছবি, কন্টেন্ট এবং ডিজাইন শপনোভা-এর অনন্য স্বত্বাধিকারভুক্ত। লিখিত অনুমতি ব্যতীত কোনো বাণিজ্যিক উদ্দেশ্যে এগুলোর নকল, ডাউনলোড বা পুনঃব্যবহার আইনত দণ্ডনীয় অপরাধ।`,
+ওয়েবসাইটে ব্যবহৃত সকল লোগো, গ্রাফিক্স, ছবি, কন্টেন্ট এবং ডিজাইন শপহাটবিডি-এর অনন্য স্বত্বাধিকারভুক্ত। লিখিত অনুমতি ব্যতীত কোনো বাণিজ্যিক উদ্দেশ্যে এগুলোর নকল, ডাউনলোড বা পুনঃব্যবহার আইনত দণ্ডনীয় অপরাধ।`,
     description_en: `1. General Terms of Agreement:
 By accessing this website, placing an order, or utilizing our services, you agree to be bound by these legal terms. All prices are stated in Bangladeshi Taka (BDT) inclusive of statutory government taxes.
 
@@ -211,12 +211,12 @@ export const DEFAULT_ABOUT_POLICY: PolicyLinkItem = {
   path: 'about',
   icon: 'sparkles',
   is_active: true,
-  short_description_en: 'Discover the story, values, and dedication to authentic quality driving SHOPNOVA across Bangladesh.',
-  short_description_bn: 'SHOPNOVA-এর লক্ষ্য, প্রতিশ্রুতি ও দেশজুড়ে প্রিমিয়াম লাইফস্টাইল পণ্য পৌঁছে দেওয়ার গল্প জানুন।',
+  short_description_en: 'Discover the story, values, and dedication to authentic quality driving SHOPHATBD across Bangladesh.',
+  short_description_bn: 'শপহাটবিডি-এর লক্ষ্য, প্রতিশ্রুতি ও দেশজুড়ে প্রিমিয়াম লাইফস্টাইল পণ্য পৌঁছে দেওয়ার গল্প জানুন।',
   description_bn: `আমাদের গল্প ও অঙ্গীকার:
-শপনোভা বাংলাদেশের একটি শীর্ষস্থানীয় আধুনিক ফ্যাশন ও স্মার্ট টেকনোলজি ই-কমার্স প্ল্যাটফর্ম। আমাদের মূল লক্ষ্য হলো দেশের প্রতিটি প্রান্তে মানুষের কাছে ১০০% অরিজিনাল, প্রিমিয়াম কোয়ালিটির লাইফস্টাইল পণ্য ও গ্যাজেট দ্রুততম সময়ে পৌঁছে দেওয়া।
+শপহাটবিডি বাংলাদেশের একটি শীর্ষস্থানীয় আধুনিক ফ্যাশন ও স্মার্ট টেকনোলজি ই-কমার্স প্ল্যাটফর্ম। আমাদের মূল লক্ষ্য হলো দেশের প্রতিটি প্রান্তে মানুষের কাছে ১০০% অরিজিনাল, প্রিমিয়াম কোয়ালিটির লাইফস্টাইল পণ্য ও গ্যাজেট দ্রুততম সময়ে পৌঁছে দেওয়া।
 
-আমরা বিশ্বাস করি শুধুমাত্র পণ্য বিক্রয় করাই আমাদের শেষ কথা নয়; বরং সততা, বিশ্বস্ত কোয়ালিটি এবং অতুলনীয় আন্তরিক গ্রাহক সেবার মাধ্যমে একটি দীর্ঘমেয়াদী পারিবারিক আস্থার সম্পর্ক গড়ে তোলাই আমাদের সার্থকতা। ৬৪ জেলার প্রতিটি গ্রাহকের মুখে সন্তুষ্টির হাসি ফোটানোই শপনোভা টিমের প্রতিটি সদস্যের নিরন্তর প্রচেষ্টা।`,
+আমরা বিশ্বাস করি শুধুমাত্র পণ্য বিক্রয় করাই আমাদের শেষ কথা নয়; বরং সততা, বিশ্বস্ত কোয়ালিটি এবং অতুলনীয় আন্তরিক গ্রাহক সেবার মাধ্যমে একটি দীর্ঘমেয়াদী পারিবারিক আস্থার সম্পর্ক গড়ে তোলাই আমাদের সার্থকতা। ৬৪ জেলার প্রতিটি গ্রাহকের মুখে সন্তুষ্টির হাসি ফোটানোই শপহাটবিডি টিমের প্রতিটি সদস্যের নিরন্তর প্রচেষ্টা।`,
   description_en: `Our Story & Purpose:
 We are a premier lifestyle and tech destination in Bangladesh, committed to curating 100% authentic apparel, modern accessories, and smart gadgets with seamless nationwide doorstep fulfillment.
 

@@ -13,7 +13,8 @@ import {
 } from './seedData.ts';
 
 let dbInstance: Database | null = null;
-const DB_FILE_PATH = path.join(process.cwd(), 'shopnova.db');
+const DB_FILE_PATH = path.join(process.cwd(), 'shophatbd.db');
+const LEGACY_DB_FILE_PATH = path.join(process.cwd(), 'shopnova.db');
 
 export function getDb(): Database {
   if (!dbInstance) {
@@ -70,11 +71,15 @@ export function run(sqlQuery: string, params: any[] = []): { changes: number } {
 export async function initDatabase(): Promise<void> {
   const SQL = await initSqlJs();
 
-  if (fs.existsSync(DB_FILE_PATH)) {
+  const targetPath = fs.existsSync(DB_FILE_PATH)
+    ? DB_FILE_PATH
+    : (fs.existsSync(LEGACY_DB_FILE_PATH) ? LEGACY_DB_FILE_PATH : null);
+
+  if (targetPath) {
     try {
-      const fileBuffer = fs.readFileSync(DB_FILE_PATH);
+      const fileBuffer = fs.readFileSync(targetPath);
       dbInstance = new SQL.Database(fileBuffer);
-      console.log('Loaded existing database from', DB_FILE_PATH);
+      console.log('Loaded existing database from', targetPath);
     } catch (e) {
       console.warn('Could not read existing db, creating fresh database...', e);
       dbInstance = new SQL.Database();
@@ -140,7 +145,7 @@ export async function initDatabase(): Promise<void> {
     { key: 'smtp_secure', value: '1' },
     { key: 'smtp_user', value: '' },
     { key: 'smtp_pass', value: '' },
-    { key: 'smtp_from_name', value: 'SHOPNOVA Customer Care' },
+    { key: 'smtp_from_name', value: 'SHOPHATBD Customer Care' },
     { key: 'smtp_from_email', value: '' }
   ];
   for (const st of defaultContactSettings) {
@@ -434,9 +439,14 @@ export async function initDatabase(): Promise<void> {
 
   // Ensure site branding defaults without overwriting user custom changes
   dbInstance.run("UPDATE site_settings SET value = 'SHOPHATBD' WHERE key = 'site_name' AND (value = 'SHOPNOVA' OR value = '' OR value IS NULL)");
+  dbInstance.run("UPDATE site_settings SET value = 'SHOPHATBD' WHERE key = 'site_name_en' AND (value = 'SHOPNOVA' OR value = '' OR value IS NULL)");
   dbInstance.run("UPDATE site_settings SET value = 'শপহাটবিডি' WHERE key = 'site_name_bn' AND (value = 'SHOPNOVA' OR value = '' OR value IS NULL)");
   dbInstance.run("UPDATE site_settings SET value = 'SHOP SMART LIVE BETTER' WHERE key = 'site_tagline_en' AND (value = '' OR value IS NULL OR value LIKE '%SHOPNOVA%')");
   dbInstance.run("UPDATE site_settings SET value = 'স্মার্ট কেনাকাটা সুন্দর জীবন' WHERE key = 'site_tagline_bn' AND (value = '' OR value IS NULL OR value LIKE '%শপনোভা%')");
+  dbInstance.run("UPDATE site_settings SET value = 'SHOPHATBD - SMART SHOPPING, BETTER LIVING' WHERE (key = 'seo_meta_title' OR key = 'meta_title_en') AND (value LIKE '%SHOPNOVA%' OR value = '' OR value IS NULL)");
+  dbInstance.run("UPDATE site_settings SET value = 'শপহাটবিডি - স্মার্ট কেনাকাটা সুন্দর জীবন' WHERE (key = 'seo_meta_title_bn' OR key = 'meta_title_bn') AND (value LIKE '%শপনোভা%' OR value LIKE '%SHOPNOVA%' OR value = '' OR value IS NULL)");
+  dbInstance.run("UPDATE site_settings SET value = 'Shop authentic fashion, watches, electronics, and lifestyle products at SHOPHATBD with fast nationwide home delivery across Bangladesh.' WHERE key = 'seo_description' AND (value LIKE '%SHOPNOVA%' OR value = '' OR value IS NULL)");
+  dbInstance.run("UPDATE site_settings SET value = 'শপহাটবিডি থেকে সেরা মানের পোশাক, ঘড়ি ও ট্রেন্ডিং গ্যাজেট কিনুন সুলভ মূল্যে। দ্রুত হোম ডেলিভারি ও সহজ রিটার্ন সুবিধা সমগ্র বাংলাদেশে।' WHERE key = 'seo_description_bn' AND (value LIKE '%শপনোভা%' OR value = '' OR value IS NULL)");
   dbInstance.run("UPDATE site_settings SET value = 'JOIN THE SHOPHATBD CLUB' WHERE key = 'footer_newsletter_title_en' AND (value LIKE '%SHOPNOVA%' OR value = '' OR value IS NULL)");
   dbInstance.run("UPDATE site_settings SET value = 'শপহাটবিডি ক্লাবে যুক্ত থাকুন' WHERE key = 'footer_newsletter_title_bn' AND (value LIKE '%SHOPNOVA%' OR value = '' OR value IS NULL)");
   dbInstance.run("UPDATE site_settings SET value = 'liakot911@gmail.com' WHERE key = 'contact_email' AND (value = 'support@shopnova.com' OR value = '' OR value IS NULL)");
@@ -448,6 +458,17 @@ export async function initDatabase(): Promise<void> {
   dbInstance.run("UPDATE site_settings SET value = 'মহেশপুর, ঝিনাইদহ, বাংলাদেশ' WHERE key = 'company_address_bn' AND (value LIKE '%বনানী%' OR value = '' OR value IS NULL)");
   dbInstance.run("UPDATE site_settings SET value = 'Maheshpur, Jhenaidah, Bangladesh' WHERE key = 'company_address_en' AND (value LIKE '%Banani%' OR value = '' OR value IS NULL)");
   dbInstance.run("UPDATE site_settings SET value = '/logo.png' WHERE key = 'logo_url' AND (value IS NULL OR value = '' OR value LIKE '%shopnova%')");
+  dbInstance.run("UPDATE products SET seo_title = REPLACE(seo_title, 'SHOPNOVA', 'SHOPHATBD') WHERE seo_title LIKE '%SHOPNOVA%'");
+  dbInstance.run("UPDATE products SET brand = REPLACE(brand, 'SHOPNOVA', 'SHOPHATBD') WHERE brand LIKE '%SHOPNOVA%'");
+  saveDatabase();
+
+  // Ensure default_language is configured in site_settings (default 'en' per user specification)
+  try {
+    const langRow = queryOne("SELECT value FROM site_settings WHERE key = 'default_language'");
+    if (!langRow) {
+      dbInstance.run("INSERT INTO site_settings (id, key, value) VALUES ('st_default_language', 'default_language', 'en')");
+    }
+  } catch (e) {}
 
   // Ensure payment gateways have user's personal bKash/Nagad number only if not set
   dbInstance.run("UPDATE payment_gateways SET account_number = '01724709454', account_type = 'Personal', instruction_bn = 'বিকাশ পার্সোনাল নম্বর ০১৭২৪৭০৯৪৫৪ এ সেন্ড মানি করুন।', instruction_en = 'Send money to bKash Personal Number 01724709454.' WHERE gateway_type = 'bkash' AND (account_number IS NULL OR account_number = '' OR account_number = 'N/A')");
@@ -580,8 +601,8 @@ export async function initDatabase(): Promise<void> {
         account_number: 'Bank Asia A/C: 1043450098231',
         account_type: 'Current Account',
         charge_percentage: 0,
-        instruction_en: 'Bank: Bank Asia Ltd | Branch: Banani, Dhaka | Account Name: SHOPNOVA Lifestyle Ltd | A/C: 1043450098231',
-        instruction_bn: 'ব্যাংক এশিয়া লিমিটেড | বনানী শাখা | হিসাব নাম: শপনোভা লাইফস্টাইল | হিসাব নম্বর: ১০৪৩৪৫০০৯৮২৩১',
+        instruction_en: 'Bank: Bank Asia Ltd | Branch: Banani, Dhaka | Account Name: SHOPHATBD Lifestyle Ltd | A/C: 1043450098231',
+        instruction_bn: 'ব্যাংক এশিয়া লিমিটেড | বনানী শাখা | হিসাব নাম: শপহাটবিডি লাইফস্টাইল | হিসাব নম্বর: ১০৪৩৪৫০০৯৮২৩১',
         logo_url: '',
         sort_order: 5,
         is_active: 1
@@ -643,12 +664,12 @@ export async function initDatabase(): Promise<void> {
               label_bn: l.label_bn || 'আমাদের সম্পর্কে',
               page: 'about',
               is_active: l.is_active !== false,
-              short_description: l.short_description || 'Discover the story, mission, and dedication to authentic quality driving SHOPNOVA across Bangladesh.',
-              short_description_bn: l.short_description_bn || 'শপনোভা-এর মিশন, প্রিমিয়াম পণ্যের প্রতিশ্রুতি ও ৬৪ জেলায় দ্রুততম হোম ডেলিভারির গল্প।',
+              short_description: l.short_description || 'Discover the story, mission, and dedication to authentic quality driving SHOPHATBD across Bangladesh.',
+              short_description_bn: l.short_description_bn || 'শপহাটবিডি-এর মিশন, প্রিমিয়াম পণ্যের প্রতিশ্রুতি ও ৬৪ জেলায় দ্রুততম হোম ডেলিভারির গল্প।',
               description_bn: l.description_bn || `আমাদের গল্প ও অঙ্গীকার:
-শপনোভা বাংলাদেশের একটি শীর্ষস্থানীয় আধুনিক ফ্যাশন ও স্মার্ট টেকনোলজি ই-কমার্স প্ল্যাটফর্ম। আমাদের মূল লক্ষ্য হলো দেশের প্রতিটি প্রান্তে মানুষের কাছে ১০০% অরিজিনাল, প্রিমিয়াম কোয়ালিটির লাইফস্টাইল পণ্য ও গ্যাজেট দ্রুততম সময়ে পৌঁছে দেওয়া।
+শপহাটবিডি বাংলাদেশের একটি শীর্ষস্থানীয় আধুনিক ফ্যাশন ও স্মার্ট টেকনোলজি ই-কমার্স প্ল্যাটফর্ম। আমাদের মূল লক্ষ্য হলো দেশের প্রতিটি প্রান্তে মানুষের কাছে ১০০% অরিজিনাল, প্রিমিয়াম কোয়ালিটির লাইফস্টাইল পণ্য ও গ্যাজেট দ্রুততম সময়ে পৌঁছে দেওয়া।
 
-আমরা বিশ্বাস করি শুধুমাত্র পণ্য বিক্রয় করাই আমাদের শেষ কথা নয়; বরং সততা, বিশ্বস্ত কোয়ালিটি এবং অতুলনীয় আন্তরিক গ্রাহক সেবার মাধ্যমে একটি দীর্ঘমেয়াদী পারিবারিক আস্থার সম্পর্ক গড়ে তোলাই আমাদের সার্থকতা। ৬৪ জেলার প্রতিটি গ্রাহকের মুখে সন্তুষ্টির হাসি ফোটানোই শপনোভা টিমের প্রতিটি সদস্যের নিরন্তর প্রচেষ্টা।`,
+আমরা বিশ্বাস করি শুধুমাত্র পণ্য বিক্রয় করাই আমাদের শেষ কথা নয়; বরং সততা, বিশ্বস্ত কোয়ালিটি এবং অতুলনীয় আন্তরিক গ্রাহক সেবার মাধ্যমে একটি দীর্ঘমেয়াদী পারিবারিক আস্থার সম্পর্ক গড়ে তোলাই আমাদের সার্থকতা। ৬৪ জেলার প্রতিটি গ্রাহকের মুখে সন্তুষ্টির হাসি ফোটানোই শপহাটবিডি টিমের প্রতিটি সদস্যের নিরন্তর প্রচেষ্টা।`,
               description_en: l.description_en || `Our Story & Purpose:
 We are a premier lifestyle and tech destination in Bangladesh, committed to curating 100% authentic apparel, modern accessories, and smart gadgets with seamless nationwide doorstep fulfillment.
 

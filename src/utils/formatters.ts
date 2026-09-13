@@ -1,5 +1,5 @@
 /**
- * ShopNova Bilingual Text & Name Formatters
+ * SHOPHATBD Bilingual Text & Name Formatters
  */
 
 export const formatBilingualName = (name: string | undefined | null, isBn: boolean): string => {

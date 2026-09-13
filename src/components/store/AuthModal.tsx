@@ -75,7 +75,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
             <div className="w-8 h-8 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center font-black">
               <Sparkles className="w-4 h-4" />
             </div>
-            <span className="font-black text-lg">{settings.site_name || 'SHOPNOVA'}</span>
+            <span className="font-black text-lg">{settings.site_name || 'SHOPHATBD'}</span>
           </div>
           <button
             onClick={onClose}

@@ -27,8 +27,8 @@ export const AIChatWidget: React.FC<AIChatWidgetProps> = ({ onNavigate }) => {
     id: 'msg_welcome',
     sender: 'bot',
     text: isBn
-      ? `👋 আসসালামু আলাইকুম! **${settings.site_name || 'SHOPNOVA'}** স্মার্ট কাস্টমার কেয়ারে স্বাগতম।\n\nআমি কীভাবে আপনাকে সাহায্য করতে পারি? ডেলিভারি চার্জ, অর্ডার ট্র্যাকিং, ডিসকাউন্ট কুপন বা রিটার্ন পলিসি সংক্রান্ত যেকোনো প্রশ্ন করতে পারেন।`
-      : `👋 Hello! Welcome to **${settings.site_name || 'SHOPNOVA'}** AI Customer Care.\n\nHow can I help you today? You can ask about delivery charges, tracking your order, promo coupons, or return policies!`,
+      ? `👋 আসসালামু আলাইকুম! **${settings.site_name_bn || settings.site_name || 'শপহাটবিডি'}** স্মার্ট কাস্টমার কেয়ারে স্বাগতম।\n\nআমি কীভাবে আপনাকে সাহায্য করতে পারি? ডেলিভারি চার্জ, অর্ডার ট্র্যাকিং, ডিসকাউন্ট কুপন বা রিটার্ন পলিসি সংক্রান্ত যেকোনো প্রশ্ন করতে পারেন।`
+      : `👋 Hello! Welcome to **${settings.site_name || 'SHOPHATBD'}** AI Customer Care.\n\nHow can I help you today? You can ask about delivery charges, tracking your order, promo coupons, or return policies!`,
     timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   };
 
@@ -166,13 +166,13 @@ export const AIChatWidget: React.FC<AIChatWidgetProps> = ({ onNavigate }) => {
       rawNumber = '88' + rawNumber;
     }
     if (!rawNumber) rawNumber = '8801700000000';
-    const greetingMsg = settings.whatsapp_chat_greeting || (isBn ? 'আসসালামু আলাইকুম, আমি আপনাদের পণ্য সম্পর্কে জানতে চাই।' : 'Hello SHOPNOVA, I want to know more about your products.');
+    const greetingMsg = settings.whatsapp_chat_greeting || (isBn ? 'আসসালামু আলাইকুম, আমি আপনাদের পণ্য সম্পর্কে জানতে চাই।' : 'Hello SHOPHATBD, I want to know more about your products.');
     return `https://wa.me/${rawNumber}?text=${encodeURIComponent(greetingMsg)}`;
   };
 
   const getMessengerUrl = () => {
     const raw = (settings.messenger_page_username || settings.facebook_url || '').trim();
-    if (!raw) return 'https://m.me/shopnovabd';
+    if (!raw) return 'https://m.me/shophatbd';
     if (raw.startsWith('http://') || raw.startsWith('https://')) {
       if (raw.includes('m.me/')) return raw;
       if (raw.includes('facebook.com/messages/t/')) return raw;
@@ -290,7 +290,7 @@ export const AIChatWidget: React.FC<AIChatWidgetProps> = ({ onNavigate }) => {
               <div>
                 <div className="flex items-center gap-1.5">
                   <h3 className="font-bold text-sm tracking-tight text-white">
-                    {settings.site_name || 'SHOPNOVA'} AI
+                    {(isBn ? settings.site_name_bn : settings.site_name) || (isBn ? 'শপহাটবিডি' : 'SHOPHATBD')} AI
                   </h3>
                   <span className="bg-amber-400/20 border border-amber-400/40 text-amber-300 text-[10px] font-extrabold px-1.5 py-0.2 rounded-md flex items-center gap-0.5">
                     <Sparkles className="w-2.5 h-2.5" /> 24/7

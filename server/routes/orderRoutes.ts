@@ -298,7 +298,7 @@ router.post('/', async (req: Request, res: Response) => {
     sendMetaCapiEvent({
       event_name: 'Purchase',
       event_id: `purchase_${orderNumber}`,
-      event_source_url: `${process.env.APP_URL || 'https://shopnova.com'}/order-success/${orderNumber}`,
+      event_source_url: `${process.env.APP_URL || 'https://shophatbd.com'}/order-success/${orderNumber}`,
       user_data: {
         email: customer_email?.trim() || undefined,
         phone: customer_phone?.trim() || undefined,

@@ -24,18 +24,20 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
   const { isBn } = useLanguage();
 
   useEffect(() => {
-    const siteName = settings.site_name || 'SHOPNOVA';
-    const tagline = isBn
-      ? settings.site_tagline_bn || 'প্রিমিয়াম লাইফস্টাইল ও আধুনিক গ্যাজেটের বিশ্বস্ত ঠিকানা'
-      : settings.site_tagline_en || 'Exclusive Lifestyle & Modern Gadget Destination';
+    const rawSiteName = isBn ? (settings.site_name_bn || 'শপহাটবিডি') : (settings.site_name || 'SHOPHATBD');
+    const siteName = rawSiteName === 'SHOPNOVA' ? (isBn ? 'শপহাটবিডি' : 'SHOPHATBD') : rawSiteName;
 
-    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://shopnova.com';
+    const tagline = isBn
+      ? settings.site_tagline_bn || 'স্মার্ট কেনাকাটা সুন্দর জীবন'
+      : settings.site_tagline_en || 'SHOP SMART LIVE BETTER';
+
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://www.shophatbd.com';
     const canonicalBase = (settings.canonical_base_url || settings.canonical_url || origin).replace(/\/+$/, '');
 
     let pageTitle = `${siteName} | ${tagline}`;
     let pageDesc = isBn
-      ? (settings.meta_description_bn || settings.seo_description_bn || settings.meta_description_en || settings.seo_description || 'সেরা মানের পোশাক, ঘড়ি ও ট্রেন্ডিং গ্যাজেট কিনুন সুলভ মূল্যে। দ্রুত হোম ডেলিভারি ও সহজ রিটার্ন সুবিধা সমগ্র বাংলাদেশে।')
-      : (settings.meta_description_en || settings.seo_description || 'Shop authentic fashion, watches, electronics, and lifestyle products with fast nationwide home delivery across Bangladesh.');
+      ? (settings.meta_description_bn || settings.seo_description_bn || settings.meta_description_en || settings.seo_description || 'শপহাটবিডি থেকে সেরা মানের পোশাক, ঘড়ি ও ট্রেন্ডিং গ্যাজেট কিনুন সুলভ মূল্যে। দ্রুত হোম ডেলিভারি ও সহজ রিটার্ন সুবিধা সমগ্র বাংলাদেশে।')
+      : (settings.meta_description_en || settings.seo_description || 'Shop authentic fashion, watches, electronics, and lifestyle products at SHOPHATBD with fast nationwide home delivery across Bangladesh.');
 
     let canonicalPath = '';
     let ogType = 'website';
@@ -46,14 +48,20 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
       const customHomeTitle = isBn
         ? (settings.meta_title_bn || settings.seo_meta_title_bn || settings.meta_title_en || settings.seo_meta_title)
         : (settings.meta_title_en || settings.seo_meta_title);
-      if (customHomeTitle) pageTitle = customHomeTitle;
+      if (customHomeTitle && !customHomeTitle.includes('SHOPNOVA') && !customHomeTitle.includes('শপনোভা')) {
+        pageTitle = customHomeTitle;
+      } else {
+        pageTitle = isBn
+          ? `${siteName} - ${tagline}`
+          : `${siteName} - ${tagline}`;
+      }
     } else if (currentPage === 'shop') {
       pageTitle = isBn ? `সকল পণ্য ও কালেকশন | ${siteName}` : `Shop All Products & Collections | ${siteName}`;
       canonicalPath = '/shop';
     } else if (currentPage === 'category') {
       const catName = pageParam ? pageParam.replace(/-/g, ' ').toUpperCase() : 'Category';
       pageTitle = isBn ? `${catName} কালেকশন | ${siteName}` : `${catName} Collection | ${siteName}`;
-      canonicalPath = `/shop?category=${encodeURIComponent(pageParam || '')}`;
+      canonicalPath = `/category/${encodeURIComponent(pageParam || '')}`;
     } else if (currentPage === 'product' && productData) {
       const prodName = isBn ? (productData.name_bn || productData.name_en) : productData.name_en;
       pageTitle = productData.seo_title || `${prodName} | ${siteName}`;
@@ -95,6 +103,14 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
 
     if (customTitle) pageTitle = customTitle;
     if (customDescription) pageDesc = customDescription;
+
+    // Automatic sanitization for brand consistency
+    pageTitle = pageTitle
+      .replace(/SHOPNOVA/gi, isBn ? 'শপহাটবিডি' : 'SHOPHATBD')
+      .replace(/শপনোভা/g, 'শপহাটবিডি');
+    pageDesc = pageDesc
+      .replace(/SHOPNOVA/gi, isBn ? 'শপহাটবিডি' : 'SHOPHATBD')
+      .replace(/শপনোভা/g, 'শপহাটবিডি');
 
     // Update browser title
     document.title = pageTitle;

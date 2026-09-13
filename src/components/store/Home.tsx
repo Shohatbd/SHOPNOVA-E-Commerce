@@ -536,8 +536,8 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
         const iconColor = settings.why_shop_icon_color || '#FBBF24';
 
         const mainTitle = isBn
-          ? (settings.why_shop_title_bn || `কেন ${settings.site_name_bn || settings.site_name || 'শপনোভা'} থেকে কেনাকাটা করবেন?`)
-          : (settings.why_shop_title_en || `Why Shop with ${settings.site_name || 'SHOPNOVA'}`);
+          ? (settings.why_shop_title_bn || `কেন ${settings.site_name_bn || settings.site_name || 'শপহাটবিডি'} থেকে কেনাকাটা করবেন?`)
+          : (settings.why_shop_title_en || `Why Shop with ${settings.site_name || 'SHOPHATBD'}`);
 
         const subtitle = isBn
           ? (settings.why_shop_subtitle_bn || 'অভিজ্ঞ কাস্টমার সাপোর্ট, দ্রুততম ডেলিভারি এবং খাঁটি লাক্সারি শপিংয়ের অভিজ্ঞতা।')

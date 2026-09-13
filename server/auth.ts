@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import { queryOne, run } from './db/db.ts';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'shopnova_super_secure_jwt_secret_key_2026_bd';
+const JWT_SECRET = process.env.JWT_SECRET || 'shophatbd_super_secure_jwt_secret_key_2026_bd';
 
 export interface AuthUser {
   id: string;

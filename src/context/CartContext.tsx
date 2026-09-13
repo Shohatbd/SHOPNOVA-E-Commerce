@@ -41,7 +41,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [items, setItems] = useState<CartItem[]>(() => {
     try {
-      const saved = localStorage.getItem('shopnova_cart');
+      const saved = localStorage.getItem('shophatbd_cart') || localStorage.getItem('shopnova_cart');
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
@@ -50,7 +50,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const [appliedCoupon, setAppliedCoupon] = useState<AppliedCoupon | null>(() => {
     try {
-      const saved = localStorage.getItem('shopnova_coupon');
+      const saved = localStorage.getItem('shophatbd_coupon') || localStorage.getItem('shopnova_coupon');
       return saved ? JSON.parse(saved) : null;
     } catch {
       return null;
@@ -61,13 +61,16 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
 
   useEffect(() => {
+    localStorage.setItem('shophatbd_cart', JSON.stringify(items));
     localStorage.setItem('shopnova_cart', JSON.stringify(items));
   }, [items]);
 
   useEffect(() => {
     if (appliedCoupon) {
+      localStorage.setItem('shophatbd_coupon', JSON.stringify(appliedCoupon));
       localStorage.setItem('shopnova_coupon', JSON.stringify(appliedCoupon));
     } else {
+      localStorage.removeItem('shophatbd_coupon');
       localStorage.removeItem('shopnova_coupon');
     }
   }, [appliedCoupon]);

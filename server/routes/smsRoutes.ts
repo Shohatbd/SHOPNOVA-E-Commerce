@@ -16,7 +16,7 @@ router.post('/send-test', requireAdmin, async (req: AuthenticatedRequest, res: R
       return;
     }
 
-    const testMessage = message || `[SHOPNOVA TEST] Your SMS Gateway is configured successfully! Time: ${new Date().toLocaleTimeString()}`;
+    const testMessage = message || `[SHOPHATBD TEST] Your SMS Gateway is configured successfully! Time: ${new Date().toLocaleTimeString()}`;
 
     // If temporary credentials provided in test modal, temporarily use them
     let result;

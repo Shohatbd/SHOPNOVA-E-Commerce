@@ -81,10 +81,10 @@ export const InvoiceModal: React.FC<InvoiceModalProps> = ({
 
   // Generate self-contained HTML for instant offline print / download
   const generateInvoiceHTML = () => {
-    const siteName = settings.site_name || 'SHOPNOVA';
+    const siteName = (isBn ? settings.site_name_bn : settings.site_name) || (isBn ? 'শপহাটবিডি' : 'SHOPHATBD');
     const siteTagline = isBn ? (settings.site_tagline_bn || 'প্রিমিয়াম লাইফস্টাইল ও আধুনিক গ্যাজেট') : (settings.site_tagline_en || 'Premium Lifestyle & Gadget Destination');
     const phone = settings.contact_phone || '+880 1700-000000';
-    const email = settings.contact_email || 'support@shopnova.com';
+    const email = settings.contact_email || 'support@shophatbd.com';
     const address = isBn
       ? (settings.company_address_bn || 'বাড়ি ৪৫, রোড ১১, ব্লক ডি, বনানী, ঢাকা-১২১৩, বাংলাদেশ')
       : (settings.company_address_en || 'House 45, Road 11, Block D, Banani, Dhaka-1213, Bangladesh');
@@ -391,13 +391,13 @@ export const InvoiceModal: React.FC<InvoiceModalProps> = ({
 
     // Strategy 1: Hidden iframe print
     try {
-      const oldFrame = document.getElementById('shopnova-print-frame');
+      const oldFrame = document.getElementById('shophatbd-print-frame') || document.getElementById('shopnova-print-frame');
       if (oldFrame && oldFrame.parentNode) {
         oldFrame.parentNode.removeChild(oldFrame);
       }
 
       const iframe = document.createElement('iframe');
-      iframe.id = 'shopnova-print-frame';
+      iframe.id = 'shophatbd-print-frame';
       iframe.setAttribute(
         'style',
         'position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden;z-index:-1;'
@@ -581,7 +581,7 @@ export const InvoiceModal: React.FC<InvoiceModalProps> = ({
                     <img src={settings.site_logo} alt={settings.site_name} className="h-10 w-auto object-contain" />
                   ) : null}
                   <span className="text-2xl font-black tracking-tight font-heading text-slate-950">
-                    {settings.site_name || 'SHOPNOVA'}
+                    {(isBn ? settings.site_name_bn : settings.site_name) || (isBn ? 'শপহাটবিডি' : 'SHOPHATBD')}
                   </span>
                 </div>
                 <p className="text-xs text-slate-500 font-medium">
@@ -593,7 +593,7 @@ export const InvoiceModal: React.FC<InvoiceModalProps> = ({
                     <span>{settings.contact_phone || '+880 1700-000000'}</span>
                     <span className="text-slate-300 mx-1">•</span>
                     <Mail className="w-3 h-3 text-slate-400" />
-                    <span>{settings.contact_email || 'support@shopnova.com'}</span>
+                    <span>{settings.contact_email || 'support@shophatbd.com'}</span>
                   </p>
                   <p className="flex items-start gap-1.5">
                     <MapPin className="w-3 h-3 text-slate-400 shrink-0 mt-0.5" />
@@ -770,7 +770,7 @@ export const InvoiceModal: React.FC<InvoiceModalProps> = ({
                   {isBn ? 'অনুমোদিত স্বাক্ষর ও সিল' : 'Authorized Signature & Seal'}
                 </p>
                 <p className="text-[10px] text-slate-400">
-                  {settings.site_name || 'SHOPNOVA'}
+                  {(isBn ? settings.site_name_bn : settings.site_name) || (isBn ? 'শপহাটবিডি' : 'SHOPHATBD')}
                 </p>
               </div>
             </div>
@@ -790,7 +790,7 @@ export const InvoiceModal: React.FC<InvoiceModalProps> = ({
         {/* Modal Bottom Footer (No-print) */}
         <div className="no-print bg-slate-50 border-t border-slate-200 p-3.5 px-6 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500 shrink-0">
           <span className="hidden sm:inline">
-            {isBn ? '© SHOPNOVA অফিসিয়াল ইনভয়েস সিস্টেম' : '© Official Invoice System'}
+            {isBn ? '© শপহাটবিডি অফিসিয়াল ইনভয়েস সিস্টেম' : '© SHOPHATBD Official Invoice System'}
           </span>
           <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-end">
             <button

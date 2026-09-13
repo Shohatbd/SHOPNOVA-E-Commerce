@@ -61,7 +61,7 @@ export function renderSmsTemplate(template: string, data: {
   result = result.replace(/\{tracking_id\}/g, data.tracking_id || 'N/A');
   result = result.replace(/\{courier_name\}/g, data.courier_name || 'Courier');
   result = result.replace(/\{grand_total\}/g, data.grand_total ? `৳${data.grand_total}` : '');
-  result = result.replace(/\{site_name\}/g, data.site_name || 'SHOPNOVA');
+  result = result.replace(/\{site_name\}/g, data.site_name || 'SHOPHATBD');
   result = result.replace(/\{tracking_url\}/g, data.tracking_url || '');
   return result;
 }
@@ -140,8 +140,8 @@ export function getSmsSettings() {
     orderDeliveredTemplate: settings['sms_template_order_delivered'] ||
       'Dear {customer_name}, your order #{order_number} has been delivered successfully! Thank you for shopping with {site_name}.',
 
-    siteName: settings['site_name'] || 'SHOPNOVA',
-    baseUrl: settings['canonical_base_url'] || settings['canonical_url'] || process.env.APP_URL || 'https://shopnova.com'
+    siteName: settings['site_name'] || 'SHOPHATBD',
+    baseUrl: settings['canonical_base_url'] || settings['canonical_url'] || process.env.APP_URL || 'https://shophatbd.com'
   };
 }
 

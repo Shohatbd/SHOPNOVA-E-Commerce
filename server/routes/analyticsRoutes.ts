@@ -52,17 +52,17 @@ router.post('/test-capi', requireAdmin, async (req: AuthenticatedRequest, res: R
     const testPayload = {
       event_name: 'PageView',
       event_id: testEventId,
-      event_source_url: (req.headers.referer as string) || process.env.APP_URL || 'https://shopnova.com',
+      event_source_url: (req.headers.referer as string) || process.env.APP_URL || 'https://shophatbd.com',
       user_data: {
         client_ip_address: clientIp,
-        client_user_agent: req.headers['user-agent'] || 'ShopNova Admin Test Agent',
-        email: 'test@shopnova.com',
+        client_user_agent: req.headers['user-agent'] || 'SHOPHATBD Admin Test Agent',
+        email: 'test@shophatbd.com',
         phone: '01700000000',
         first_name: 'Test',
         last_name: 'Admin'
       },
       custom_data: {
-        test_source: 'ShopNova Admin Diagnostics',
+        test_source: 'SHOPHATBD Admin Diagnostics',
         timestamp: new Date().toISOString()
       }
     };

@@ -71,7 +71,7 @@ const SMS_PROVIDERS = [
     apiKeyLabel: 'BulkSMSBD API Key',
     apiKeyPlaceholder: 'e.g. dshf89234jsdf...',
     senderIdLabel: 'Sender ID / Masking',
-    senderIdPlaceholder: 'e.g. 8809612345678 or SHOPNOVA',
+    senderIdPlaceholder: 'e.g. 8809612345678 or SHOPHATBD',
     desc: 'Widely used SMS gateway with HTTP API and real-time DLR.'
   },
   {
@@ -85,7 +85,7 @@ const SMS_PROVIDERS = [
     apiKeyLabel: 'Elitbuzz API Key',
     apiKeyPlaceholder: 'e.g. eltbz_key_...',
     senderIdLabel: 'Sender ID / Masking Name',
-    senderIdPlaceholder: 'e.g. SHOPNOVA',
+    senderIdPlaceholder: 'e.g. SHOPHATBD',
     desc: 'High-throughput bulk messaging with operator level routing.'
   },
   {
@@ -99,7 +99,7 @@ const SMS_PROVIDERS = [
     apiKeyLabel: 'SSL Wireless API Token (api_token)',
     apiKeyPlaceholder: 'e.g. your_bearer_token',
     senderIdLabel: 'Stakeholder ID (SID)',
-    senderIdPlaceholder: 'e.g. SHOPNOVANONMASK',
+    senderIdPlaceholder: 'e.g. SHOPHATBDNONMASK',
     desc: 'Direct telco integration with maximum reliability and bank-grade infrastructure.'
   },
   {
@@ -113,7 +113,7 @@ const SMS_PROVIDERS = [
     apiKeyLabel: 'MimSMS API Token',
     apiKeyPlaceholder: 'e.g. mim_token_...',
     senderIdLabel: 'Sender ID',
-    senderIdPlaceholder: 'e.g. SHOPNOVA',
+    senderIdPlaceholder: 'e.g. SHOPHATBD',
     desc: 'Fast JSON API with simple masking setup.'
   },
   {
@@ -581,7 +581,7 @@ export const AdminSmsSettings: React.FC = () => {
                     type="text"
                     value={senderId}
                     onChange={(e) => setSenderId(e.target.value)}
-                    placeholder={selectedProviderInfo.senderIdPlaceholder || 'e.g. SHOPNOVA'}
+                    placeholder={selectedProviderInfo.senderIdPlaceholder || 'e.g. SHOPHATBD'}
                     className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-900 font-mono focus:outline-none focus:border-amber-500"
                   />
                   <span className="text-[10px] text-slate-400 mt-1 block">
@@ -879,7 +879,7 @@ export const AdminSmsSettings: React.FC = () => {
                 rows={3}
                 value={testMessage}
                 onChange={(e) => setTestMessage(e.target.value)}
-                placeholder={`[${settings.site_name || 'SHOPNOVA'}] Your SMS Gateway is connected successfully! Order tracking & notifications are active.`}
+                placeholder={`[${settings.site_name || 'SHOPHATBD'}] Your SMS Gateway is connected successfully! Order tracking & notifications are active.`}
                 className="w-full bg-white border border-slate-300 rounded-lg p-3 text-xs text-slate-900 focus:outline-none focus:border-amber-500"
               />
             </div>

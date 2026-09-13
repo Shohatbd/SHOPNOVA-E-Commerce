@@ -16,8 +16,8 @@ function getAI(): GoogleGenAI | null {
 function getIntelligentFallbackResponse(userMessage: string, isBengali: boolean, storeName: string, contactPhone: string, contactEmail: string): string {
   const msg = userMessage.toLowerCase().trim();
   const phone = contactPhone || '+880 1700-123456';
-  const email = contactEmail || 'support@shopnova.com';
-  const name = storeName || 'SHOPNOVA';
+  const email = contactEmail || 'support@shophatbd.com';
+  const name = storeName || 'SHOPHATBD';
 
   // 1. Delivery & Shipping
   if (msg.includes('ডেলিভারি') || msg.includes('চার্জ') || msg.includes('কত দিন') || msg.includes('সময়') || msg.includes('delivery') || msg.includes('shipping') || msg.includes('cost')) {
@@ -107,9 +107,9 @@ router.post('/message', async (req: Request, res: Response) => {
     const coupons = query<any>('SELECT code, discount_value, discount_type, min_order_amount FROM coupons WHERE is_active = 1 LIMIT 5');
 
     const storeContext = `
-Store Name: ${settingsMap.site_name || 'SHOPNOVA'}
+Store Name: ${settingsMap.site_name || 'SHOPHATBD'}
 Contact Phone / Hotline: ${settingsMap.contact_phone || '+880 1700-123456'}
-Contact Email: ${settingsMap.contact_email || 'support@shopnova.com'}
+Contact Email: ${settingsMap.contact_email || 'support@shophatbd.com'}
 Delivery:
 - Inside Dhaka: 60 BDT, 24-48 hours delivery.
 - Outside Dhaka: 120 BDT, 2-4 working days delivery across all 64 districts in Bangladesh.
@@ -124,7 +124,7 @@ Sample Featured Products: ${popularProducts.map((p: any) => `${p.name_en} - ৳$
 
     if (ai) {
       try {
-        const systemPrompt = `You are a polite, helpful, and highly intelligent e-commerce customer care assistant for "${settingsMap.site_name || 'SHOPNOVA'}" (an e-commerce store in Bangladesh).
+        const systemPrompt = `You are a polite, helpful, and highly intelligent e-commerce customer care assistant for "${settingsMap.site_name || 'SHOPHATBD'}" (an e-commerce store in Bangladesh).
 Language instruction:
 - If the user writes in Bengali (বাংলা) or Banglish, reply in warm, polite, natural Bengali.
 - If the user writes in English, reply in English.
@@ -183,9 +183,9 @@ ${storeContext}
     const fallbackText = getIntelligentFallbackResponse(
       trimmedMsg,
       isBengali,
-      settingsMap.site_name || 'SHOPNOVA',
+      settingsMap.site_name || 'SHOPHATBD',
       settingsMap.contact_phone || '+880 1700-123456',
-      settingsMap.contact_email || 'support@shopnova.com'
+      settingsMap.contact_email || 'support@shophatbd.com'
     );
     res.json({
       success: true,

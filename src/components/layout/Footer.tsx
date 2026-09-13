@@ -196,13 +196,13 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
     // Fallbacks to individual settings or defaults
     const fallbackList = [];
     if (settings.facebook_url || !settings.footer_social_links_json) {
-      fallbackList.push({ id: 'fb', platform: 'facebook', name: 'Facebook', url: settings.facebook_url || 'https://facebook.com/shopnovabd' });
+      fallbackList.push({ id: 'fb', platform: 'facebook', name: 'Facebook', url: settings.facebook_url || 'https://facebook.com/shophatbd' });
     }
     if (settings.instagram_url || !settings.footer_social_links_json) {
-      fallbackList.push({ id: 'ig', platform: 'instagram', name: 'Instagram', url: settings.instagram_url || 'https://instagram.com/shopnovabd' });
+      fallbackList.push({ id: 'ig', platform: 'instagram', name: 'Instagram', url: settings.instagram_url || 'https://instagram.com/shophatbd' });
     }
     if (settings.youtube_url || !settings.footer_social_links_json) {
-      fallbackList.push({ id: 'yt', platform: 'youtube', name: 'YouTube', url: settings.youtube_url || 'https://youtube.com/@shopnovabd' });
+      fallbackList.push({ id: 'yt', platform: 'youtube', name: 'YouTube', url: settings.youtube_url || 'https://youtube.com/@shophatbd' });
     }
     if (settings.contact_whatsapp || !settings.footer_social_links_json) {
       fallbackList.push({ id: 'wa', platform: 'whatsapp', name: 'WhatsApp', url: settings.contact_whatsapp || 'https://wa.me/8801700000000' });
@@ -274,10 +274,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 )
               )}
               {settings.logo_type !== 'image' && (
-                <div className="inline-flex flex-col justify-center min-w-0">
+                <div className="inline-flex flex-col justify-center min-w-0 overflow-visible py-0.5">
                   <span
                     style={{ color: footerTextColor }}
-                    className="text-xl sm:text-2xl font-black tracking-tight font-heading block leading-none uppercase"
+                    className="text-xl sm:text-2xl font-black tracking-tight font-heading block leading-tight uppercase whitespace-nowrap pt-1 pb-0.5 overflow-visible"
                   >
                     {isBn && settings.site_name_bn ? settings.site_name_bn : (settings.site_name || 'SHOPHATBD')}
                   </span>
@@ -522,7 +522,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           style={{ color: footerTextColor }}
           className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-bold font-bengali tracking-normal"
         >
-          <p className="opacity-90">© {new Date().getFullYear()} {settings.site_name || 'SHOPNOVA'} Bangladesh. {isBn ? 'সর্বস্বত্ব সংরক্ষিত।' : 'All Rights Reserved.'}</p>
+          <p className="opacity-90">© {new Date().getFullYear()} {(isBn ? settings.site_name_bn : settings.site_name) || (isBn ? 'শপহাটবিডি' : 'SHOPHATBD')} Bangladesh. {isBn ? 'সর্বস্বত্ব সংরক্ষিত।' : 'All Rights Reserved.'}</p>
           <div className="flex flex-wrap items-center justify-center sm:justify-end gap-3 sm:gap-4">
             {/* Language Switcher in Footer */}
             <div className="flex items-center bg-black/15 rounded-lg p-0.5 text-[11px] font-bold border border-black/10 shrink-0">

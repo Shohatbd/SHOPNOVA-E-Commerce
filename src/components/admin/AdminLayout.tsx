@@ -148,7 +148,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
               )}
               <div>
                 <span className="font-bold text-sm text-white tracking-wide block leading-none truncate max-w-[130px]">
-                  {settings.site_name || 'SHOPNOVA'}
+                  {settings.site_name || 'SHOPHATBD'}
                 </span>
                 <span className="text-[10px] font-semibold text-amber-400 uppercase tracking-wider block mt-0.5">
                   {isBn ? 'অ্যাডমিন প্যানেল' : 'Admin Console'}

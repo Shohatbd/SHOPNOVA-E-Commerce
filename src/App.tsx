@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { LanguageProvider, useLanguage } from './context/LanguageContext.tsx';
 import { SettingsProvider, useSettings } from './context/SettingsContext.tsx';
 import { AuthProvider, useAuth } from './context/AuthContext.tsx';
 import { CartProvider } from './context/CartContext.tsx';
 import { WishlistProvider } from './context/WishlistContext.tsx';
+import { parseUrlToRoute, buildUrlFromRoute, RouteState } from './utils/router.ts';
 
 // Layout Components
 import { AnnouncementBar } from './components/layout/AnnouncementBar.tsx';
@@ -53,11 +54,54 @@ const AppContent: React.FC = () => {
   const { isBn } = useLanguage();
   const { settings } = useSettings();
 
-  // Navigation State
-  const [currentPage, setCurrentPage] = useState<string>('home');
-  const [pageParam, setPageParam] = useState<string | undefined>(undefined);
+  // Dynamic Browser Routing State
+  const [route, setRoute] = useState<RouteState>(() => {
+    if (typeof window !== 'undefined') {
+      return parseUrlToRoute(window.location.pathname, window.location.search);
+    }
+    return { page: 'home' };
+  });
+
+  const currentPage = route.page;
+  const pageParam = route.param;
+
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
-  const [adminTab, setAdminTab] = useState<string>('dashboard');
+  const [adminTab, setAdminTab] = useState<string>(() => {
+    if (typeof window !== 'undefined' && window.location.pathname.startsWith('/admin')) {
+      const parts = window.location.pathname.slice(1).split('/');
+      return parts[1] || 'dashboard';
+    }
+    return 'dashboard';
+  });
+
+  // Handle browser back/forward buttons (popstate) & initial history synchronization
+  useEffect(() => {
+    const current = parseUrlToRoute(window.location.pathname, window.location.search);
+    window.history.replaceState(
+      { page: current.page, param: current.param },
+      '',
+      window.location.pathname + window.location.search
+    );
+
+    const handlePopState = (event: PopStateEvent) => {
+      if (event.state && event.state.page) {
+        setRoute({ page: event.state.page, param: event.state.param });
+        if (event.state.page === 'admin' && event.state.param) {
+          setAdminTab(event.state.param);
+        }
+      } else {
+        const parsed = parseUrlToRoute(window.location.pathname, window.location.search);
+        setRoute(parsed);
+        if (parsed.page === 'admin' && parsed.param) {
+          setAdminTab(parsed.param);
+        }
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   // Synchronize dynamic body background color
   useEffect(() => {
@@ -69,12 +113,21 @@ const AppContent: React.FC = () => {
     }
   }, [settings.site_bg_color, currentPage]);
 
-  // Handle URL hash or state updates
-  const handleNavigate = (page: string, param?: string) => {
-    setCurrentPage(page);
-    setPageParam(param);
+  // Handle URL updates and clean SEO-friendly transitions
+  const handleNavigate = useCallback((page: string, param?: string) => {
+    const targetUrl = buildUrlFromRoute(page, param);
+    const currentUrl = window.location.pathname + window.location.search;
+
+    if (currentUrl !== targetUrl) {
+      window.history.pushState({ page, param }, '', targetUrl);
+    }
+
+    setRoute({ page, param });
+    if (page === 'admin' && param) {
+      setAdminTab(param);
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  }, []);
 
   // If viewing admin route
   if (currentPage === 'admin') {
@@ -102,7 +155,7 @@ const AppContent: React.FC = () => {
                 {isBn ? 'এডমিন লগইন করুন' : 'Sign in as Admin'}
               </button>
               <button
-                onClick={() => setCurrentPage('home')}
+                onClick={() => handleNavigate('home')}
                 className="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2 px-4 rounded-lg text-xs transition-colors"
               >
                 {isBn ? 'স্টোরফ্রন্টে ফিরে যান' : 'Back to Store'}
@@ -113,7 +166,7 @@ const AppContent: React.FC = () => {
             isOpen={isAuthModalOpen}
             onClose={() => setIsAuthModalOpen(false)}
             onSuccess={() => {
-              if (isAdmin) setCurrentPage('admin');
+              if (isAdmin) handleNavigate('admin');
             }}
           />
         </div>
@@ -123,8 +176,12 @@ const AppContent: React.FC = () => {
     return (
       <AdminLayout
         currentTab={adminTab}
-        onSelectTab={(tab) => setAdminTab(tab)}
-        onExitToStore={() => setCurrentPage('home')}
+        onSelectTab={(tab) => {
+          setAdminTab(tab);
+          const targetUrl = buildUrlFromRoute('admin', tab);
+          window.history.pushState({ page: 'admin', param: tab }, '', targetUrl);
+        }}
+        onExitToStore={() => handleNavigate('home')}
       >
         {adminTab === 'dashboard' && <AdminDashboard onNavigateTab={(tab) => setAdminTab(tab)} />}
         {adminTab === 'inquiries' && <AdminMessages />}
@@ -159,16 +216,16 @@ const AppContent: React.FC = () => {
       {/* Custom Header/Footer Scripts, Tracking Pixels, and Chatbots */}
       <CustomScriptsInjector />
 
-      {/* Top Announcement Bar */}
-      <AnnouncementBar />
-
-      {/* Main Header */}
-      <Header
-        currentPage={currentPage}
-        currentParam={pageParam}
-        onNavigate={handleNavigate}
-        onOpenAuth={() => setIsAuthModalOpen(true)}
-      />
+      {/* Sticky Header Group: All 3 Bars (Announcement Bar, Main Header, Category Bar) stay frozen/sticky together */}
+      <div className="sticky top-0 z-40 shadow-xs">
+        <AnnouncementBar />
+        <Header
+          currentPage={currentPage}
+          currentParam={pageParam}
+          onNavigate={handleNavigate}
+          onOpenAuth={() => setIsAuthModalOpen(true)}
+        />
+      </div>
 
       {/* Main View Body */}
       <main className="flex-1">
@@ -211,7 +268,11 @@ const AppContent: React.FC = () => {
           currentPage === 'faq' ||
           currentPage.startsWith('l_') ||
           currentPage.startsWith('page_') ||
-          currentPage.startsWith('pol_')) && (
+          currentPage.startsWith('pol_') ||
+          currentPage.endsWith('-policy') ||
+          currentPage.startsWith('policy-') ||
+          currentPage.endsWith('-terms') ||
+          currentPage.startsWith('custom-')) && (
           <PolicyPages
             type={currentPage as any}
             onNavigate={(p) => handleNavigate(p)}
@@ -228,7 +289,7 @@ const AppContent: React.FC = () => {
         onClose={() => setIsAuthModalOpen(false)}
         onSuccess={() => {
           if (currentPage === 'admin' && !isAdmin) {
-            setCurrentPage('home');
+            handleNavigate('home');
           }
         }}
       />
@@ -251,8 +312,8 @@ const AppContent: React.FC = () => {
 
 export default function App() {
   return (
-    <LanguageProvider>
-      <SettingsProvider>
+    <SettingsProvider>
+      <LanguageProvider>
         <AuthProvider>
           <CartProvider>
             <WishlistProvider>
@@ -260,7 +321,7 @@ export default function App() {
             </WishlistProvider>
           </CartProvider>
         </AuthProvider>
-      </SettingsProvider>
-    </LanguageProvider>
+      </LanguageProvider>
+    </SettingsProvider>
   );
 }

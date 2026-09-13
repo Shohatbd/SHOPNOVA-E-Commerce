@@ -313,7 +313,7 @@ router.post('/', requireAdmin, (req: AuthenticatedRequest, res: Response) => {
         productId, finalSku, name_en, name_bn || name_en, slug,
         short_description_en || null, short_description_bn || null,
         description_en || null, description_bn || null,
-        category_id, subcategory_id || null, brand || 'SHOPNOVA',
+        category_id, subcategory_id || null, brand || 'SHOPHATBD',
         regular, sale, discount,
         stock, stock, Number(low_stock_threshold || 5),
         thumbnail, Number(weight || 0.3),

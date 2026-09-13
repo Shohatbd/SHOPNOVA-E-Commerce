@@ -18,7 +18,7 @@ export const BkashModal: React.FC<BkashModalProps> = ({
   formatPrice,
   onSuccess,
   isBn,
-  siteName = 'SHOPNOVA'
+  siteName = 'SHOPHATBD'
 }) => {
   const [step, setStep] = useState<'phone' | 'otp' | 'pin' | 'processing' | 'success'>('phone');
   const [phone, setPhone] = useState('');

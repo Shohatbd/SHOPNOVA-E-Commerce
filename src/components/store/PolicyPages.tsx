@@ -200,8 +200,8 @@ export const PolicyPages: React.FC<PolicyProps> = ({ type, onNavigate }) => {
     ? (currentServiceLink?.label_bn || currentPolicy?.title_bn || policyTitles[cleanType]?.bn || currentServiceLink?.label || currentPolicy?.title || cleanType)
     : (currentServiceLink?.label || currentPolicy?.title || policyTitles[cleanType]?.en || (isAbout ? 'About Us' : isContact ? 'Contact & Support' : isPrivacy ? 'Privacy Policy' : cleanType));
 
-  const siteName = settings.site_name || 'SHOPNOVA';
-  const siteNameBn = settings.site_name_bn || settings.site_name || 'শপনোভা';
+  const siteName = (isBn ? settings.site_name_bn : settings.site_name) || (isBn ? 'শপহাটবিডি' : 'SHOPHATBD');
+  const siteNameBn = settings.site_name_bn || 'শপহাটবিডি';
 
   const replaceStoreName = (content: string) => {
     if (!content) return content;
@@ -304,7 +304,7 @@ export const PolicyPages: React.FC<PolicyProps> = ({ type, onNavigate }) => {
             {displayTitle}
           </h1>
           <p className="text-xs text-slate-400 mt-1">
-            {settings.site_name || 'SHOPNOVA'} • {isBn ? 'সর্বশেষ হালনাগাদ পলিসি ও নির্দেশিকা' : 'Official Store Policy & Guidelines'}
+            {siteName} • {isBn ? 'সর্বশেষ হালনাগাদ পলিসি ও নির্দেশিকা' : 'Official Store Policy & Guidelines'}
           </p>
         </div>
 
@@ -373,10 +373,10 @@ export const PolicyPages: React.FC<PolicyProps> = ({ type, onNavigate }) => {
                   <span>{isBn ? 'ইমেইল সাপোর্ট' : 'Email Support'}</span>
                 </div>
                 <a
-                  href={`mailto:${settings.contact_email || 'support@shopnova.com'}`}
+                  href={`mailto:${settings.contact_email || 'support@shophatbd.com'}`}
                   className="text-base font-black text-slate-900 hover:text-amber-600 transition-colors block"
                 >
-                  {settings.contact_email || 'support@shopnova.com'}
+                  {settings.contact_email || 'support@shophatbd.com'}
                 </a>
                 <p className="text-slate-500 text-xs">
                   {isBn

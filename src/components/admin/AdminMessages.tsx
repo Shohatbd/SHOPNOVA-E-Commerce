@@ -72,7 +72,7 @@ export const AdminMessages: React.FC = () => {
     smtp_secure: '1',
     smtp_user: '',
     smtp_pass: '',
-    smtp_from_name: 'SHOPNOVA Support',
+    smtp_from_name: 'SHOPHATBD Support',
     smtp_from_email: '',
     admin_notification_email: 'liakot911@gmail.com'
   });
@@ -133,7 +133,7 @@ export const AdminMessages: React.FC = () => {
         smtp_secure: settings.smtp_secure !== undefined ? settings.smtp_secure : '1',
         smtp_user: settings.smtp_user || '',
         smtp_pass: settings.smtp_pass || '',
-        smtp_from_name: settings.smtp_from_name || `${settings.site_name || 'SHOPNOVA'} Support`,
+        smtp_from_name: settings.smtp_from_name || `${settings.site_name || 'SHOPHATBD'} Support`,
         smtp_from_email: settings.smtp_from_email || settings.contact_email || '',
         admin_notification_email: settings.admin_notification_email || 'liakot911@gmail.com'
       });
@@ -146,7 +146,7 @@ export const AdminMessages: React.FC = () => {
       setAdminNote(selectedMessage.admin_notes || '');
       setReplySubject(`Re: ${selectedMessage.subject || 'Customer Care Inquiry'}`);
       setReplyBody(
-        `Dear ${selectedMessage.name},\n\nThank you for reaching out to SHOPNOVA. Regarding your message:\n\n\n\nBest regards,\nSHOPNOVA Customer Care Team`
+        `Dear ${selectedMessage.name},\n\nThank you for reaching out to SHOPHATBD. Regarding your message:\n\n\n\nBest regards,\nSHOPHATBD Customer Care Team`
       );
       setReplyResult(null);
 
@@ -1028,7 +1028,7 @@ export const AdminMessages: React.FC = () => {
                       type="text"
                       value={smtpConfig.smtp_from_name}
                       onChange={(e) => setSmtpConfig((prev) => ({ ...prev, smtp_from_name: e.target.value }))}
-                      placeholder="SHOPNOVA Support"
+                      placeholder="SHOPHATBD Support"
                       className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-amber-500"
                     />
                   </div>
@@ -1039,7 +1039,7 @@ export const AdminMessages: React.FC = () => {
                       type="text"
                       value={smtpConfig.smtp_from_email}
                       onChange={(e) => setSmtpConfig((prev) => ({ ...prev, smtp_from_email: e.target.value }))}
-                      placeholder="noreply@shopnova.com"
+                      placeholder="noreply@shophatbd.com"
                       className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-amber-500"
                     />
                   </div>

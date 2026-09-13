@@ -1,7 +1,7 @@
 export const translations = {
   en: {
     // Brand & Top bar
-    brand_name: 'SHOPNOVA',
+    brand_name: 'SHOPHATBD',
     search_placeholder: 'Search for clothes, watches, gadgets, brands...',
     call_us: 'Call Us',
     free_delivery_notice: 'Free delivery on orders over ৳2,500 across Bangladesh',
@@ -36,7 +36,7 @@ export const translations = {
     best_sellers: 'Best Selling Items',
     new_arrivals: 'New Arrivals',
     trending_gadgets: 'Trending Gadgets',
-    why_choose_us: 'Why Shop with SHOPNOVA',
+    why_choose_us: 'Why Shop with SHOPHATBD',
     why_1_title: '100% Authentic Quality',
     why_1_desc: 'Carefully curated premium fabrics and verified original gadget warranties.',
     why_2_title: 'Super Fast Nationwide Delivery',
@@ -46,7 +46,7 @@ export const translations = {
     why_4_title: '7-Day Easy Exchange',
     why_4_desc: 'Hassle-free size exchange and dedicated 24/7 customer care helpline.',
     customer_reviews: 'Loved by 20,000+ Happy Customers',
-    newsletter_title: 'Join the SHOPNOVA Club',
+    newsletter_title: 'Join the SHOPHATBD Club',
     newsletter_sub: 'Subscribe to get 10% OFF your first order, exclusive Eid flash sales, and new drop alerts.',
     subscribe: 'Subscribe',
 
@@ -136,7 +136,7 @@ export const translations = {
 
     // Order Success & Tracking
     order_success_title: 'Order Confirmed Successfully!',
-    order_success_msg: 'Thank you for shopping with SHOPNOVA. We have received your order and our team is preparing it for dispatch.',
+    order_success_msg: 'Thank you for shopping with SHOPHATBD. We have received your order and our team is preparing it for dispatch.',
     order_number: 'Order Number',
     order_date: 'Order Date',
     delivery_to: 'Delivery Address',
@@ -217,7 +217,7 @@ export const translations = {
 
   bn: {
     // Brand & Top bar
-    brand_name: 'শপনোভা',
+    brand_name: 'শপহাটবিডি',
     search_placeholder: 'পোশাক, ঘড়ি, গ্যাজেট অথবা ব্র্যান্ড খুঁজুন...',
     call_us: 'কল করুন',
     free_delivery_notice: '২৫০০ টাকার বেশি অর্ডারে সমগ্র বাংলাদেশে ফ্রি ডেলিভারি!',
@@ -252,7 +252,7 @@ export const translations = {
     best_sellers: 'বেস্ট সেলিং আইটেম',
     new_arrivals: 'নতুন আগমন',
     trending_gadgets: 'ট্রেন্ডিং আধুনিক গ্যাজেটস',
-    why_choose_us: 'কেন শপনোভা থেকে কেনাকাটা করবেন?',
+    why_choose_us: 'কেন শপহাটবিডি থেকে কেনাকাটা করবেন?',
     why_1_title: '১০০% খাঁটি ও প্রিমিয়াম কোয়ালিটি',
     why_1_desc: 'সেরা ফেব্রিক ও শতভাগ অরিজিনাল ব্র্যান্ড ওয়্যারেন্টিযুক্ত গ্যাজেট।',
     why_2_title: 'দ্রুততম দেশজুড়ে ডেলিভারি',
@@ -262,7 +262,7 @@ export const translations = {
     why_4_title: '৭ দিনের সহজ এক্সচেঞ্জ পলিসি',
     why_4_desc: 'সাইজ অথবা পণ্যে কোনো সমস্যা হলে ঝামেলামুক্ত এক্সচেঞ্জ ও সার্বক্ষণিক কাস্টমার সাপোর্ট।',
     customer_reviews: '২০,০০০+ সন্তুষ্ট গ্রাহকের অভিজ্ঞতা',
-    newsletter_title: 'শপনোভা ক্লাবে যুক্ত হোন',
+    newsletter_title: 'শপহাটবিডি ক্লাবে যুক্ত হোন',
     newsletter_sub: 'সাবস্ক্রাইব করলেই প্রথম অর্ডারে ১০% ইনস্ট্যান্ট ছাড় এবং নতুন অফার সংক্রান্ত আপডেট পাবেন।',
     subscribe: 'সাবস্ক্রাইব করুন',
 
@@ -352,7 +352,7 @@ export const translations = {
 
     // Order Success & Tracking
     order_success_title: 'আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!',
-    order_success_msg: 'শপনোভা থেকে কেনাকাটা করার জন্য ধন্যবাদ। আমরা আপনার অর্ডারটি পেয়েছি এবং ডেলিভারির জন্য প্রস্তুত করছি।',
+    order_success_msg: 'শপহাটবিডি থেকে কেনাকাটা করার জন্য ধন্যবাদ। আমরা আপনার অর্ডারটি পেয়েছি এবং ডেলিভারির জন্য প্রস্তুত করছি।',
     order_number: 'অর্ডার নাম্বার',
     order_date: 'অর্ডারের তারিখ',
     delivery_to: 'ডেলিভারির ঠিকানা',

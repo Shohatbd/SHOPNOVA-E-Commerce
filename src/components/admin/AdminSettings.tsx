@@ -69,7 +69,8 @@ import { useSettings } from '../../context/SettingsContext.tsx';
 import { ImageUploadField } from './ImageUploadField.tsx';
 import { StoreBackupManager } from './StoreBackupManager.tsx';
 import { SUPPORTED_CURRENCIES, getAutoCurrencySymbol } from '../../utils/currency.ts';
-import { WhyShopFeatureItem } from '../../types/index.ts';
+import { WhyShopFeatureItem, PaymentBadgeItem } from '../../types/index.ts';
+import { PaymentBadges, DEFAULT_PAYMENT_BADGES, renderPaymentLogo } from '../common/PaymentBadges.tsx';
 
 // Supported social media platforms configuration with authentic brand colors & icons
 export const SOCIAL_PLATFORM_OPTIONS = [
@@ -552,6 +553,12 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
   const [isSocialModalOpen, setIsSocialModalOpen] = useState(false);
   const [socialToDelete, setSocialToDelete] = useState<string | null>(null);
 
+  // Dynamic Payment Badges state
+  const [paymentBadges, setPaymentBadges] = useState<PaymentBadgeItem[]>(DEFAULT_PAYMENT_BADGES);
+  const [editingPaymentBadge, setEditingPaymentBadge] = useState<PaymentBadgeItem | null>(null);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [paymentBadgeToDelete, setPaymentBadgeToDelete] = useState<string | null>(null);
+
   // Google SEO & Sitemap state
   const [sitemapModalOpen, setSitemapModalOpen] = useState(false);
   const [copiedSitemap, setCopiedSitemap] = useState(false);
@@ -723,6 +730,31 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
     } else {
       setWhyShopFeatures(DEFAULT_WHY_SHOP_FEATURES);
     }
+
+    // Parse dynamic footer payment badges
+    if (settings.footer_payment_badges_json) {
+      try {
+        const parsed = JSON.parse(settings.footer_payment_badges_json);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setPaymentBadges(
+            parsed.map((b: any, i: number) => ({
+              id: b.id || `badge_pm_${i}`,
+              type: b.type || 'bkash',
+              name: b.name || 'Payment Method',
+              name_bn: b.name_bn || b.name || 'পেমেন্ট মেথড',
+              logo_url: b.logo_url || '',
+              is_active: b.is_active !== false && b.is_active !== 0 && b.is_active !== '0'
+            }))
+          );
+        } else {
+          setPaymentBadges(DEFAULT_PAYMENT_BADGES);
+        }
+      } catch (e) {
+        setPaymentBadges(DEFAULT_PAYMENT_BADGES);
+      }
+    } else {
+      setPaymentBadges(DEFAULT_PAYMENT_BADGES);
+    }
   }, [settings]);
 
   const initDefaultBadges = () => {
@@ -824,8 +856,19 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
         footer_policies_title_en: formData.footer_policies_title_en || formData.footer_policies_title || 'CUSTOMER SERVICE & POLICIES',
         footer_policies_title_bn: formData.footer_policies_title_bn || 'গ্রাহক সেবা ও পলিসি',
         why_shop_features_json: JSON.stringify(whyShopFeatures),
+        footer_payment_badges_json: JSON.stringify(paymentBadges),
         updated_at: new Date().toISOString()
       };
+
+      // Keep legacy individual payment badge flags in sync with badges array
+      const bkashBadge = paymentBadges.find(b => b.type === 'bkash');
+      if (bkashBadge) payload.show_payment_badge_bkash = bkashBadge.is_active ? 'true' : 'false';
+      const nagadBadge = paymentBadges.find(b => b.type === 'nagad');
+      if (nagadBadge) payload.show_payment_badge_nagad = nagadBadge.is_active ? 'true' : 'false';
+      const cardBadge = paymentBadges.find(b => b.type === 'card');
+      if (cardBadge) payload.show_payment_badge_card = cardBadge.is_active ? 'true' : 'false';
+      const codBadge = paymentBadges.find(b => b.type === 'cod');
+      if (codBadge) payload.show_payment_badge_cod = codBadge.is_active ? 'true' : 'false';
 
       // Keep legacy individual social fields in sync
       const fb = socialLinks.find(s => s.platform === 'facebook' && s.is_active);
@@ -1346,6 +1389,81 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
     updated[index] = updated[targetIndex];
     updated[targetIndex] = temp;
     setSocialLinks(updated);
+  };
+
+  // Payment Badge Management Handlers
+  const handleOpenAddPaymentBadge = () => {
+    setEditingPaymentBadge({
+      id: `pm_${Date.now()}`,
+      type: 'bkash',
+      name: 'bKash',
+      name_bn: 'বিকাশ',
+      logo_url: '',
+      is_active: true
+    });
+    setIsPaymentModalOpen(true);
+  };
+
+  const handleOpenEditPaymentBadge = (item: PaymentBadgeItem) => {
+    setEditingPaymentBadge({ ...item });
+    setIsPaymentModalOpen(true);
+  };
+
+  const handleSavePaymentBadgeItem = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!editingPaymentBadge) return;
+
+    const trimmedName = (editingPaymentBadge.name || '').trim();
+    const trimmedNameBn = (editingPaymentBadge.name_bn || '').trim();
+
+    if (!trimmedName && !trimmedNameBn) {
+      alert(isBn ? 'অনুগ্রহ করে পেমেন্ট মেথডের নাম লিখুন।' : 'Please enter payment method name.');
+      return;
+    }
+
+    const finalItem: PaymentBadgeItem = {
+      ...editingPaymentBadge,
+      name: trimmedName || trimmedNameBn,
+      name_bn: trimmedNameBn || trimmedName,
+      is_active: editingPaymentBadge.is_active !== false
+    };
+
+    const exists = paymentBadges.some((b) => b.id === finalItem.id);
+    if (exists) {
+      setPaymentBadges(paymentBadges.map((b) => (b.id === finalItem.id ? finalItem : b)));
+    } else {
+      setPaymentBadges([...paymentBadges, finalItem]);
+    }
+
+    setIsPaymentModalOpen(false);
+    setEditingPaymentBadge(null);
+  };
+
+  const handleDeletePaymentBadge = (id: string) => {
+    setPaymentBadges(paymentBadges.filter((b) => b.id !== id));
+    setPaymentBadgeToDelete(null);
+  };
+
+  const handleTogglePaymentBadgeActive = (id: string) => {
+    setPaymentBadges(
+      paymentBadges.map((b) => (b.id === id ? { ...b, is_active: !b.is_active } : b))
+    );
+  };
+
+  const handleMovePaymentBadge = (index: number, direction: 'up' | 'down') => {
+    if ((direction === 'up' && index === 0) || (direction === 'down' && index === paymentBadges.length - 1)) return;
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    const updated = [...paymentBadges];
+    const temp = updated[index];
+    updated[index] = updated[targetIndex];
+    updated[targetIndex] = temp;
+    setPaymentBadges(updated);
+  };
+
+  const handleResetDefaultPaymentBadges = () => {
+    if (window.confirm(isBn ? 'আপনি কি নিশ্চিত যে সকল পেমেন্ট মেথড ব্যাজ ডিফল্ট ৪টি ব্যাজে ফিরিয়ে আনতে চান?' : 'Are you sure you want to reset payment badges to default 4 methods?')) {
+      setPaymentBadges(DEFAULT_PAYMENT_BADGES);
+    }
   };
 
   return (
@@ -4348,7 +4466,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
                   <span>{isBn ? 'ফুটার স্বীকৃত পেমেন্ট গেটওয়ে কাস্টমাইজেশন' : 'Footer Accepted Payment Gateways Customization'}</span>
                 </h3>
                 <p className="text-xs text-slate-400 mt-1">
-                  {isBn ? 'স্টোরফ্রন্ট ফুটারে কাস্টমারদের জন্য পেমেন্ট গেটওয়ে সেকশন ও ব্যাজসমূহ প্রদর্শন বা লুকানোর সেটিংস।' : 'Control display of accepted payment gateway badges in storefront footer.'}
+                  {isBn ? 'স্টোরফ্রন্ট ফুটারে কাস্টমারদের জন্য পেমেন্ট গেটওয়ে সেকশন ও ব্যাজসমূহ প্রদর্শন, যোগ/বিয়োগ ও ক্রম নিয়ন্ত্রণ করুন।' : 'Manage accepted payment gateway badges in storefront footer with live layout preview.'}
                 </p>
               </div>
 
@@ -4369,7 +4487,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
                   {isBn ? 'ফুটারে স্বীকৃত পেমেন্ট গেটওয়ে সেকশন প্রদর্শন করুন' : 'Show Accepted Payment Gateways Section in Footer'}
                 </span>
                 <span className="text-xs text-slate-400">
-                  {isBn ? 'চেক মার্ক দিলে স্টোরফ্রন্ট ফুটারে পেমেন্ট ব্যাজসমূহ শো করবে, চেক মার্ক তুলে দিলে হাইড হয়ে যাবে।' : 'When checked, the payment badges block will appear at the bottom of the footer.'}
+                  {isBn ? 'চেক মার্ক দিলে স্টোরফ্রন্ট ফুটারে পেমেন্ট ব্যাজসমূহ শো করবে, চেক মার্ক তুলে দিলে হাইড হয়ে যাবে।' : 'When checked, the payment badges block will appear inside the footer newsletter & payment container.'}
                 </span>
               </div>
               <label className="relative inline-flex items-center cursor-pointer shrink-0">
@@ -4383,104 +4501,161 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
               </label>
             </div>
 
-            {/* Individual Payment Badges Checkboxes */}
+            {/* Live Visual Preview of Footer Payment Badges */}
+            <div className="p-4 bg-[#14171E] border border-amber-500/30 rounded-2xl space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Eye className="w-4 h-4 text-amber-400" />
+                  <span className="text-xs font-bold text-white uppercase tracking-wider">
+                    {isBn ? 'লাইভ ফুটার নমুনা প্রিভিউ' : 'Live Footer Badge Style Preview'}
+                  </span>
+                </div>
+                <span className="text-[10px] bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full font-bold border border-amber-500/30">
+                  {paymentBadges.filter(b => b.is_active).length} {isBn ? 'টি সক্রিয় ব্যাজ' : 'Active Badges'}
+                </span>
+              </div>
+
+              {/* Styled Preview Container */}
+              <div className="p-4 bg-[#1e2530] border border-slate-700 rounded-xl space-y-2">
+                <p className="text-[11px] font-bold text-slate-300">
+                  {isBn
+                    ? (formData.accepted_payment_gateways_title_bn || 'গৃহীত পেমেন্ট মেথডসমূহ')
+                    : (formData.accepted_payment_gateways_title_en || 'Accepted Payment Gateways')}
+                </p>
+                <PaymentBadges
+                  badgesJson={JSON.stringify(paymentBadges)}
+                  isBn={isBn}
+                />
+              </div>
+              <p className="text-[11px] text-slate-400">
+                {isBn
+                  ? 'উপরে প্রদর্শিত নমুনার মতো স্টোরফ্রন্ট ফুটারে কাস্টমারদের জন্য পেমেন্ট ব্যাজসমূহ সুন্দর বর্ডারে প্রদর্শিত হবে।'
+                  : 'This shows the exact visual rendering displayed to customers in the storefront footer.'}
+              </p>
+            </div>
+
+            {/* Payment Method Badges Management List */}
             <div className="space-y-3">
-              <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider">
-                {isBn ? 'যে পেমেন্ট ব্যাজসমূহ ফুটারে দৃশ্যমান থাকবে:' : 'Select Badges to Display in Footer:'}
-              </h4>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                  <CreditCard className="w-3.5 h-3.5 text-amber-400" />
+                  <span>{isBn ? 'পেমেন্ট মেথড ব্যাজসমূহ পরিচালনা ও কাস্টমাইজেশন:' : 'Manage Payment Method Badges:'}</span>
+                </h4>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* bKash Badge Toggle */}
-                <div className="p-4 bg-[#14171E] border border-[#2C323F] rounded-xl flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="px-2.5 py-1 bg-pink-950/60 border border-pink-800 text-pink-400 font-bold rounded-lg text-xs">
-                      bKash
-                    </span>
-                    <div>
-                      <span className="font-bold text-white block">
-                        {isBn ? 'বিকাশ (bKash) ব্যাজ' : 'bKash Badge'}
-                      </span>
-                      <span className="text-[11px] text-slate-400">
-                        {isBn ? 'চেক দিলে ফুটারে বিকাশ লোগো দেখাবে' : 'Show bKash badge in footer'}
-                      </span>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleResetDefaultPaymentBadges}
+                    className="px-3 py-1.5 bg-[#14171E] hover:bg-slate-800 text-slate-300 border border-[#2C323F] rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+                    title={isBn ? 'ডিফল্ট ৪টি ব্যাজে ফিরিয়ে নিন' : 'Reset to default 4 badges'}
+                  >
+                    <RotateCcw className="w-3.5 h-3.5 text-amber-400" />
+                    <span>{isBn ? 'ডিফল্ট ৪টি ব্যাজ' : 'Reset Defaults'}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleOpenAddPaymentBadge}
+                    className="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-lg text-xs flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>{isBn ? 'নতুন মেথড যোগ করুন' : 'Add Payment Method'}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Badges List */}
+              <div className="space-y-2.5">
+                {paymentBadges.map((badge, index) => (
+                  <div
+                    key={badge.id}
+                    className={`p-3.5 bg-[#14171E] border rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all ${
+                      badge.is_active ? 'border-[#2C323F]' : 'border-slate-800 opacity-60'
+                    }`}
+                  >
+                    {/* Left: Badge Logo Preview & Names */}
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="h-9 px-2.5 bg-white rounded-lg border border-slate-200 flex items-center justify-center shrink-0 shadow-xs">
+                        {renderPaymentLogo(badge.type, badge.logo_url)}
+                      </div>
+
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-bold text-white truncate">
+                            {isBn ? (badge.name_bn || badge.name) : (badge.name || badge.name_bn)}
+                          </span>
+                          <span className="text-[10px] px-2 py-0.5 rounded-full font-mono font-bold bg-slate-800 text-slate-300 border border-slate-700">
+                            {badge.type.toUpperCase()}
+                          </span>
+                          {!badge.is_active && (
+                            <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30">
+                              {isBn ? 'বন্ধ' : 'Disabled'}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-[11px] text-slate-400 mt-0.5 truncate">
+                          EN: {badge.name} | BN: {badge.name_bn || badge.name}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Right: Controls (Move Up/Down, Active Switch, Edit, Delete) */}
+                    <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
+                      {/* Move Up */}
+                      <button
+                        type="button"
+                        disabled={index === 0}
+                        onClick={() => handleMovePaymentBadge(index, 'up')}
+                        className="w-7 h-7 rounded-lg bg-[#1E222B] hover:bg-slate-700 text-slate-300 disabled:opacity-30 disabled:hover:bg-[#1E222B] flex items-center justify-center transition-colors cursor-pointer disabled:cursor-not-allowed"
+                        title={isBn ? 'উপরে নিন' : 'Move Up'}
+                      >
+                        <ArrowUp className="w-3.5 h-3.5" />
+                      </button>
+
+                      {/* Move Down */}
+                      <button
+                        type="button"
+                        disabled={index === paymentBadges.length - 1}
+                        onClick={() => handleMovePaymentBadge(index, 'down')}
+                        className="w-7 h-7 rounded-lg bg-[#1E222B] hover:bg-slate-700 text-slate-300 disabled:opacity-30 disabled:hover:bg-[#1E222B] flex items-center justify-center transition-colors cursor-pointer disabled:cursor-not-allowed"
+                        title={isBn ? 'নিচে নিন' : 'Move Down'}
+                      >
+                        <ArrowDown className="w-3.5 h-3.5" />
+                      </button>
+
+                      {/* Active Toggle Switch */}
+                      <label className="relative inline-flex items-center cursor-pointer ml-1" title={isBn ? 'সক্রিয় / বন্ধ করুন' : 'Toggle Active'}>
+                        <input
+                          type="checkbox"
+                          checked={badge.is_active !== false}
+                          onChange={() => handleTogglePaymentBadgeActive(badge.id)}
+                          className="sr-only peer"
+                        />
+                        <div className="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
+                      </label>
+
+                      {/* Edit Button */}
+                      <button
+                        type="button"
+                        onClick={() => handleOpenEditPaymentBadge(badge)}
+                        className="p-1.5 bg-[#1E222B] hover:bg-slate-700 text-amber-400 rounded-lg transition-colors cursor-pointer ml-1"
+                        title={isBn ? 'সম্পাদনা করুন' : 'Edit Badge'}
+                      >
+                        <Edit3 className="w-3.5 h-3.5" />
+                      </button>
+
+                      {/* Delete Button */}
+                      <button
+                        type="button"
+                        onClick={() => setPaymentBadgeToDelete(badge.id)}
+                        className="p-1.5 bg-[#1E222B] hover:bg-rose-900/40 text-rose-400 rounded-lg transition-colors cursor-pointer"
+                        title={isBn ? 'মুছে ফেলুন' : 'Delete Badge'}
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
                     </div>
                   </div>
-                  <input
-                    type="checkbox"
-                    checked={formData.show_payment_badge_bkash !== 'false'}
-                    onChange={(e) => setFormData({ ...formData, show_payment_badge_bkash: e.target.checked ? 'true' : 'false' })}
-                    className="w-5 h-5 rounded text-amber-500 focus:ring-amber-400 cursor-pointer"
-                  />
-                </div>
-
-                {/* Nagad Badge Toggle */}
-                <div className="p-4 bg-[#14171E] border border-[#2C323F] rounded-xl flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="px-2.5 py-1 bg-orange-950/60 border border-orange-800 text-orange-400 font-bold rounded-lg text-xs">
-                      Nagad
-                    </span>
-                    <div>
-                      <span className="font-bold text-white block">
-                        {isBn ? 'নগদ (Nagad) ব্যাজ' : 'Nagad Badge'}
-                      </span>
-                      <span className="text-[11px] text-slate-400">
-                        {isBn ? 'চেক দিলে ফুটারে নগদ লোগো দেখাবে' : 'Show Nagad badge in footer'}
-                      </span>
-                    </div>
-                  </div>
-                  <input
-                    type="checkbox"
-                    checked={formData.show_payment_badge_nagad !== 'false'}
-                    onChange={(e) => setFormData({ ...formData, show_payment_badge_nagad: e.target.checked ? 'true' : 'false' })}
-                    className="w-5 h-5 rounded text-amber-500 focus:ring-amber-400 cursor-pointer"
-                  />
-                </div>
-
-                {/* VISA / MC Badge Toggle */}
-                <div className="p-4 bg-[#14171E] border border-[#2C323F] rounded-xl flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="px-2.5 py-1 bg-blue-950/60 border border-blue-800 text-blue-400 font-bold rounded-lg text-xs">
-                      VISA / MC
-                    </span>
-                    <div>
-                      <span className="font-bold text-white block">
-                        {isBn ? 'কার্ড (VISA / Mastercard) ব্যাজ' : 'Debit/Credit Cards Badge'}
-                      </span>
-                      <span className="text-[11px] text-slate-400">
-                        {isBn ? 'চেক দিলে ফুটারে কার্ড লোগো দেখাবে' : 'Show VISA / MC badge in footer'}
-                      </span>
-                    </div>
-                  </div>
-                  <input
-                    type="checkbox"
-                    checked={formData.show_payment_badge_card !== 'false'}
-                    onChange={(e) => setFormData({ ...formData, show_payment_badge_card: e.target.checked ? 'true' : 'false' })}
-                    className="w-5 h-5 rounded text-amber-500 focus:ring-amber-400 cursor-pointer"
-                  />
-                </div>
-
-                {/* Cash on Delivery Badge Toggle */}
-                <div className="p-4 bg-[#14171E] border border-[#2C323F] rounded-xl flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="px-2.5 py-1 bg-emerald-950/60 border border-emerald-800 text-emerald-400 font-bold rounded-lg text-xs">
-                      COD
-                    </span>
-                    <div>
-                      <span className="font-bold text-white block">
-                        {isBn ? 'ক্যাশ অন ডেলিভারি (Cash on Delivery) ব্যাজ' : 'Cash on Delivery Badge'}
-                      </span>
-                      <span className="text-[11px] text-slate-400">
-                        {isBn ? 'চেক দিলে ফুটারে ক্যাশ অন ডেলিভারি দেখাবে' : 'Show Cash on Delivery badge in footer'}
-                      </span>
-                    </div>
-                  </div>
-                  <input
-                    type="checkbox"
-                    checked={formData.show_payment_badge_cod !== 'false'}
-                    onChange={(e) => setFormData({ ...formData, show_payment_badge_cod: e.target.checked ? 'true' : 'false' })}
-                    className="w-5 h-5 rounded text-amber-500 focus:ring-amber-400 cursor-pointer"
-                  />
-                </div>
+                ))}
               </div>
             </div>
 
@@ -4495,7 +4670,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
                   value={formData.accepted_payment_gateways_title_bn || ''}
                   onChange={(e) => setFormData({ ...formData, accepted_payment_gateways_title_bn: e.target.value })}
                   placeholder="গৃহীত পেমেন্ট মেথডসমূহ"
-                  className="w-full bg-[#14171E] border border-[#2C323F] rounded-xl p-2.5 text-xs text-white"
+                  className="w-full bg-[#14171E] border border-[#2C323F] rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-amber-500"
                 />
               </div>
               <div>
@@ -4507,7 +4682,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
                   value={formData.accepted_payment_gateways_title_en || ''}
                   onChange={(e) => setFormData({ ...formData, accepted_payment_gateways_title_en: e.target.value })}
                   placeholder="Accepted Payment Gateways"
-                  className="w-full bg-[#14171E] border border-[#2C323F] rounded-xl p-2.5 text-xs text-white"
+                  className="w-full bg-[#14171E] border border-[#2C323F] rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-amber-500"
                 />
               </div>
             </div>
@@ -6971,6 +7146,229 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigateTab }) =
                 type="button"
                 onClick={() => handleDeleteWhyShop(whyShopToDelete)}
                 className="flex-1 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold transition-colors shadow-lg shadow-rose-950/40"
+              >
+                {isBn ? 'হ্যাঁ, মুছুন' : 'Yes, Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* MODAL: ADD / EDIT PAYMENT BADGE METHOD */}
+      {/* ========================================================================= */}
+      {isPaymentModalOpen && editingPaymentBadge && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-[#1E222B] border border-[#2C323F] rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-4 border-b border-[#2C323F] bg-[#14171E]">
+              <div className="flex items-center gap-2">
+                <CreditCard className="w-4 h-4 text-amber-400" />
+                <h3 className="text-sm font-bold text-white">
+                  {editingPaymentBadge.id.startsWith('pm_') && !paymentBadges.some(b => b.id === editingPaymentBadge.id)
+                    ? (isBn ? 'নতুন পেমেন্ট মেথড যোগ করুন' : 'Add New Payment Method')
+                    : (isBn ? 'পেমেন্ট মেথড সম্পাদনা করুন' : 'Edit Payment Method')}
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsPaymentModalOpen(false);
+                  setEditingPaymentBadge(null);
+                }}
+                className="text-slate-400 hover:text-white p-1 rounded-lg transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <form onSubmit={handleSavePaymentBadgeItem} className="flex-1 overflow-y-auto p-5 space-y-4">
+              {/* Payment Method Preset Type Selector */}
+              <div>
+                <label className="text-xs font-bold text-slate-300 block mb-2">
+                  {isBn ? 'পেমেন্ট মেথড ধরণ (লোগো ও স্টাইল নির্বাচন করুন)' : 'Payment Method Type & Preset Logo'} <span className="text-amber-400">*</span>
+                </label>
+                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                  {[
+                    { id: 'bkash', name: 'bKash', bn: 'বিকাশ' },
+                    { id: 'nagad', name: 'Nagad', bn: 'নগদ' },
+                    { id: 'card', name: 'Debit/Credit Card', bn: 'কার্ড (VISA/Mastercard)' },
+                    { id: 'cod', name: 'Cash on Delivery', bn: 'ক্যাশ অন ডেলিভারি' },
+                    { id: 'rocket', name: 'Rocket', bn: 'রকেট' },
+                    { id: 'ok_wallet', name: 'OK Wallet', bn: 'ওকে ওয়ালেট' },
+                    { id: 'upay', name: 'Upay', bn: 'উপায়' },
+                    { id: 'custom', name: 'Custom', bn: 'কাস্টম' }
+                  ].map((preset) => {
+                    const isSelected = editingPaymentBadge.type === preset.id;
+                    return (
+                      <button
+                        key={preset.id}
+                        type="button"
+                        onClick={() => {
+                          setEditingPaymentBadge({
+                            ...editingPaymentBadge,
+                            type: preset.id,
+                            name: preset.id === 'custom' ? editingPaymentBadge.name : preset.name,
+                            name_bn: preset.id === 'custom' ? editingPaymentBadge.name_bn : preset.bn
+                          });
+                        }}
+                        className={`p-2.5 rounded-xl border flex flex-col items-center justify-center gap-1.5 transition-all text-center cursor-pointer ${
+                          isSelected
+                            ? 'bg-amber-500/10 border-amber-500 text-amber-300 shadow-sm'
+                            : 'bg-[#14171E] border-[#2C323F] text-slate-400 hover:border-slate-600 hover:text-white'
+                        }`}
+                      >
+                        <div className="h-6 flex items-center justify-center pointer-events-none">
+                          {renderPaymentLogo(preset.id)}
+                        </div>
+                        <span className="text-[10px] font-bold block truncate w-full">
+                          {preset.id.toUpperCase()}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Names (English & Bengali) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs font-bold text-slate-300 block mb-1.5">
+                    {isBn ? 'মেথডের নাম (English)' : 'Method Name (English)'} <span className="text-amber-400">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={editingPaymentBadge.name || ''}
+                    onChange={(e) => setEditingPaymentBadge({ ...editingPaymentBadge, name: e.target.value })}
+                    placeholder="e.g. bKash"
+                    className="w-full bg-[#14171E] border border-[#2C323F] focus:border-amber-500 rounded-xl p-2.5 text-white text-xs outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-bold text-slate-300 block mb-1.5">
+                    {isBn ? 'মেথডের নাম (বাংলা)' : 'Method Name (Bangla)'}
+                  </label>
+                  <input
+                    type="text"
+                    value={editingPaymentBadge.name_bn || ''}
+                    onChange={(e) => setEditingPaymentBadge({ ...editingPaymentBadge, name_bn: e.target.value })}
+                    placeholder="যেমন: বিকাশ"
+                    className="w-full bg-[#14171E] border border-[#2C323F] focus:border-amber-500 rounded-xl p-2.5 text-white text-xs outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* Custom Logo URL (Optional) */}
+              {editingPaymentBadge.type === 'custom' && (
+                <div>
+                  <label className="text-xs font-bold text-slate-300 block mb-1.5">
+                    {isBn ? 'কাস্টম লোগো ইমেজ URL (ঐচ্ছিক)' : 'Custom Logo Image URL (Optional)'}
+                  </label>
+                  <input
+                    type="url"
+                    value={editingPaymentBadge.logo_url || ''}
+                    onChange={(e) => setEditingPaymentBadge({ ...editingPaymentBadge, logo_url: e.target.value })}
+                    placeholder="https://example.com/logo.png"
+                    className="w-full bg-[#14171E] border border-[#2C323F] focus:border-amber-500 rounded-xl p-2.5 text-white text-xs outline-none"
+                  />
+                </div>
+              )}
+
+              {/* Active Toggle */}
+              <div className="p-3 bg-[#14171E] border border-[#2C323F] rounded-xl flex items-center justify-between">
+                <div>
+                  <span className="text-xs font-bold text-white block">
+                    {isBn ? 'ফুটারে মেথডটি দৃশ্যমান রাখুন' : 'Show Badge in Footer'}
+                  </span>
+                  <span className="text-[10px] text-slate-400 block">
+                    {isBn ? 'বন্ধ থাকলে স্টোরফ্রন্ট ফুটারে দেখানো হবে না' : 'When disabled, this badge is hidden on the storefront'}
+                  </span>
+                </div>
+
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={editingPaymentBadge.is_active !== false}
+                    onChange={(e) => setEditingPaymentBadge({ ...editingPaymentBadge, is_active: e.target.checked })}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+                </label>
+              </div>
+
+              {/* Live Preview Card */}
+              <div className="p-3 bg-[#14171E] border border-amber-500/20 rounded-xl space-y-1.5">
+                <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider block">
+                  {isBn ? 'ব্যাজ প্রিভিউ:' : 'Badge Preview:'}
+                </span>
+                <div className="inline-flex items-center justify-center p-1.5 bg-white rounded-md border border-slate-200 shadow-xs">
+                  {renderPaymentLogo(editingPaymentBadge.type, editingPaymentBadge.logo_url)}
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-[#2C323F]">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsPaymentModalOpen(false);
+                    setEditingPaymentBadge(null);
+                  }}
+                  className="px-4 py-2 bg-[#14171E] hover:bg-slate-800 text-slate-300 rounded-xl text-xs font-bold transition-colors border border-[#2C323F] cursor-pointer"
+                >
+                  {isBn ? 'বাতিল' : 'Cancel'}
+                </button>
+
+                <button
+                  type="submit"
+                  className="px-5 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl text-xs font-black transition-colors flex items-center gap-1.5 shadow-md cursor-pointer"
+                >
+                  <Check className="w-4 h-4" />
+                  <span>{isBn ? 'সংরক্ষণ করুন' : 'Save Method'}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* MODAL: DELETE PAYMENT BADGE CONFIRMATION */}
+      {/* ========================================================================= */}
+      {paymentBadgeToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-[#1E222B] border border-rose-500/30 rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl p-6 space-y-4">
+            <div className="w-12 h-12 rounded-full bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400 mx-auto">
+              <Trash2 className="w-6 h-6" />
+            </div>
+
+            <div className="text-center space-y-1.5">
+              <h3 className="text-base font-bold text-white">
+                {isBn ? 'পেমেন্ট মেথডটি মুছে ফেলতে চান?' : 'Delete Payment Method?'}
+              </h3>
+              <p className="text-xs text-slate-400">
+                {isBn
+                  ? 'আপনি কি নিশ্চিত যে এই পেমেন্ট মেথডটি তালিকা থেকে মুছে ফেলতে চান? প্রয়োজনে ডিফল্ট ৪টি ব্যাজ বাটনে ক্লিক করে পুনরায় ফিরিয়ে আনা যাবে।'
+                  : 'Are you sure you want to delete this payment badge? You can always restore defaults.'}
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setPaymentBadgeToDelete(null)}
+                className="flex-1 py-2 bg-[#14171E] hover:bg-slate-800 text-slate-300 rounded-xl text-xs font-bold border border-[#2C323F] transition-colors cursor-pointer"
+              >
+                {isBn ? 'বাতিল' : 'Cancel'}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleDeletePaymentBadge(paymentBadgeToDelete)}
+                className="flex-1 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold transition-colors shadow-lg shadow-rose-950/40 cursor-pointer"
               >
                 {isBn ? 'হ্যাঁ, মুছুন' : 'Yes, Delete'}
               </button>

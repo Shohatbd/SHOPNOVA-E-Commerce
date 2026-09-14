@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext.tsx';
 import { useSettings } from '../../context/SettingsContext.tsx';
+import { PaymentBadges } from '../common/PaymentBadges.tsx';
 import { api } from '../../services/api.ts';
 
 interface FooterProps {
@@ -326,10 +327,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             >
               <div className="flex items-start gap-2.5 opacity-90">
                 <MapPin style={{ color: footerTextColor }} className="w-4 h-4 shrink-0 mt-0.5" />
-                <span className="font-bengali tracking-normal">
+                <span className="font-bengali tracking-normal text-xs sm:text-sm">
                   {isBn
-                    ? settings.company_address_bn || settings.company_address_en || 'বাড়ি ৪২, রোড ১১, বনানী, ঢাকা-১২১৩, বাংলাদেশ'
-                    : settings.company_address_en || settings.company_address_bn || 'House 42, Road 11, Banani, Dhaka-1213, Bangladesh'}
+                    ? settings.company_address_bn || settings.company_address_en || 'মহেশপুর, ঝিনাইদহ, বাংলাদেশ'
+                    : settings.company_address_en || settings.company_address_bn || 'Maheshpur, Jhenaidah, Bangladesh'}
                 </span>
               </div>
               {settings.contact_phone && (
@@ -338,7 +339,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   <a
                     href={`tel:${settings.contact_phone}`}
                     style={{ color: footerTextColor }}
-                    className="hover:underline font-bold"
+                    className="hover:underline font-bold text-xs sm:text-sm"
                   >
                     {settings.contact_phone}
                   </a>
@@ -350,7 +351,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   <a
                     href={`mailto:${settings.contact_email}`}
                     style={{ color: footerTextColor }}
-                    className="hover:underline font-bold"
+                    className="hover:underline font-bold text-xs sm:text-sm truncate"
                   >
                     {settings.contact_email}
                   </a>
@@ -414,7 +415,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                       }
                     }}
                     style={{ color: footerTextColor }}
-                    className="opacity-85 hover:opacity-100 hover:underline transition-all text-left"
+                    className="opacity-85 hover:opacity-100 hover:underline transition-all text-left cursor-pointer"
                   >
                     {isBn ? (pol.title_bn || pol.title) : (pol.title || pol.title_bn)}
                   </button>
@@ -423,92 +424,90 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </ul>
           </div>
 
-          {/* Newsletter Box */}
-          <div className="sm:col-span-2 lg:col-span-4">
-            <p
-              style={{ color: footerTextColor }}
-              className={`text-xs font-black uppercase mb-2 ${isBn ? 'tracking-normal font-bengali' : 'tracking-wider'}`}
-            >
-              {isBn
-                ? (settings.footer_newsletter_title_bn || settings.footer_newsletter_title || 'শপহাটবিডি ক্লাবে যুক্ত থাকুন')
-                : (settings.footer_newsletter_title_en || settings.footer_newsletter_title || 'JOIN THE SHOPHATBD CLUB')}
-            </p>
-            <p
-              style={{ color: footerTextColor }}
-              className="text-[11px] font-medium mb-3 opacity-90 leading-relaxed font-bengali tracking-normal"
-            >
-              {isBn
-                ? (settings.footer_newsletter_sub_bn || settings.footer_newsletter_sub || 'সাবস্ক্রাইব করে প্রথম অর্ডারে ১০% বিশেষ ছাড় উপভোগ করুন।')
-                : (settings.footer_newsletter_sub_en || settings.footer_newsletter_sub || 'Subscribe to get 10% OFF your first order, exclusive Eid flash sales, and new drop alerts.')}
-            </p>
-
-            {isSubscribed ? (
-              <div
-                style={{ backgroundColor: `${footerTextColor}20`, color: footerTextColor, borderColor: `${footerTextColor}40` }}
-                className="p-2.5 border rounded-xl text-xs flex items-center gap-2 font-bold font-bengali tracking-normal"
-              >
-                <CheckCircle2 className="w-4 h-4 shrink-0" />
-                <span>{subMessage || (isBn ? 'ধন্যবাদ! আপনি যুক্ত হয়েছেন।' : 'Thank you! You are now subscribed.')}</span>
-              </div>
-            ) : (
-              <form onSubmit={handleSubscribe} className="space-y-2">
-                <input
-                  type="email"
-                  required
-                  value={emailInput}
-                  onChange={(e) => setEmailInput(e.target.value)}
-                  placeholder={
-                    isBn
-                      ? (settings.footer_newsletter_placeholder_bn || 'আপনার ইমেইল লিখুন...')
-                      : (settings.footer_newsletter_placeholder_en || 'Enter your email...')
-                  }
-                  className="w-full bg-white border border-black/15 rounded-xl py-2 px-3 text-xs text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-950 font-bengali"
-                />
-                <button
-                  type="submit"
-                  style={{
-                    backgroundColor: settings.footer_newsletter_btn_bg || footerTextColor,
-                    color: settings.footer_newsletter_btn_text_color || footerBg
-                  }}
-                  className="w-full font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-opacity hover:opacity-90 shadow-xs font-bengali tracking-normal"
-                >
-                  <Send className="w-3.5 h-3.5" />
-                  <span>
+          {/* Right Newsletter Subscription & Payment Methods */}
+          <div className="sm:col-span-2 lg:col-span-4 flex flex-col items-start lg:items-end">
+            <div className="w-full max-w-[320px] space-y-3.5">
+              {/* Newsletter Title & Subtitle */}
+              <div>
+                <div className="flex items-center gap-1.5 mb-1">
+                  <Sparkles className="w-3.5 h-3.5 opacity-80 shrink-0" />
+                  <p
+                    style={{ color: footerTextColor }}
+                    className={`text-xs font-black uppercase ${isBn ? 'tracking-normal font-bengali' : 'tracking-wider'}`}
+                  >
                     {isBn
-                      ? (settings.footer_newsletter_btn_bn || 'সাবস্ক্রাইব করুন')
-                      : (settings.footer_newsletter_btn_en || 'Subscribe')}
-                  </span>
-                </button>
-              </form>
-            )}
-
-            {/* Payment Badges in BD - Customisable via Site Settings */}
-            {settings.show_accepted_payment_gateways !== 'false' && (
-              <div className="mt-4 pt-3 border-t border-black/10">
+                      ? (settings.footer_newsletter_title_bn || settings.footer_newsletter_title || 'শপহাটবিডি ক্লাবে যুক্ত থাকুন')
+                      : (settings.footer_newsletter_title_en || settings.footer_newsletter_title || 'JOIN THE SHOPHATBD CLUB')}
+                  </p>
+                </div>
                 <p
                   style={{ color: footerTextColor }}
-                  className={`text-[11px] font-black mb-1.5 opacity-90 ${isBn ? 'font-bengali tracking-normal' : ''}`}
+                  className="text-[11px] font-medium opacity-90 leading-snug font-bengali tracking-normal"
                 >
                   {isBn
-                    ? (settings.accepted_payment_gateways_title_bn || 'গৃহীত পেমেন্ট মেথডসমূহ')
-                    : (settings.accepted_payment_gateways_title_en || 'Accepted Payment Gateways')}
+                    ? (settings.footer_newsletter_sub_bn || settings.footer_newsletter_sub || 'সাবস্ক্রাইব করে প্রথম অর্ডারে ১০% বিশেষ ছাড় উপভোগ করুন।')
+                    : (settings.footer_newsletter_sub_en || settings.footer_newsletter_sub || 'Subscribe to get 10% OFF your first order, exclusive Eid flash sales, and new drop alerts.')}
                 </p>
-                <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-bold text-slate-900">
-                  {settings.show_payment_badge_bkash !== 'false' && (
-                    <span className="px-2 py-0.5 bg-white border border-black/15 rounded-md font-bold text-pink-700">bKash</span>
-                  )}
-                  {settings.show_payment_badge_nagad !== 'false' && (
-                    <span className="px-2 py-0.5 bg-white border border-black/15 rounded-md font-bold text-orange-700">Nagad</span>
-                  )}
-                  {settings.show_payment_badge_card !== 'false' && (
-                    <span className="px-2 py-0.5 bg-white border border-black/15 rounded-md font-bold text-blue-700">VISA / MC</span>
-                  )}
-                  {settings.show_payment_badge_cod !== 'false' && (
-                    <span className="px-2 py-0.5 bg-white border border-black/15 rounded-md font-bold text-emerald-800">Cash on Delivery</span>
-                  )}
-                </div>
               </div>
-            )}
+
+              {isSubscribed ? (
+                <div
+                  style={{ backgroundColor: `${footerTextColor}20`, color: footerTextColor, borderColor: `${footerTextColor}40` }}
+                  className="p-2.5 border rounded-xl text-xs flex items-center gap-2 font-bold font-bengali tracking-normal"
+                >
+                  <CheckCircle2 className="w-4 h-4 shrink-0" />
+                  <span>{subMessage || (isBn ? 'ধন্যবাদ! আপনি যুক্ত হয়েছেন।' : 'Thank you! You are now subscribed.')}</span>
+                </div>
+              ) : (
+                <form onSubmit={handleSubscribe} className="space-y-2">
+                  <input
+                    type="email"
+                    required
+                    value={emailInput}
+                    onChange={(e) => setEmailInput(e.target.value)}
+                    placeholder={
+                      isBn
+                        ? (settings.footer_newsletter_placeholder_bn || 'আপনার ইমেইল লিখুন...')
+                        : (settings.footer_newsletter_placeholder_en || 'Enter your email...')
+                    }
+                    className="w-full bg-white border border-black/15 rounded-xl py-1.5 px-3 text-xs text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-950 font-bengali shadow-xs"
+                  />
+                  <button
+                    type="submit"
+                    style={{
+                      backgroundColor: settings.footer_newsletter_btn_bg || footerTextColor,
+                      color: settings.footer_newsletter_btn_text_color || footerBg
+                    }}
+                    className="w-full font-bold py-2 px-3 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-opacity hover:opacity-90 shadow-xs font-bengali tracking-normal cursor-pointer"
+                  >
+                    <Send className="w-3.5 h-3.5" />
+                    <span>
+                      {isBn
+                        ? (settings.footer_newsletter_btn_bn || 'সাবস্ক্রাইব করুন')
+                        : (settings.footer_newsletter_btn_en || 'SUBSCRIBE')}
+                    </span>
+                  </button>
+                </form>
+              )}
+
+              {/* Payment Badges */}
+              {settings.show_accepted_payment_gateways !== 'false' && (
+                <div className="pt-3 border-t border-black/10 space-y-1.5">
+                  <p
+                    style={{ color: footerTextColor }}
+                    className={`text-[11px] font-black opacity-90 ${isBn ? 'font-bengali tracking-normal' : ''}`}
+                  >
+                    {isBn
+                      ? (settings.accepted_payment_gateways_title_bn || 'গৃহীত পেমেন্ট মেথডসমূহ')
+                      : (settings.accepted_payment_gateways_title_en || 'Accepted Payment Gateways')}
+                  </p>
+                  <PaymentBadges
+                    badgesJson={settings.footer_payment_badges_json}
+                    isBn={isBn}
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

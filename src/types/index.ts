@@ -256,6 +256,15 @@ export interface WhyShopFeatureItem {
   is_active?: boolean;
 }
 
+export interface PaymentBadgeItem {
+  id: string;
+  type: 'bkash' | 'nagad' | 'rocket' | 'ok_wallet' | 'card' | 'cod' | 'upay' | 'amarpay' | 'custom' | string;
+  name: string;
+  name_bn: string;
+  logo_url?: string;
+  is_active?: boolean;
+}
+
 export interface SiteSettings {
   // Logo & Branding
   logo_url?: string;
@@ -360,6 +369,10 @@ export interface SiteSettings {
   footer_service_links_json?: string;
   footer_social_links_json?: string;
   store_policies_json?: string;
+  footer_payment_badges_json?: string;
+  show_accepted_payment_gateways?: string;
+  accepted_payment_gateways_title_en?: string;
+  accepted_payment_gateways_title_bn?: string;
   footer_policies_title?: string;
   footer_policies_title_en?: string;
   footer_policies_title_bn?: string;

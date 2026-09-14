@@ -1,5 +1,5 @@
 {
-  "name": "SHOPHATBD (শপহাটবিডি)",
+  "name": "SHOPHATBD E-Commerce",
   "description": "Full-Stack bilingual (English/Bengali) e-commerce platform for SHOPHATBD (শপহাটবিডি) with admin panel, real SQL database, inventory, order tracking, payment and courier integrations.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]

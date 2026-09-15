@@ -137,12 +137,12 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
   return (
     <div className="space-y-12 pb-16">
       {/* 1. Hero Banner Carousel & Side Offer Cards (Daraz Style) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 sm:gap-4 items-stretch">
+      <section className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 pt-2 sm:pt-4 overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-2.5 sm:gap-4 items-stretch">
           {/* Main Hero Slider (Takes 8 columns on large screens) */}
-          <div className="lg:col-span-8 w-full">
+          <div className="lg:col-span-8 w-full min-w-0">
             {banners.length > 0 ? (
-              <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl aspect-[16/10] sm:aspect-[18/9] lg:aspect-auto lg:h-[420px] min-h-[220px] sm:min-h-[290px] bg-slate-900">
+              <div className="relative rounded-xl sm:rounded-3xl overflow-hidden shadow-md sm:shadow-xl aspect-[16/9] sm:aspect-[18/9] lg:aspect-auto lg:h-[390px] min-h-[160px] sm:min-h-[250px] bg-slate-900">
                 {banners.map((banner, index) => {
                   const displayTitle = isBn ? (banner.title_bn || banner.title_en) : banner.title_en;
                   const displaySubtitle = isBn ? (banner.subtitle_bn || banner.subtitle_en) : banner.subtitle_en;
@@ -163,25 +163,25 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                         className="w-full h-full object-cover object-center"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r from-slate-950/95 via-slate-950/70 sm:via-slate-950/45 to-transparent flex items-end sm:items-center">
-                        <div className="max-w-xl p-4 sm:p-7 md:p-9 space-y-1.5 sm:space-y-3">
+                        <div className="max-w-xl p-3 sm:p-6 md:p-8 space-y-1 sm:space-y-2.5">
                           {displayBadge && (
-                            <span className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-[10px] sm:text-xs font-bold uppercase tracking-wider backdrop-blur-md">
-                              <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                            <span className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-[9px] sm:text-xs font-bold uppercase tracking-wider backdrop-blur-md">
+                              <Sparkles className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5" />
                               {displayBadge}
                             </span>
                           )}
 
-                          <h1 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-black text-white leading-tight font-siliguri">
+                          <h1 className="text-sm sm:text-2xl md:text-3xl lg:text-4xl font-black text-white leading-tight font-siliguri line-clamp-2">
                             {displayTitle}
                           </h1>
 
                           {displaySubtitle && (
-                            <p className="text-[11px] sm:text-xs md:text-sm text-slate-300 line-clamp-1 sm:line-clamp-2 font-siliguri max-w-xs sm:max-w-md">
+                            <p className="text-[10px] sm:text-xs md:text-sm text-slate-300 line-clamp-1 sm:line-clamp-2 font-siliguri max-w-xs sm:max-w-md">
                               {displaySubtitle}
                             </p>
                           )}
 
-                          <div className="pt-1 sm:pt-2">
+                          <div className="pt-0.5 sm:pt-2">
                             <button
                               onClick={() => {
                                 if (banner.link_url && (banner.link_url.startsWith('http://') || banner.link_url.startsWith('https://'))) {
@@ -193,10 +193,10 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                                   onNavigate('shop');
                                 }
                               }}
-                              className="inline-flex items-center gap-1.5 sm:gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-lg sm:rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-all text-xs sm:text-sm group font-siliguri"
+                              className="inline-flex items-center gap-1 sm:gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-2.5 sm:px-5 py-1 sm:py-2 rounded-md sm:rounded-xl shadow-md sm:shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-all text-[10px] sm:text-sm group font-siliguri"
                             >
                               <span>{displayButton}</span>
-                              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform" />
+                              <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform" />
                             </button>
                           </div>
                         </div>
@@ -223,14 +223,14 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                       <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
                     </button>
 
-                    <div className="absolute bottom-2.5 sm:bottom-3.5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5">
+                    <div className="absolute bottom-2 sm:bottom-3.5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 sm:gap-1.5">
                       {banners.map((_, i) => (
                         <button
                           key={i}
                           onClick={() => setCurrentSlide(i)}
                           aria-label={`Go to slide ${i + 1}`}
-                          className={`h-1.5 sm:h-2 rounded-full transition-all ${
-                            i === currentSlide ? 'w-5 sm:w-7 bg-amber-500' : 'w-1.5 sm:w-2 bg-white/50 hover:bg-white/80'
+                          className={`h-1 sm:h-2 rounded-full transition-all ${
+                            i === currentSlide ? 'w-4 sm:w-7 bg-amber-500' : 'w-1 sm:w-2 bg-white/50 hover:bg-white/80'
                           }`}
                         />
                       ))}
@@ -242,7 +242,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
           </div>
 
           {/* 2 Stacked Promo Mini Banners on the Right (Daraz Style) */}
-          <div className="grid grid-cols-2 lg:grid-cols-1 gap-3 sm:gap-4 lg:col-span-4 h-full">
+          <div className="grid grid-cols-2 lg:grid-cols-1 gap-2.5 sm:gap-4 lg:col-span-4 h-full min-w-0">
             {/* Promo Card 1: Top Side Banner */}
             <div
               onClick={() => {
@@ -254,7 +254,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                   onNavigate(clean || 'shop');
                 }
               }}
-              className="group relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg border border-slate-200/60 cursor-pointer bg-slate-900 h-[140px] sm:h-[160px] lg:h-[202px] transition-all hover:shadow-xl hover:-translate-y-0.5"
+              className="group relative rounded-xl sm:rounded-3xl overflow-hidden shadow-sm sm:shadow-lg border border-slate-200/60 cursor-pointer bg-slate-900 h-[105px] sm:h-[145px] lg:h-[188px] transition-all hover:shadow-xl hover:-translate-y-0.5"
             >
               <img
                 src={settings.side_banner_top_image || "https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=600&q=80"}
@@ -262,24 +262,24 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r from-slate-950/95 via-slate-950/75 to-transparent flex items-center">
-                <div className="p-3.5 sm:p-5 md:p-6 space-y-1 sm:space-y-1.5 max-w-[240px]">
+                <div className="p-2.5 sm:p-5 md:p-6 space-y-0.5 sm:space-y-1.5 max-w-[240px]">
                   {(settings.side_banner_top_badge_bn || settings.side_banner_top_badge_en) && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-rose-500/25 border border-rose-400/40 text-rose-300 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider backdrop-blur-md">
-                      <Flame className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-rose-400" />
+                    <span className="inline-flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-0.5 rounded-full bg-rose-500/25 border border-rose-400/40 text-rose-300 text-[8px] sm:text-[10px] font-bold uppercase tracking-wider backdrop-blur-md">
+                      <Flame className="w-2 h-2 sm:w-3 sm:h-3 text-rose-400" />
                       {isBn ? (settings.side_banner_top_badge_bn || settings.side_banner_top_badge_en) : (settings.side_banner_top_badge_en || settings.side_banner_top_badge_bn)}
                     </span>
                   )}
-                  <h3 className="text-sm sm:text-base lg:text-lg font-black text-white leading-tight font-siliguri">
+                  <h3 className="text-xs sm:text-base lg:text-lg font-black text-white leading-tight font-siliguri line-clamp-1 sm:line-clamp-2">
                     {isBn ? (settings.side_banner_top_title_bn || settings.side_banner_top_title_en || "স্মার্ট গ্যাজেট ও ঘড়ি") : (settings.side_banner_top_title_en || "Modern Tech & Watches")}
                   </h3>
                   {(settings.side_banner_top_subtitle_bn || settings.side_banner_top_subtitle_en) && (
-                    <p className="text-[10px] sm:text-xs text-slate-300 line-clamp-1 font-siliguri hidden sm:block">
+                    <p className="text-[9px] sm:text-xs text-slate-300 line-clamp-1 font-siliguri hidden sm:block">
                       {isBn ? (settings.side_banner_top_subtitle_bn || settings.side_banner_top_subtitle_en) : (settings.side_banner_top_subtitle_en || settings.side_banner_top_subtitle_bn)}
                     </p>
                   )}
-                  <span className="inline-flex items-center gap-1 text-[11px] sm:text-xs font-bold text-amber-400 group-hover:text-amber-300 transition-colors pt-0.5">
+                  <span className="inline-flex items-center gap-0.5 sm:gap-1 text-[9.5px] sm:text-xs font-bold text-amber-400 group-hover:text-amber-300 transition-colors pt-0.5">
                     <span>{isBn ? (settings.side_banner_top_button_bn || "এখনই কিনুন") : (settings.side_banner_top_button_en || "Shop Now")}</span>
-                    <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="w-2.5 h-2.5 sm:w-3 sm:h-3 group-hover:translate-x-1 transition-transform" />
                   </span>
                 </div>
               </div>
@@ -296,7 +296,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                   onNavigate(clean || 'shop');
                 }
               }}
-              className="group relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg border border-slate-200/60 cursor-pointer bg-slate-900 h-[140px] sm:h-[160px] lg:h-[202px] transition-all hover:shadow-xl hover:-translate-y-0.5"
+              className="group relative rounded-xl sm:rounded-3xl overflow-hidden shadow-sm sm:shadow-lg border border-slate-200/60 cursor-pointer bg-slate-900 h-[105px] sm:h-[145px] lg:h-[188px] transition-all hover:shadow-xl hover:-translate-y-0.5"
             >
               <img
                 src={settings.side_banner_bottom_image || "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80"}
@@ -304,24 +304,24 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r from-slate-950/95 via-slate-950/75 to-transparent flex items-center">
-                <div className="p-3.5 sm:p-5 md:p-6 space-y-1 sm:space-y-1.5 max-w-[240px]">
+                <div className="p-2.5 sm:p-5 md:p-6 space-y-0.5 sm:space-y-1.5 max-w-[240px]">
                   {(settings.side_banner_bottom_badge_bn || settings.side_banner_bottom_badge_en) && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/25 border border-emerald-400/40 text-emerald-300 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider backdrop-blur-md">
-                      <Truck className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-emerald-400" />
+                    <span className="inline-flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-0.5 rounded-full bg-emerald-500/25 border border-emerald-400/40 text-emerald-300 text-[8px] sm:text-[10px] font-bold uppercase tracking-wider backdrop-blur-md">
+                      <Truck className="w-2 h-2 sm:w-3 sm:h-3 text-emerald-400" />
                       {isBn ? (settings.side_banner_bottom_badge_bn || settings.side_banner_bottom_badge_en) : (settings.side_banner_bottom_badge_en || settings.side_banner_bottom_badge_bn)}
                     </span>
                   )}
-                  <h3 className="text-sm sm:text-base lg:text-lg font-black text-white leading-tight font-siliguri">
+                  <h3 className="text-xs sm:text-base lg:text-lg font-black text-white leading-tight font-siliguri line-clamp-1 sm:line-clamp-2">
                     {isBn ? (settings.side_banner_bottom_title_bn || settings.side_banner_bottom_title_en || "লেটেস্ট ট্রেন্ডি ফ্যাশন") : (settings.side_banner_bottom_title_en || "Latest Lifestyle Fashion")}
                   </h3>
                   {(settings.side_banner_bottom_subtitle_bn || settings.side_banner_bottom_subtitle_en) && (
-                    <p className="text-[10px] sm:text-xs text-slate-300 line-clamp-1 font-siliguri hidden sm:block">
+                    <p className="text-[9px] sm:text-xs text-slate-300 line-clamp-1 font-siliguri hidden sm:block">
                       {isBn ? (settings.side_banner_bottom_subtitle_bn || settings.side_banner_bottom_subtitle_en) : (settings.side_banner_bottom_subtitle_en || settings.side_banner_bottom_subtitle_bn)}
                     </p>
                   )}
-                  <span className="inline-flex items-center gap-1 text-[11px] sm:text-xs font-bold text-emerald-400 group-hover:text-emerald-300 transition-colors pt-0.5">
+                  <span className="inline-flex items-center gap-0.5 sm:gap-1 text-[9.5px] sm:text-xs font-bold text-emerald-400 group-hover:text-emerald-300 transition-colors pt-0.5">
                     <span>{isBn ? (settings.side_banner_bottom_button_bn || "অফার দেখুন") : (settings.side_banner_bottom_button_en || "Explore Deals")}</span>
-                    <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="w-2.5 h-2.5 sm:w-3 sm:h-3 group-hover:translate-x-1 transition-transform" />
                   </span>
                 </div>
               </div>

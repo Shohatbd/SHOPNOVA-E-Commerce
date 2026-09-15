@@ -179,15 +179,13 @@ async function startServer() {
   app.use('/api/chat', aiChatRoutes);
   app.use('/api/subscribers', subscribersRoutes);
 
-  // Vite middleware for development vs Static file serving in production
-  if (process.env.NODE_ENV !== 'production') {
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: 'spa',
-    });
-    app.use(vite.middlewares);
-  } else {
-    const distPath = path.join(process.cwd(), 'dist');
+  // Vite middleware or Static file serving fallback
+  const distPath = path.join(process.cwd(), 'dist');
+  const indexHtmlInDist = path.join(distPath, 'index.html');
+  const fs = await import('fs');
+  const hasDist = fs.existsSync(indexHtmlInDist);
+
+  if (hasDist && process.env.NODE_ENV === 'production') {
     app.use(
       express.static(distPath, {
         maxAge: '1d',
@@ -195,8 +193,15 @@ async function startServer() {
       })
     );
     app.get('*', (_req, res) => {
-      res.sendFile(path.join(distPath, 'index.html'));
+      res.sendFile(indexHtmlInDist);
     });
+  } else {
+    // Direct Vite On-Demand Engine (Works instantly without requiring manual build in cPanel)
+    const vite = await createViteServer({
+      server: { middlewareMode: true },
+      appType: 'spa',
+    });
+    app.use(vite.middlewares);
   }
 
   app.listen(PORT, '0.0.0.0', () => {

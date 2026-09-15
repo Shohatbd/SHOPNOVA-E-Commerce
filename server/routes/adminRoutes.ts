@@ -102,7 +102,11 @@ router.get('/customers', requireAdmin, (_req: AuthenticatedRequest, res: Respons
     const existingEmails = new Set(registeredCustomers.map((c: any) => c.email).filter(Boolean));
 
     const guestOrdersSummary = query<any>(
-      `SELECT customer_phone, customer_email, customer_name,
+      `SELECT 
+              COALESCE(NULLIF(customer_phone, ''), NULLIF(customer_email, ''), id) as guest_key,
+              MAX(customer_phone) as customer_phone,
+              MAX(customer_email) as customer_email,
+              MAX(customer_name) as customer_name,
               COUNT(id) as total_orders,
               COALESCE(SUM(CASE WHEN payment_status = 'paid' OR order_status = 'delivered' THEN grand_total ELSE 0 END), 0) as total_spent,
               COALESCE(SUM(CASE WHEN order_status = 'delivered' THEN 1 ELSE 0 END), 0) as delivered_orders,
@@ -110,20 +114,31 @@ router.get('/customers', requireAdmin, (_req: AuthenticatedRequest, res: Respons
               MAX(created_at) as last_order_date
        FROM orders
        WHERE user_id IS NULL OR user_id = ''
-       GROUP BY customer_phone, customer_name`
+       GROUP BY COALESCE(NULLIF(customer_phone, ''), NULLIF(customer_email, ''), id)`
     );
 
     const guestCustomers: any[] = [];
+    const seenGuestIds = new Set<string>();
+
     for (const g of guestOrdersSummary) {
-      if (g.customer_phone && existingPhones.has(g.customer_phone)) continue;
-      if (g.customer_email && existingEmails.has(g.customer_email)) continue;
+      const cleanPhone = g.customer_phone?.trim() || '';
+      const cleanEmail = g.customer_email?.trim() || '';
+
+      if (cleanPhone && existingPhones.has(cleanPhone)) continue;
+      if (cleanEmail && existingEmails.has(cleanEmail)) continue;
+
+      const rawId = cleanPhone || cleanEmail || g.guest_key || Math.random().toString();
+      const guestId = `guest_${encodeURIComponent(rawId)}`;
+
+      if (seenGuestIds.has(guestId)) continue;
+      seenGuestIds.add(guestId);
 
       guestCustomers.push({
-        id: `guest_${encodeURIComponent(g.customer_phone || g.customer_email || Math.random().toString())}`,
+        id: guestId,
         name: g.customer_name || 'Guest Customer',
-        username: 'guest_' + (g.customer_phone ? g.customer_phone.slice(-4) : 'order'),
-        email: g.customer_email || '',
-        phone: g.customer_phone || '',
+        username: 'guest_' + (cleanPhone ? cleanPhone.slice(-4) : 'order'),
+        email: cleanEmail,
+        phone: cleanPhone,
         role_id: 'guest',
         created_at: g.created_at,
         total_orders: g.total_orders,

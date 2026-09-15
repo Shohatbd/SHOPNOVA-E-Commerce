@@ -251,8 +251,8 @@ export const AdminCustomers: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/80">
-                {filtered.map((c) => (
-                  <tr key={c.id} className="hover:bg-slate-900/50 transition-colors">
+                {filtered.map((c, index) => (
+                  <tr key={c.id ? `${c.id}_${index}` : `cust_${index}`} className="hover:bg-slate-900/50 transition-colors">
                     {/* Name */}
                     <td className="py-3.5">
                       <div className="flex items-center gap-3">
@@ -597,8 +597,8 @@ export const AdminCustomers: React.FC = () => {
                   {isBn ? 'এই গ্রাহকের কোনো পূর্ববর্তী অর্ডার রেকর্ড নেই।' : 'No previous orders found for this customer.'}
                 </div>
               ) : (
-                customerOrders.map((ord) => (
-                  <div key={ord.id} className="bg-[#12141A] border border-[#2C323F] rounded-2xl p-4 flex items-center justify-between">
+                customerOrders.map((ord, oIdx) => (
+                  <div key={ord.id ? `${ord.id}_${oIdx}` : `order_${oIdx}`} className="bg-[#12141A] border border-[#2C323F] rounded-2xl p-4 flex items-center justify-between">
                     <div>
                       <span className="font-mono font-bold text-amber-400 text-xs">#{ord.order_number}</span>
                       <p className="text-[11px] text-slate-400 mt-0.5">

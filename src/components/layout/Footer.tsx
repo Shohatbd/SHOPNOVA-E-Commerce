@@ -25,7 +25,7 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
-  const { t, isBn, setLang } = useLanguage();
+  const { t, isBn } = useLanguage();
   const { settings } = useSettings();
   const [emailInput, setEmailInput] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -523,32 +523,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         >
           <p className="opacity-90">© {new Date().getFullYear()} {(isBn ? settings.site_name_bn : settings.site_name) || (isBn ? 'শপহাটবিডি' : 'SHOPHATBD')} Bangladesh. {isBn ? 'সর্বস্বত্ব সংরক্ষিত।' : 'All Rights Reserved.'}</p>
           <div className="flex flex-wrap items-center justify-center sm:justify-end gap-3 sm:gap-4">
-            {/* Language Switcher in Footer */}
-            <div className="flex items-center bg-black/15 rounded-lg p-0.5 text-[11px] font-bold border border-black/10 shrink-0">
-              <button
-                type="button"
-                onClick={() => setLang('bn')}
-                className={`px-2 py-0.5 rounded-md transition-all ${
-                  isBn
-                    ? 'bg-slate-950 text-white shadow-xs'
-                    : 'opacity-70 hover:opacity-100 hover:bg-black/5'
-                }`}
-              >
-                বাংলা
-              </button>
-              <button
-                type="button"
-                onClick={() => setLang('en')}
-                className={`px-2 py-0.5 rounded-md transition-all ${
-                  !isBn
-                    ? 'bg-slate-950 text-white shadow-xs'
-                    : 'opacity-70 hover:opacity-100 hover:bg-black/5'
-                }`}
-              >
-                EN
-              </button>
-            </div>
-
             {serviceLinks.map((link: any) => (
               <button
                 key={`btm-${link.id}`}

@@ -209,7 +209,7 @@ const AppContent: React.FC = () => {
   return (
     <div
       style={{ backgroundColor: settings.site_bg_color || '#F8F9FA' }}
-      className="min-h-screen flex flex-col text-slate-800 font-sans transition-colors duration-200"
+      className="min-h-screen flex flex-col text-slate-800 font-sans transition-colors duration-200 w-full max-w-full overflow-x-hidden"
     >
       {/* Dynamic SEO Meta & Schema Injector */}
       <SEOHead currentPage={currentPage} pageParam={pageParam} />
